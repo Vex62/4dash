@@ -29,7 +29,7 @@ function loadPrefs() {
 function savePrefs() { try { localStorage.setItem(PREFS_KEY, JSON.stringify(App.prefs)); } catch { /* ignorar */ } }
 function newProject() {
   const pg = { id: uid(), name: 'Página 1', size: '16:9', w: 1280, h: 720, widgets: [] };
-  return { format: '4dash', v: 1, title: 'Dashboard sin título', logo: null, datasets: [], pages: [pg], filters: [], active: pg.id, snap: true, created: new Date().toISOString() };
+  return { format: '4dash', v: 1, title: 'Dashboard sin título', logo: null, palette: { id: 'default' }, datasets: [], pages: [pg], filters: [], active: pg.id, snap: true, created: new Date().toISOString() };
 }
 const saveNow = () => {
   if (!App.prefs.autosave) { App.saveError = null; renderSaveState(); return; }
@@ -72,7 +72,7 @@ function autoTitle(w) {
 }
 
 /* ---------- Historial (deshacer / rehacer) ---------- */
-function snapshot() { return JSON.stringify({ pages: App.p.pages, title: App.p.title, active: App.p.active }, jsonReplacer); }
+function snapshot() { return JSON.stringify({ pages: App.p.pages, title: App.p.title, active: App.p.active, palette: App.p.palette }, jsonReplacer); }
 function pushHistory(snap) {
   App.hist.push(snap);
   if (App.hist.length > 80) App.hist.shift();
@@ -97,6 +97,7 @@ function restore(json) {
   App.p.pages = o.pages.map(sanitizePage).filter(Boolean);
   App.p.title = str(o.title, 120, App.p.title);
   App.p.active = App.p.pages.some(p => p.id === o.active) ? o.active : App.p.pages[0].id;
+  App.p.palette = sanitizePalette(o.palette);
   if (!selW()) App.sel = null;
   afterChange({});
 }
@@ -104,6 +105,7 @@ function undo() { if (!App.hist.length) return; App.fut.push(snapshot()); restor
 function redo() { if (!App.fut.length) return; App.hist.push(snapshot()); restore(App.fut.pop()); }
 function afterChange(opts) {
   scheduleSave();
+  applyPalette();
   if (opts.only === 'widget' && opts.w) { rerenderWidget(opts.w); renderRibbon(); if (!opts.keepProps) renderRight(); return; }
   renderCanvas();
   renderRibbon();
@@ -149,6 +151,8 @@ function renderTopbar() {
     vs.appendChild(b);
   }
   renderLogo();
+  const pb = clear($('#paletteBtn'));
+  pb.appendChild(icon('palette', 18));
   const tb = clear($('#themeBtn'));
   tb.appendChild(icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon', 18));
   renderPresNav();
@@ -234,7 +238,8 @@ function renderRibbon() {
         rsm('slicer', 'Segmentación', () => insertWidget('slicer'), { disabled: !hasData })),
       rbtn('page', 'Nueva página', addPage)),
     rgroup('Diseño',
-      rbtn('wand', 'Generar automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Genera un dashboard automático para esta página a partir de un origen de datos' })),
+      rbtn('wand', 'Generar automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Genera un dashboard automático para esta página a partir de un origen de datos' }),
+      rbtn('palette', 'Paleta de colores', openPaletteDialog, { title: 'Cambiar la paleta de colores de la herramienta y del dashboard' })),
     rgroup('Organizar',
       h('div', { class: 'rstack' },
         rsm('copy', 'Duplicar', duplicateSelected, { disabled: !w }),
@@ -1125,6 +1130,7 @@ function toggleFullscreen() {
 }
 function applyTheme(t) {
   document.documentElement.dataset.theme = t;
+  applyPalette();
   App.prefs.theme = t;
   savePrefs();
   renderTopbar();
@@ -1150,9 +1156,10 @@ async function handleImport(file) {
   const baseName = String(file.name).replace(/\.[^.]+$/, '').slice(0, 100);
   mutate(() => {
     if (mode === 'replace') {
-      const keepLogo = App.p.logo;
+      const keepLogo = App.p.logo, keepPal = App.p.palette;
       App.p = newProject();
       App.p.logo = keepLogo;
+      App.p.palette = keepPal;
       App.p.title = baseName || 'Dashboard';
       App.p.pages = [];
       App.hist = [];
@@ -1198,9 +1205,10 @@ function fitPage(pg, height) {
 function loadSample() {
   const t = buildTable(sampleGrid());
   const run = () => mutate(() => {
-    const keepLogo = App.p.logo;
+    const keepLogo = App.p.logo, keepPal = App.p.palette;
     App.p = newProject();
     App.p.logo = keepLogo;
+    App.p.palette = keepPal;
     App.p.title = 'Ventas 2025 — Demo';
     App.p.pages = [];
     const pages = buildPagesFor([{ name: 'Ventas', ...t }]);

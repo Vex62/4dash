@@ -114,23 +114,25 @@ const ICONS = {
   page: 'M4 3h16v18H4z|M8 7h8|M8 11h8|M8 15h5',
   info: 'M12 22a10 10 0 1 0 0-20a10 10 0 1 0 0 20z|M12 16v-4|M12 8h.01',
   focus: 'M3 7V3h4|M17 3h4v4|M21 17v4h-4|M7 21H3v-4',
-  lock: 'M5 11h14v10H5z|M8 11V7a4 4 0 0 1 8 0v4'
+  lock: 'M5 11h14v10H5z|M8 11V7a4 4 0 0 1 8 0v4',
+  palette: 'M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.4 3.4A1.6 1.6 0 0 1 12 22z|M7.5 11.5h.01|M10.5 7.5h.01|M15.5 8.5h.01'
 };
 const BOLD_ICONS = new Set(['more', 'scatter']);
+const DOT_ICONS = new Set(['palette']);
 function icon(name, size = 16, extraClass = '') {
   const svg = s('svg', {
     viewBox: '0 0 24 24', width: size, height: size, fill: 'none', stroke: 'currentColor',
     'stroke-width': BOLD_ICONS.has(name) ? 3 : 1.75, 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
     class: 'ico ' + extraClass, 'aria-hidden': 'true', focusable: 'false'
   });
-  for (const d of (ICONS[name] || ICONS.info).split('|')) s('path', { d }, svg);
+  for (const d of (ICONS[name] || ICONS.info).split('|')) s('path', { d, 'stroke-width': DOT_ICONS.has(name) && d.endsWith('h.01') ? 3 : null }, svg);
   return svg;
 }
 function brandMark(size = 22) {
   const svg = s('svg', { viewBox: '0 0 32 32', width: size, height: size, class: 'brand-mark', 'aria-hidden': 'true' });
-  s('rect', { x: 4, y: 17, width: 6, height: 11, rx: 1.5, fill: '#f2c811' }, svg);
-  s('rect', { x: 13, y: 10, width: 6, height: 18, rx: 1.5, fill: '#f2c811', opacity: .85 }, svg);
-  s('rect', { x: 22, y: 4, width: 6, height: 24, rx: 1.5, fill: '#f2c811', opacity: .7 }, svg);
+  s('rect', { x: 4, y: 17, width: 6, height: 11, rx: 1.5, class: 'brand-fill' }, svg);
+  s('rect', { x: 13, y: 10, width: 6, height: 18, rx: 1.5, class: 'brand-fill', opacity: .85 }, svg);
+  s('rect', { x: 22, y: 4, width: 6, height: 24, rx: 1.5, class: 'brand-fill', opacity: .7 }, svg);
   return svg;
 }
 

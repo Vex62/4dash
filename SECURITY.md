@@ -20,6 +20,29 @@ El objetivo del atacante sería ejecutar código en el navegador, exfiltrar dato
 | ZIP | Límite de entradas, tamaño descomprimido por entrada y total, y ratio de compresión. La descompresión es en streaming y se aborta al superar el límite (zip bomb). Sin ZIP64 ni entradas cifradas. |
 | Imágenes | Solo PNG/JPEG/WEBP/GIF (SVG rechazado: puede contener script). Se decodifican con `createImageBitmap` y se **recodifican en canvas**, lo que elimina metadatos y cargas ocultas. Las imágenes guardadas deben cumplir `^data:image/(png|jpeg|webp|gif);base64,…$`. |
 | Proyectos y almacenamiento local | `JSON.parse` con *reviver* que descarta `__proto__`, `constructor` y `prototype`; después, validación por esquema campo a campo (tipos, enumerados, longitudes, rangos, ids `^[A-Za-z0-9_-]{1,40}$`). Los objetos se reconstruyen desde cero y nunca se mezclan con los originales. Las agrupaciones usan `Map`/`Set`. |
+| Paletas de color | Los colores se aplican como variables CSS mediante CSSOM (compatible con la CSP, sin estilos en línea). Los colores personalizados de proyectos importados deben cumplir `^#[0-9a-f]{6}# Revisión de seguridad de 4Dash (OWASP)
+
+**Alcance:** `dist/4dash.html` (aplicación de una sola página, sin backend) y su proceso de build.
+**Referencias:** OWASP Top 10 2021, OWASP ASVS 4.0 (capítulos V5, V12, V14) y las cheat sheets de XSS, CSP, XXE,
+CSV Injection, Prototype Pollution y File Upload.
+**Modelo de amenazas:** la entrada no confiable es todo lo que el usuario importa — Excel/CSV recibidos de terceros, proyectos
+`.4dash.json`, imágenes y el contenido de `localStorage` (que en `file://` puede compartirse con otras páginas locales).
+El objetivo del atacante sería ejecutar código en el navegador, exfiltrar datos o bloquear la herramienta.
+
+## Resumen de controles
+
+| Control | Implementación |
+|---|---|
+| Sin dependencias ni red | Cero librerías y cero CDN. La CSP prohíbe toda conexión (`connect-src 'none'`, `default-src 'none'`). El build falla si aparece una URL externa. |
+| CSP estricta por hash | `script-src` y `style-src` solo admiten el hash SHA-256 del bloque incrustado: no se permite `unsafe-inline`, `unsafe-eval` ni scripts inyectados. Además `object-src`, `frame-src`, `worker-src`, `base-uri` y `form-action` a `'none'`. |
+| Trusted Types | `require-trusted-types-for 'script'`: cualquier asignación a `innerHTML` y similares lanza un error en Chromium. La única política (`fourdash-xml`) se usa solo para `DOMParser` en un documento XML inerte. |
+| DOM seguro | Todo el texto se inserta con `textContent`/nodos de texto (`h()` en `01-util.js`). Nombres de hojas, columnas y celdas nunca se interpretan como HTML. |
+| Archivos | Validación por firma binaria (ZIP, OLE, PNG, JPEG, GIF, WEBP), no por extensión. Límites de tamaño, filas, columnas, celdas y hojas. |
+| XML | Se rechaza cualquier `<!DOCTYPE>`/`<!ENTITY>` (XXE y «billion laughs»). |
+| ZIP | Límite de entradas, tamaño descomprimido por entrada y total, y ratio de compresión. La descompresión es en streaming y se aborta al superar el límite (zip bomb). Sin ZIP64 ni entradas cifradas. |
+| Imágenes | Solo PNG/JPEG/WEBP/GIF (SVG rechazado: puede contener script). Se decodifican con `createImageBitmap` y se **recodifican en canvas**, lo que elimina metadatos y cargas ocultas. Las imágenes guardadas deben cumplir `^data:image/(png|jpeg|webp|gif);base64,…$`. |
+| Proyectos y almacenamiento local | `JSON.parse` con *reviver* que descarta `__proto__`, `constructor` y `prototype`; después, validación por esquema campo a campo (tipos, enumerados, longitudes, rangos, ids `^[A-Za-z0-9_-]{1,40}$`). Los objetos se reconstruyen desde cero y nunca se mezclan con los originales. Las agrupaciones usan `Map`/`Set`. |
+; cualquier otro valor se sustituye por el predeterminado. |
 | Exportación CSV | Neutraliza *CSV/Formula Injection*: los textos que empiezan por `= + - @ tab CR` se prefijan con `'`. |
 | Privacidad | Autoguardado opcional y desactivable; botón para borrar los datos locales. `referrer` = `no-referrer`. |
 

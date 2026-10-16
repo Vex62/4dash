@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-8PN4Sv61bToeCn3wblN9Hy6LsGF4M+JUExa5FbyLmMc='; style-src 'sha256-iglOllJRc5P2W6m2q9InUFl3K8od/DroqmRBXSEsVhg='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-NHynDKf4FiHfE5gwe3y1U093dEmjSDE1lG2e379nkSU='; style-src 'sha256-rkGrjtXS2Go4Ac//dyr7VQuJtwCq1vYQwe/w//rVPiM='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
 <meta name="generator" content="4Dash 1.0.0">
@@ -25,6 +25,7 @@
   --topbar-fg-2: #c8c6c4;
   --topbar-hover: #3b3a39;
   --brand: #f2c811;
+  --tab-accent: #f2c811;
   --primary: #0078d4;
   --primary-hover: #106ebe;
   --primary-fg: #ffffff;
@@ -150,7 +151,8 @@ svg.ico { flex: none; display: block; }
   border-right: 1px solid var(--topbar-hover);
 }
 .brand-mark { width: 22px; height: 22px; }
-.brand b { color: var(--brand); font-weight: 700; }
+.brand b { color: var(--brand-top, var(--brand)); font-weight: 700; }
+.brand-fill { fill: var(--brand-top, var(--brand)); }
 .doc-title {
   background: transparent; border: 1px solid transparent; color: var(--topbar-fg);
   font-size: 14px; padding: 5px 8px; border-radius: 2px; min-width: 120px; width: 280px; max-width: 32vw;
@@ -169,7 +171,7 @@ svg.ico { flex: none; display: block; }
   padding: 5px 12px; border-radius: 3px; font-weight: 600; font-size: 12.5px;
 }
 .segmented button:hover { color: var(--topbar-fg); }
-.segmented button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+.segmented button[aria-pressed="true"] { background: var(--seg-on-bg, var(--primary)); color: var(--seg-on-fg, #fff); }
 
 .logo-slot {
   display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -545,7 +547,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 12px; font-varian
   font-size: 12.5px; color: var(--text-2); white-space: nowrap; border-top: 3px solid transparent; position: relative;
 }
 .ptab:hover { background: var(--hover); color: var(--text); }
-.ptab[aria-selected="true"] { color: var(--text); font-weight: 600; border-top-color: var(--brand); background: var(--app-bg); }
+.ptab[aria-selected="true"] { color: var(--text); font-weight: 600; border-top-color: var(--tab-accent); background: var(--app-bg); }
 .ptab-input { width: 140px; border: 1px solid var(--primary); padding: 2px 6px; font-size: 12.5px; background: var(--pane-bg); }
 .status { display: flex; align-items: center; gap: 14px; color: var(--text-2); font-size: 12px; white-space: nowrap; padding-left: 8px; }
 
@@ -613,6 +615,40 @@ body.is-fullscreen #app { grid-template-rows: 0 0 1fr auto; }
 .modal-body { padding: 8px 24px 16px; overflow: auto; flex: 1; min-height: 0; line-height: 1.5; }
 .modal-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 24px 20px; align-items: center; }
 .modal-foot .grow { flex: 1; }
+
+/* Paletas */
+.palette-modal { max-width: 760px; }
+.pal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 8px; }
+.pal-card {
+  display: flex; flex-direction: column; gap: 0; padding: 0; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--pane-bg); overflow: hidden; text-align: left;
+}
+.pal-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-1); }
+.pal-card[aria-checked="true"] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+.pal-top { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; font-size: 12px; font-weight: 700; }
+.pal-top.custom { background: var(--app-bg); color: var(--text-2); }
+.pal-dot { width: 10px; height: 10px; border-radius: 2px; }
+.pal-strip { display: flex; height: 18px; margin: 10px 10px 0; gap: 2px; }
+.pal-strip span { flex: 1; border-radius: 2px; }
+.pal-name { display: flex; align-items: center; gap: 4px; padding: 8px 10px 10px; font-size: 12.5px; font-weight: 600; }
+.pal-name .ico { color: var(--primary); }
+.color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.color-grid.series { grid-template-columns: repeat(4, 1fr); }
+.color-field { display: flex; align-items: center; gap: 8px; cursor: pointer; min-width: 0; }
+.color-inp { width: 38px; height: 34px; border: 1px solid var(--border-strong); border-radius: 4px; padding: 2px; background: var(--pane-bg); cursor: pointer; flex: none; }
+.cf-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cf-label { font-size: 11.5px; color: var(--text-2); font-weight: 600; }
+.hex-inp { min-height: 26px; padding: 2px 6px; font-size: 12px; font-family: Consolas, "Cascadia Mono", monospace; width: 92px; }
+.pal-from { margin-top: 10px; max-width: 260px; }
+.a11y-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.a11y { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; padding: 6px 8px; border-radius: 3px; background: var(--app-bg); }
+.a11y .ico { margin-top: 2px; flex: none; }
+.a11y.ok .ico { color: var(--good-text); }
+.a11y.warn { background: rgba(250, 178, 25, .14); }
+.a11y.warn .ico { color: #a86b00; }
+.a11y.bad { background: var(--danger-soft); }
+.a11y.bad .ico { color: var(--danger); }
+@media (max-width: 700px) { .color-grid, .color-grid.series { grid-template-columns: repeat(2, 1fr); } }
 
 /* Tutorial */
 .tut-step { display: grid; grid-template-columns: 64px 1fr; gap: 18px; align-items: start; min-height: 190px; }
@@ -696,6 +732,7 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
     <div class="pres-nav presenter-only" id="presNav"></div>
     <div class="segmented" role="group" aria-label="Cambiar de vista" id="viewSwitch"></div>
     <div class="logo-wrap" id="logoWrap"></div>
+    <button class="top-btn editor-only" id="paletteBtn" type="button" title="Paleta de colores" aria-label="Paleta de colores"></button>
     <button class="top-btn" id="themeBtn" type="button" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"></button>
     <button class="top-btn help-btn" id="helpBtn" type="button" title="Tutorial y ayuda" aria-label="Abrir tutorial">?</button>
   </header>
@@ -843,23 +880,25 @@ const ICONS = {
   page: 'M4 3h16v18H4z|M8 7h8|M8 11h8|M8 15h5',
   info: 'M12 22a10 10 0 1 0 0-20a10 10 0 1 0 0 20z|M12 16v-4|M12 8h.01',
   focus: 'M3 7V3h4|M17 3h4v4|M21 17v4h-4|M7 21H3v-4',
-  lock: 'M5 11h14v10H5z|M8 11V7a4 4 0 0 1 8 0v4'
+  lock: 'M5 11h14v10H5z|M8 11V7a4 4 0 0 1 8 0v4',
+  palette: 'M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.4 3.4A1.6 1.6 0 0 1 12 22z|M7.5 11.5h.01|M10.5 7.5h.01|M15.5 8.5h.01'
 };
 const BOLD_ICONS = new Set(['more', 'scatter']);
+const DOT_ICONS = new Set(['palette']);
 function icon(name, size = 16, extraClass = '') {
   const svg = s('svg', {
     viewBox: '0 0 24 24', width: size, height: size, fill: 'none', stroke: 'currentColor',
     'stroke-width': BOLD_ICONS.has(name) ? 3 : 1.75, 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
     class: 'ico ' + extraClass, 'aria-hidden': 'true', focusable: 'false'
   });
-  for (const d of (ICONS[name] || ICONS.info).split('|')) s('path', { d }, svg);
+  for (const d of (ICONS[name] || ICONS.info).split('|')) s('path', { d, 'stroke-width': DOT_ICONS.has(name) && d.endsWith('h.01') ? 3 : null }, svg);
   return svg;
 }
 function brandMark(size = 22) {
   const svg = s('svg', { viewBox: '0 0 32 32', width: size, height: size, class: 'brand-mark', 'aria-hidden': 'true' });
-  s('rect', { x: 4, y: 17, width: 6, height: 11, rx: 1.5, fill: '#f2c811' }, svg);
-  s('rect', { x: 13, y: 10, width: 6, height: 18, rx: 1.5, fill: '#f2c811', opacity: .85 }, svg);
-  s('rect', { x: 22, y: 4, width: 6, height: 24, rx: 1.5, fill: '#f2c811', opacity: .7 }, svg);
+  s('rect', { x: 4, y: 17, width: 6, height: 11, rx: 1.5, class: 'brand-fill' }, svg);
+  s('rect', { x: 13, y: 10, width: 6, height: 18, rx: 1.5, class: 'brand-fill', opacity: .85 }, svg);
+  s('rect', { x: 22, y: 4, width: 6, height: 24, rx: 1.5, class: 'brand-fill', opacity: .7 }, svg);
   return svg;
 }
 
@@ -3065,6 +3104,7 @@ function sanitizeProject(raw) {
     format: '4dash', v: 1,
     title: str(raw.title, 120, 'Dashboard sin título') || 'Dashboard sin título',
     logo: isSafeImageDataUrl(raw.logo, 4 * 1024 * 1024) ? raw.logo : null,
+    palette: sanitizePalette(raw.palette),
     datasets, pages, filters,
     active: pages.some(p => p.id === raw.active) ? raw.active : pages[0].id,
     snap: bool(raw.snap, true),
@@ -3084,7 +3124,8 @@ const TUTORIAL = [
   { icon: 'grid', title: '2. Diseña en la vista Editor', text: ['Organiza el lienzo como en Power BI:'],
     list: ['Arrastra un visual para moverlo; usa los tiradores azules para cambiar su tamaño.', 'Aparecen guías magenta para alinear con otros visuales; mantén Alt para mover sin ajustar a la cuadrícula.', 'Inserta visuales desde el panel «Visualizaciones» (clic o arrastrar al lienzo).', 'Arrastra campos del panel «Datos» a un visual o al lienzo vacío.'] },
   { icon: 'edit', title: '3. Configura cada visual', text: ['Selecciona un visual y usa el panel «Propiedades» de la derecha:'],
-    list: ['Datos: origen, eje, leyenda, valores, agregación (suma, promedio…), agrupación de fechas, orden y Top N.', 'Formato: título, formato numérico y moneda, etiquetas, leyenda, color, objetivo del KPI…', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
+    list: ['Datos: origen, eje, leyenda, valores, agregación (suma, promedio…), agrupación de fechas, orden y Top N.', 'Formato: título, formato numérico y moneda, etiquetas, leyenda, color, objetivo del KPI…',
+      'Paleta de colores (cinta «Diseño» o icono de paleta): elige Verde esmeralda, Azul eléctrico u otras, o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
   { icon: 'filter', title: '4. Filtra e interactúa', text: ['Los visuales están conectados entre sí (filtrado cruzado):'],
     list: ['Haz clic en una barra, sector o fila para filtrar el resto de la página. Ctrl+clic suma selecciones.', 'En el Editor, el primer clic selecciona el visual y el segundo filtra.', 'Las segmentaciones filtran todos los visuales del mismo origen.', 'Los filtros activos aparecen sobre el lienzo; pulsa × para quitarlos.'] },
   { icon: 'monitor', title: '5. Presenta', text: ['Cambia a «Presentador» en la barra superior.'],
@@ -3166,7 +3207,7 @@ function loadPrefs() {
 function savePrefs() { try { localStorage.setItem(PREFS_KEY, JSON.stringify(App.prefs)); } catch { /* ignorar */ } }
 function newProject() {
   const pg = { id: uid(), name: 'Página 1', size: '16:9', w: 1280, h: 720, widgets: [] };
-  return { format: '4dash', v: 1, title: 'Dashboard sin título', logo: null, datasets: [], pages: [pg], filters: [], active: pg.id, snap: true, created: new Date().toISOString() };
+  return { format: '4dash', v: 1, title: 'Dashboard sin título', logo: null, palette: { id: 'default' }, datasets: [], pages: [pg], filters: [], active: pg.id, snap: true, created: new Date().toISOString() };
 }
 const saveNow = () => {
   if (!App.prefs.autosave) { App.saveError = null; renderSaveState(); return; }
@@ -3209,7 +3250,7 @@ function autoTitle(w) {
 }
 
 /* ---------- Historial (deshacer / rehacer) ---------- */
-function snapshot() { return JSON.stringify({ pages: App.p.pages, title: App.p.title, active: App.p.active }, jsonReplacer); }
+function snapshot() { return JSON.stringify({ pages: App.p.pages, title: App.p.title, active: App.p.active, palette: App.p.palette }, jsonReplacer); }
 function pushHistory(snap) {
   App.hist.push(snap);
   if (App.hist.length > 80) App.hist.shift();
@@ -3234,6 +3275,7 @@ function restore(json) {
   App.p.pages = o.pages.map(sanitizePage).filter(Boolean);
   App.p.title = str(o.title, 120, App.p.title);
   App.p.active = App.p.pages.some(p => p.id === o.active) ? o.active : App.p.pages[0].id;
+  App.p.palette = sanitizePalette(o.palette);
   if (!selW()) App.sel = null;
   afterChange({});
 }
@@ -3241,6 +3283,7 @@ function undo() { if (!App.hist.length) return; App.fut.push(snapshot()); restor
 function redo() { if (!App.fut.length) return; App.hist.push(snapshot()); restore(App.fut.pop()); }
 function afterChange(opts) {
   scheduleSave();
+  applyPalette();
   if (opts.only === 'widget' && opts.w) { rerenderWidget(opts.w); renderRibbon(); if (!opts.keepProps) renderRight(); return; }
   renderCanvas();
   renderRibbon();
@@ -3286,6 +3329,8 @@ function renderTopbar() {
     vs.appendChild(b);
   }
   renderLogo();
+  const pb = clear($('#paletteBtn'));
+  pb.appendChild(icon('palette', 18));
   const tb = clear($('#themeBtn'));
   tb.appendChild(icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon', 18));
   renderPresNav();
@@ -3371,7 +3416,8 @@ function renderRibbon() {
         rsm('slicer', 'Segmentación', () => insertWidget('slicer'), { disabled: !hasData })),
       rbtn('page', 'Nueva página', addPage)),
     rgroup('Diseño',
-      rbtn('wand', 'Generar automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Genera un dashboard automático para esta página a partir de un origen de datos' })),
+      rbtn('wand', 'Generar automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Genera un dashboard automático para esta página a partir de un origen de datos' }),
+      rbtn('palette', 'Paleta de colores', openPaletteDialog, { title: 'Cambiar la paleta de colores de la herramienta y del dashboard' })),
     rgroup('Organizar',
       h('div', { class: 'rstack' },
         rsm('copy', 'Duplicar', duplicateSelected, { disabled: !w }),
@@ -4262,6 +4308,7 @@ function toggleFullscreen() {
 }
 function applyTheme(t) {
   document.documentElement.dataset.theme = t;
+  applyPalette();
   App.prefs.theme = t;
   savePrefs();
   renderTopbar();
@@ -4287,9 +4334,10 @@ async function handleImport(file) {
   const baseName = String(file.name).replace(/\.[^.]+$/, '').slice(0, 100);
   mutate(() => {
     if (mode === 'replace') {
-      const keepLogo = App.p.logo;
+      const keepLogo = App.p.logo, keepPal = App.p.palette;
       App.p = newProject();
       App.p.logo = keepLogo;
+      App.p.palette = keepPal;
       App.p.title = baseName || 'Dashboard';
       App.p.pages = [];
       App.hist = [];
@@ -4335,9 +4383,10 @@ function fitPage(pg, height) {
 function loadSample() {
   const t = buildTable(sampleGrid());
   const run = () => mutate(() => {
-    const keepLogo = App.p.logo;
+    const keepLogo = App.p.logo, keepPal = App.p.palette;
     App.p = newProject();
     App.p.logo = keepLogo;
+    App.p.palette = keepPal;
     App.p.title = 'Ventas 2025 — Demo';
     App.p.pages = [];
     const pages = buildPagesFor([{ name: 'Ventas', ...t }]);
@@ -4637,6 +4686,244 @@ function openDataEditor(dsId) {
   return m;
 }
 
+/* ---- 07b-palettes.js ---- */
+/* ==========================================================================
+   Paletas de color de la herramienta y del dashboard.
+   Cada paleta define el cromo (barra superior, color principal, acento) y
+   la serie categórica de 8 colores para claro y oscuro. Las paletas
+   incluidas se han validado (contraste, separación para daltonismo y
+   visión normal entre colores adyacentes). La personalizada se valida en vivo.
+   ========================================================================== */
+
+// Pasos validados de la paleta de referencia (azul, naranja, aqua, amarillo, magenta, verde, violeta, rojo)
+const HUES_L = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#6250d6', '#e34948'];
+const HUES_D = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300', '#9085e9', '#e66767'];
+function seriesFrom(lead, order) {
+  return { light: [lead[0], ...order.map(i => HUES_L[i])], dark: [lead[1], ...order.map(i => HUES_D[i])] };
+}
+const PALETTES = {
+  default: { name: '4Dash (predeterminada)', topbar: '#252423', primary: '#0078d4', brand: '#f2c811', ...seriesFrom(['#2a78d6', '#3987e5'], [1, 2, 3, 4, 5, 6, 7]) },
+  emerald: { name: 'Verde esmeralda', topbar: '#047857', primary: '#047857', brand: '#ffffff', ...seriesFrom(['#059669', '#10a37a'], [1, 0, 3, 4, 6, 7, 5]) },
+  electric: { name: 'Azul eléctrico', topbar: '#0047ff', primary: '#0050e6', brand: '#ffffff', ...seriesFrom(['#0062ff', '#3b82ff'], [1, 2, 3, 4, 5, 6, 7]) },
+  navy: { name: 'Corporativo marino', topbar: '#1f2a44', primary: '#2f5597', brand: '#d4a72c', ...seriesFrom(['#2f5597', '#4a74c9'], [1, 2, 3, 4, 6, 5, 7]) },
+  sunset: { name: 'Atardecer', topbar: '#7c2d12', primary: '#c2410c', brand: '#fdba74', ...seriesFrom(['#d9480f', '#e8590c'], [0, 2, 3, 4, 6, 5, 7]) },
+  violet: { name: 'Violeta', topbar: '#3b0764', primary: '#6d28d9', brand: '#e9d5ff', ...seriesFrom(['#7c3aed', '#9b6cf2'], [2, 1, 0, 3, 4, 5, 7]) },
+  graphite: { name: 'Grafito y cian', topbar: '#111827', primary: '#0e7490', brand: '#22d3ee', ...seriesFrom(['#0b7fa0', '#1597b5'], [1, 6, 3, 4, 5, 0, 7]) }
+};
+const HEX_RE = /^#[0-9a-f]{6}$/i;
+
+/* ---------- Utilidades de color ---------- */
+const hexToRgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+const rgbToHex = rgb => '#' + rgb.map(v => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0')).join('');
+const mixHex = (a, b, t) => { const x = hexToRgb(a), y = hexToRgb(b); return rgbToHex(x.map((v, i) => v + (y[i] - v) * t)); };
+const toLin = c => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+function luminance(hex) { const [r, g, b] = hexToRgb(hex).map(toLin); return 0.2126 * r + 0.7152 * g + 0.0722 * b; }
+function contrast(a, b) { const x = luminance(a), y = luminance(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+const readableOn = bg => (contrast(bg, '#ffffff') >= contrast(bg, '#111111') ? '#ffffff' : '#111111');
+function oklab([r, g, b]) {
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
+}
+// Simulación de daltonismo (Machado et al. 2009, severidad 1.0) en RGB lineal
+const CVD = {
+  protan: [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
+  deutan: [[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.01182, 0.04294, 0.968881]]
+};
+function deltaE(a, b, sim) {
+  const lin = hex => {
+    const v = hexToRgb(hex).map(toLin);
+    if (!sim) return v;
+    return CVD[sim].map(row => clamp(row[0] * v[0] + row[1] * v[1] + row[2] * v[2], 0, 1));
+  };
+  const p = oklab(lin(a)), q = oklab(lin(b));
+  return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]) * 100;
+}
+/** Comprobaciones de accesibilidad de una serie categórica y del color principal. */
+function checkPalette(pal, surface = '#ffffff') {
+  const out = [];
+  const s = pal.series || pal.light;
+  let worstN = Infinity, worstC = Infinity, pairN = null, pairC = null;
+  for (let i = 0; i + 1 < s.length; i++) {
+    const n = deltaE(s[i], s[i + 1]);
+    const c = Math.min(deltaE(s[i], s[i + 1], 'protan'), deltaE(s[i], s[i + 1], 'deutan'));
+    if (n < worstN) { worstN = n; pairN = [i, i + 1]; }
+    if (c < worstC) { worstC = c; pairC = [i, i + 1]; }
+  }
+  out.push(worstN >= 15
+    ? { level: 'ok', text: `Colores contiguos distinguibles (ΔE mínimo ${worstN.toFixed(1)}).` }
+    : { level: 'bad', text: `Los colores ${pairN[0] + 1} y ${pairN[1] + 1} se parecen demasiado (ΔE ${worstN.toFixed(1)} < 15).` });
+  out.push(worstC >= 8
+    ? { level: 'ok', text: `Apta para daltonismo protan/deutan (ΔE mínimo ${worstC.toFixed(1)}).` }
+    : worstC >= 6
+      ? { level: 'warn', text: `Daltonismo: los colores ${pairC[0] + 1} y ${pairC[1] + 1} quedan justos (ΔE ${worstC.toFixed(1)}). Mantén etiquetas de datos activadas.` }
+      : { level: 'bad', text: `Daltonismo: los colores ${pairC[0] + 1} y ${pairC[1] + 1} son casi iguales (ΔE ${worstC.toFixed(1)} < 6).` });
+  const low = s.map((c, i) => [i + 1, contrast(c, surface)]).filter(x => x[1] < 3);
+  out.push(!low.length
+    ? { level: 'ok', text: 'Todos los colores tienen contraste ≥ 3:1 sobre el fondo.' }
+    : { level: 'warn', text: `Contraste bajo sobre el fondo en los colores ${low.map(x => x[0]).join(', ')}: usa etiquetas de datos o la vista de tabla.` });
+  const pc = contrast(pal.primary, '#ffffff');
+  out.push(pc >= 4.5
+    ? { level: 'ok', text: `Color principal legible en botones (contraste ${pc.toFixed(1)}:1).` }
+    : { level: 'warn', text: `El color principal tiene poco contraste con texto blanco (${pc.toFixed(1)}:1 < 4,5:1).` });
+  return out;
+}
+
+/* ---------- Aplicación ---------- */
+function currentPalette() {
+  const p = App.p && App.p.palette;
+  if (p && p.id === 'custom' && p.custom) return Object.assign({ name: 'Personalizada' }, p.custom, { light: p.custom.series, dark: p.custom.series });
+  return PALETTES[(p && PALETTES[p.id]) ? p.id : 'default'];
+}
+/** Aplica la paleta como variables CSS (CSSOM: compatible con la CSP). */
+function applyPalette() {
+  const pal = currentPalette();
+  const dark = document.documentElement.dataset.theme === 'dark';
+  const root = document.documentElement.style;
+  const set = (k, v) => root.setProperty(k, v);
+  const topFg = readableOn(pal.topbar);
+  set('--topbar-bg', dark ? mixHex(pal.topbar, '#000000', 0.35) : pal.topbar);
+  set('--topbar-fg', topFg);
+  set('--topbar-fg-2', mixHex(topFg, pal.topbar, 0.3));
+  set('--topbar-hover', mixHex(pal.topbar, topFg, 0.16));
+  set('--brand', pal.brand);
+  const top = dark ? mixHex(pal.topbar, '#000000', 0.35) : pal.topbar;
+  set('--brand-top', contrast(pal.brand, top) >= 1.8 ? pal.brand : topFg);
+  const pane = dark ? '#252423' : '#ffffff';
+  const primary = dark ? mixHex(pal.primary, '#ffffff', luminance(pal.primary) < 0.2 ? 0.3 : 0.1) : pal.primary;
+  set('--primary', primary);
+  set('--primary-hover', mixHex(primary, dark ? '#ffffff' : '#000000', 0.12));
+  set('--primary-fg', readableOn(primary));
+  set('--primary-soft', mixHex(pane, primary, dark ? 0.28 : 0.13));
+  set('--focus', primary);
+  const segOn = contrast(primary, top) >= 1.8;
+  set('--seg-on-bg', segOn ? primary : topFg);
+  set('--seg-on-fg', segOn ? readableOn(primary) : top);
+  set('--tab-accent', contrast(pal.brand, pane) >= 1.6 ? pal.brand : primary);
+  const series = dark ? pal.dark : pal.light;
+  series.forEach((c, i) => set(`--series-${i + 1}`, c));
+}
+function sanitizePalette(p) {
+  if (!p || typeof p !== 'object') return { id: 'default' };
+  if (p.id === 'custom' && p.custom && typeof p.custom === 'object') {
+    const c = p.custom;
+    const hx = (v, d) => (typeof v === 'string' && HEX_RE.test(v) ? v.toLowerCase() : d);
+    const base = PALETTES.default;
+    return {
+      id: 'custom', custom: {
+        topbar: hx(c.topbar, base.topbar), primary: hx(c.primary, base.primary), brand: hx(c.brand, base.brand),
+        series: Array.from({ length: 8 }, (_, i) => hx(Array.isArray(c.series) ? c.series[i] : null, base.light[i]))
+      }
+    };
+  }
+  return { id: PALETTES[p.id] ? p.id : 'default' };
+}
+
+/* ---------- Diálogo de paletas ---------- */
+function paletteSwatchRow(colors, cls = '') {
+  return h('div', { class: 'pal-strip ' + cls }, colors.map(c => { const sw = h('span'); sw.style.background = c; return sw; }));
+}
+function openPaletteDialog() {
+  const original = JSON.stringify(App.p.palette || { id: 'default' });
+  const snap = snapshot();
+  const cur = sanitizePalette(App.p.palette);
+  let draft = cur.id === 'custom' ? deepClone(cur.custom) : null;
+  const body = h('div', { class: 'modal-body' });
+  const apply = h('button', { class: 'btn primary', type: 'button', text: 'Aplicar' });
+  const cancel = h('button', { class: 'btn', type: 'button', text: 'Cancelar' });
+  let applied = false;
+  const m = openModal({
+    title: 'Paleta de colores', labelledIcon: 'palette', body, cls: 'palette-modal',
+    foot: h('div', { class: 'modal-foot' }, h('span', { class: 'grow hint', text: 'Se aplica a la herramienta y a todos los gráficos del dashboard. Se guarda con el proyecto.' }), cancel, apply),
+    onClose: () => { if (!applied) { App.p.palette = safeJsonParse(original); applyPalette(); renderTopbar(); } }
+  });
+  const preview = sel => { App.p.palette = sel; applyPalette(); renderTopbar(); draw(); };
+  cancel.addEventListener('click', () => m.close());
+  apply.addEventListener('click', () => {
+    applied = true;
+    const sel = App.p.palette;
+    App.p.palette = safeJsonParse(original);
+    mutate(() => { App.p.palette = sel; }, { snap });
+    applyPalette(); renderTopbar();
+    m.close();
+    toast('Paleta aplicada: ' + currentPalette().name, 'ok');
+  });
+  function draw() {
+    clear(body);
+    const sel = sanitizePalette(App.p.palette);
+    const grid = h('div', { class: 'pal-grid', role: 'radiogroup', 'aria-label': 'Paletas' });
+    for (const [id, p] of Object.entries(PALETTES)) {
+      const card = h('button', { class: 'pal-card', type: 'button', role: 'radio', 'aria-checked': sel.id === id ? 'true' : 'false' },
+        h('div', { class: 'pal-top' }, h('span', { class: 'pal-dot' }), h('span', { text: '4Dash' })),
+        paletteSwatchRow(p.light),
+        h('div', { class: 'pal-name' }, sel.id === id ? icon('check', 14) : null, h('span', { text: p.name })));
+      const top = card.querySelector('.pal-top');
+      top.style.background = p.topbar; top.style.color = readableOn(p.topbar);
+      card.querySelector('.pal-dot').style.background = p.brand;
+      card.addEventListener('click', () => preview({ id }));
+      grid.appendChild(card);
+    }
+    const customCard = h('button', { class: 'pal-card', type: 'button', role: 'radio', 'aria-checked': sel.id === 'custom' ? 'true' : 'false' },
+      h('div', { class: 'pal-top custom' }, icon('palette', 14), h('span', { text: 'Tu marca' })),
+      paletteSwatchRow((draft && draft.series) || PALETTES.default.light),
+      h('div', { class: 'pal-name' }, sel.id === 'custom' ? icon('check', 14) : null, h('span', { text: 'Personalizada' })));
+    customCard.addEventListener('click', () => {
+      if (!draft) { const base = currentPalette(); draft = { topbar: base.topbar, primary: base.primary, brand: base.brand, series: (base.light || base.series).slice() }; }
+      preview({ id: 'custom', custom: deepClone(draft) });
+    });
+    grid.appendChild(customCard);
+    body.appendChild(grid);
+
+    if (sel.id !== 'custom') {
+      body.appendChild(h('p', { class: 'hint', text: 'Las paletas incluidas están validadas para daltonismo y contraste en modo claro y oscuro. Elige «Personalizada» para usar los colores de tu marca (parte de la paleta seleccionada).' }));
+      return;
+    }
+    // Editor personalizado
+    const c = sel.custom;
+    draft = deepClone(c);
+    const update = () => preview({ id: 'custom', custom: deepClone(draft) });
+    const colorField = (label, get, setv) => {
+      const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': label });
+      inp.value = get();
+      const hex = h('input', { class: 'inp hex-inp', maxlength: 7, 'aria-label': label + ' (hex)', spellcheck: 'false' });
+      hex.value = get();
+      inp.addEventListener('input', () => { hex.value = inp.value; setv(inp.value); });
+      inp.addEventListener('change', update);
+      hex.addEventListener('change', () => {
+        const v = hex.value.trim().startsWith('#') ? hex.value.trim() : '#' + hex.value.trim();
+        if (HEX_RE.test(v)) { setv(v.toLowerCase()); update(); } else { hex.value = get(); toast('Color no válido: usa el formato #RRGGBB', 'error'); }
+      });
+      return h('label', { class: 'color-field' }, inp, h('span', { class: 'cf-text' }, h('span', { class: 'cf-label', text: label }), hex));
+    };
+    body.appendChild(h('div', { class: 'section-title', text: 'Herramienta' }));
+    body.appendChild(h('div', { class: 'color-grid' },
+      colorField('Barra superior', () => draft.topbar, v => { draft.topbar = v; }),
+      colorField('Color principal', () => draft.primary, v => { draft.primary = v; }),
+      colorField('Acento / logo', () => draft.brand, v => { draft.brand = v; })));
+    body.appendChild(h('div', { class: 'section-title', text: 'Colores de los gráficos (orden fijo)' }));
+    body.appendChild(h('div', { class: 'color-grid series' }, draft.series.map((_, i) => colorField('Serie ' + (i + 1), () => draft.series[i], v => { draft.series[i] = v; }))));
+    const from = h('select', { class: 'sel', 'aria-label': 'Partir de una paleta' });
+    from.appendChild(h('option', { value: '', text: 'Partir de una paleta…' }));
+    for (const [id, p] of Object.entries(PALETTES)) from.appendChild(h('option', { value: id, text: p.name }));
+    from.addEventListener('change', () => {
+      const p = PALETTES[from.value];
+      if (!p) return;
+      draft = { topbar: p.topbar, primary: p.primary, brand: p.brand, series: p.light.slice() };
+      update();
+    });
+    body.appendChild(h('div', { class: 'form-row pal-from' }, from));
+    body.appendChild(h('div', { class: 'section-title', text: 'Accesibilidad' }));
+    const list = h('ul', { class: 'a11y-list' });
+    for (const r of checkPalette(Object.assign({}, draft))) {
+      list.appendChild(h('li', { class: 'a11y ' + r.level }, icon(r.level === 'ok' ? 'check' : 'info', 14), h('span', { text: (r.level === 'ok' ? 'Correcto: ' : r.level === 'warn' ? 'Aviso: ' : 'Problema: ') + r.text })));
+    }
+    body.appendChild(list);
+  }
+  draw();
+  return m;
+}
+
 /* ---- 08-boot.js ---- */
 /* ==========================================================================
    Arranque y eventos globales.
@@ -4653,6 +4940,7 @@ function bindEvents() {
   title.addEventListener('keydown', e => { if (e.key === 'Enter') title.blur(); });
   $('#themeBtn').addEventListener('click', () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
   $('#helpBtn').addEventListener('click', () => openTutorial());
+  $('#paletteBtn').addEventListener('click', openPaletteDialog);
 
   $('#fileInput').addEventListener('change', e => { const f = e.target.files[0]; if (f) handleImport(f); });
   $('#projectInput').addEventListener('change', e => openProjectFile(e.target.files[0]));
@@ -4771,6 +5059,7 @@ function boot() {
   document.documentElement.dataset.theme = App.prefs.theme || (dark ? 'dark' : 'light');
   App.p = (App.prefs.autosave && loadStored()) || newProject();
   bindEvents();
+  applyPalette();
   renderAll();
   if (window.top !== window.self) {
     toast('Aviso: 4Dash se está mostrando dentro de otra página. Ábrelo directamente para mayor seguridad.', 'error', 9000);

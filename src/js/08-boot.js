@@ -13,6 +13,7 @@ function bindEvents() {
   title.addEventListener('keydown', e => { if (e.key === 'Enter') title.blur(); });
   $('#themeBtn').addEventListener('click', () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
   $('#helpBtn').addEventListener('click', () => openTutorial());
+  $('#paletteBtn').addEventListener('click', openPaletteDialog);
 
   $('#fileInput').addEventListener('change', e => { const f = e.target.files[0]; if (f) handleImport(f); });
   $('#projectInput').addEventListener('change', e => openProjectFile(e.target.files[0]));
@@ -131,6 +132,7 @@ function boot() {
   document.documentElement.dataset.theme = App.prefs.theme || (dark ? 'dark' : 'light');
   App.p = (App.prefs.autosave && loadStored()) || newProject();
   bindEvents();
+  applyPalette();
   renderAll();
   if (window.top !== window.self) {
     toast('Aviso: 4Dash se está mostrando dentro de otra página. Ábrelo directamente para mayor seguridad.', 'error', 9000);

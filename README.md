@@ -18,7 +18,8 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 | **Interactividad** | Filtrado cruzado al hacer clic en barras, sectores, filas o leyendas (Ctrl+clic suma selecciones), barra de filtros activos, tooltips en todos los gráficos, modo foco, «Ver datos» y exportación CSV por visual. |
 | **Editor de datos** | Ver y editar celdas, renombrar columnas (los visuales se actualizan), cambiar tipos, añadir/eliminar filas y columnas, buscar, transponer, exportar. |
 | **Vista Presentador** | Cabecera con logo y título, navegación por páginas (← →), pantalla completa (F), filtros interactivos. |
-| **Barra superior** | Cambio de vista Editor/Presentador, **espacio para el logo** de la empresa o cliente, tema claro/oscuro y **botón ?** con tutorial paso a paso y atajos de teclado. |
+| **Paletas de color** | 7 paletas para la herramienta y los gráficos: 4Dash (predeterminada), **Verde esmeralda**, **Azul eléctrico**, Corporativo marino, Atardecer, Violeta y Grafito y cian, todas validadas para daltonismo y contraste en claro y oscuro. Paleta **personalizada** con selector de color (barra superior, color principal, acento y 8 colores de serie), comprobación de accesibilidad en vivo y vista previa antes de aplicar. Se guarda con el proyecto y se puede deshacer. |
+| **Barra superior** | Cambio de vista Editor/Presentador, **espacio para el logo** de la empresa o cliente, paleta de colores, tema claro/oscuro y **botón ?** con tutorial paso a paso y atajos de teclado. |
 | **Proyecto** | Autoguardado local (opcional), guardar/abrir proyecto `.4dash.json`, páginas múltiples (renombrar, duplicar, reordenar), tamaños de página, **Imprimir / PDF** de todas las páginas. |
 | **Accesibilidad** | Paleta categórica validada para daltonismo en claro y oscuro, colores estables por entidad, leyenda siempre con ≥ 2 series, iconos + texto en deltas, navegación por teclado, `prefers-reduced-motion`. |
 
@@ -38,6 +39,7 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 │       ├── 05-ui.js         ← modales, menús, saneado de imágenes/proyectos, tutorial
 │       ├── 06-app.js        ← estado, editor, paneles, páginas, persistencia
 │       ├── 07-dataeditor.js ← editor de datos
+│       ├── 07b-palettes.js  ← paletas de color y editor personalizado
 │       └── 08-boot.js       ← arranque y atajos de teclado
 ├── samples/ejemplo_ventas.xlsx
 ├── tools/make_sample_xlsx.py  ← regenera el Excel de ejemplo (solo stdlib)
