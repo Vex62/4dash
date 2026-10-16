@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="{{CSP}}">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<meta name="generator" content="4Dash {{VERSION}}">
+<title>4Dash</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23252423'/%3E%3Crect x='7' y='17' width='4' height='8' rx='1' fill='%23f2c811'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1' fill='%23f2c811'/%3E%3Crect x='21' y='6' width='4' height='19' rx='1' fill='%23f2c811'/%3E%3C/svg%3E">
+<style>{{STYLE}}</style>
+</head>
+<body class="mode-editor">
+<noscript>4Dash necesita JavaScript activado para funcionar. No realiza conexiones de red: todo se procesa en tu navegador.</noscript>
+<div id="app">
+  <header class="topbar" role="banner">
+    <div class="brand" id="brand"></div>
+    <label class="sr-only" for="docTitle">Título del dashboard</label>
+    <input id="docTitle" class="doc-title" maxlength="120" autocomplete="off" spellcheck="false">
+    <span class="save-state editor-only" id="saveState"></span>
+    <div class="spacer"></div>
+    <div class="pres-nav presenter-only" id="presNav"></div>
+    <div class="segmented" role="group" aria-label="Cambiar de vista" id="viewSwitch"></div>
+    <div class="logo-wrap" id="logoWrap"></div>
+    <button class="top-btn" id="themeBtn" type="button" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"></button>
+    <button class="top-btn help-btn" id="helpBtn" type="button" title="Tutorial y ayuda" aria-label="Abrir tutorial">?</button>
+  </header>
+  <nav class="ribbon" id="ribbon" aria-label="Herramientas del editor"></nav>
+  <main class="workspace">
+    <aside class="pane left" id="leftPane" aria-label="Visualizaciones y campos"></aside>
+    <section class="canvas-area" id="canvasArea" aria-label="Lienzo del dashboard">
+      <div class="pres-header presenter-only" id="presHeader"></div>
+      <div class="filter-bar" id="filterBar" aria-label="Filtros activos"></div>
+      <div class="canvas-scroller" id="scroller">
+        <div class="page-frame" id="pageFrame"><div class="page" id="page"></div></div>
+      </div>
+      <div class="empty-state hidden" id="emptyState"></div>
+    </section>
+    <aside class="pane right" id="rightPane" aria-label="Propiedades"></aside>
+  </main>
+  <footer class="bottombar">
+    <div class="page-tabs" id="pageTabs" role="tablist" aria-label="Páginas"></div>
+    <div class="status" id="statusBar"></div>
+  </footer>
+</div>
+<div id="printRoot" aria-hidden="true"></div>
+<div class="tooltip hidden" id="tooltip" role="tooltip"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<input type="file" id="fileInput" class="hidden" accept=".xlsx,.xlsm,.csv,.tsv,.txt">
+<input type="file" id="projectInput" class="hidden" accept=".json,.4dash">
+<input type="file" id="imageInput" class="hidden" accept="image/png,image/jpeg,image/webp,image/gif">
+<script>{{SCRIPT}}</script>
+</body>
+</html>

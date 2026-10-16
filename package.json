@@ -1,0 +1,14 @@
+{
+  "name": "4dash",
+  "version": "1.0.0",
+  "description": "4Dash: dashboards interactivos a partir de Excel en un único HTML autocontenido, sin dependencias.",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
