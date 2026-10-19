@@ -125,7 +125,7 @@ button { cursor: pointer; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 svg.ico { flex: none; display: block; }
 
-#app { display: grid; grid-template-rows: 48px auto 1fr auto; height: 100vh; }
+#app { display: grid; grid-template-rows: 48px auto 1fr auto; grid-template-columns: minmax(0, 1fr); height: 100vh; width: 100%; overflow: hidden; }
 
 /* ---------- Barra superior ---------- */
 .topbar {
@@ -230,7 +230,7 @@ body.mode-presenter .logo-remove { display: none !important; }
 @media (max-width: 1100px) { .tbtn:not(.keep) .tb-lbl { display: none; } .tbtn { padding: 0 7px; } .tgroup { padding: 0 3px; } }
 
 /* ---------- Área de trabajo ---------- */
-.workspace { display: flex; min-height: 0; }
+.workspace { display: flex; min-height: 0; min-width: 0; }
 .pane {
   width: 264px; flex: none; background: var(--pane-bg); border-right: 1px solid var(--border);
   display: flex; flex-direction: column; min-height: 0; overflow: hidden;
@@ -339,7 +339,7 @@ body.mode-presenter .logo-remove { display: none !important; }
 
 /* ---------- Lienzo ---------- */
 .canvas-area {
-  flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--canvas-bg); position: relative;
+  flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--canvas-bg); position: relative; overflow: hidden;
 }
 .filter-bar {
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 6px 16px; min-height: 0;

@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9Ubc7cp66v/PkG6212ksm1GwSxnJvdAwjSpk+7cNIys='; style-src 'sha256-kVoFr4BH7p0H9ze9SQ+RW6RIRm9kSkQXgLHqcAr7HTE='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ppeVFiuOhpEQjankg9nGr1HUN0GfkH05vEgns4ucbrQ='; style-src 'sha256-ewAD2WeSmKhpD2tAOv2aSMjfKcLdbgw+tSKrTl5yIdA='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
-<meta name="generator" content="4Dash 1.2.0">
+<meta name="generator" content="4Dash 1.2.1">
 <meta name="author" content="Vex62">
 <title>4Dash</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b2130'/%3E%3Crect x='5' y='5' width='13' height='13' rx='3.5' fill='%23ff8a5b'/%3E%3Crect x='20' y='5' width='7' height='13' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='5' y='20' width='7' height='7' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='14' y='20' width='13' height='7' rx='2.5' fill='%23ff8a5b' opacity='.8'/%3E%3C/svg%3E">
@@ -137,7 +137,7 @@ button { cursor: pointer; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 svg.ico { flex: none; display: block; }
 
-#app { display: grid; grid-template-rows: 48px auto 1fr auto; height: 100vh; }
+#app { display: grid; grid-template-rows: 48px auto 1fr auto; grid-template-columns: minmax(0, 1fr); height: 100vh; width: 100%; overflow: hidden; }
 
 /* ---------- Barra superior ---------- */
 .topbar {
@@ -242,7 +242,7 @@ body.mode-presenter .logo-remove { display: none !important; }
 @media (max-width: 1100px) { .tbtn:not(.keep) .tb-lbl { display: none; } .tbtn { padding: 0 7px; } .tgroup { padding: 0 3px; } }
 
 /* ---------- Área de trabajo ---------- */
-.workspace { display: flex; min-height: 0; }
+.workspace { display: flex; min-height: 0; min-width: 0; }
 .pane {
   width: 264px; flex: none; background: var(--pane-bg); border-right: 1px solid var(--border);
   display: flex; flex-direction: column; min-height: 0; overflow: hidden;
@@ -351,7 +351,7 @@ body.mode-presenter .logo-remove { display: none !important; }
 
 /* ---------- Lienzo ---------- */
 .canvas-area {
-  flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--canvas-bg); position: relative;
+  flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--canvas-bg); position: relative; overflow: hidden;
 }
 .filter-bar {
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 6px 16px; min-height: 0;
@@ -881,7 +881,7 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 <input type="file" id="fileInput" class="hidden" accept=".xlsx,.xlsm,.csv,.tsv,.txt">
 <input type="file" id="projectInput" class="hidden" accept=".json,.4dash">
 <input type="file" id="imageInput" class="hidden" accept="image/png,image/jpeg,image/webp,image/gif">
-<script>/*! 4Dash v1.2.0 — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */
+<script>/*! 4Dash v1.2.1 — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */
 (() => {
 'use strict';
 /* ---- 01-util.js ---- */
