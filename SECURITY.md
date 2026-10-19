@@ -21,29 +21,8 @@ El objetivo del atacante sería ejecutar código en el navegador, exfiltrar dato
 | Imágenes | Solo PNG/JPEG/WEBP/GIF (SVG rechazado: puede contener script). Se decodifican con `createImageBitmap` y se **recodifican en canvas**, lo que elimina metadatos y cargas ocultas. Las imágenes guardadas deben cumplir `^data:image/(png|jpeg|webp|gif);base64,…$`. |
 | Exportación PNG / SVG / PDF | Se realiza íntegramente en el navegador: la página se serializa con `XMLSerializer` (sin `innerHTML`) dentro de un SVG que se carga como imagen `data:` (los documentos SVG cargados como imagen no ejecutan scripts ni cargan recursos externos) y se dibuja en un canvas; el PDF se escribe byte a byte. No se inserta ningún `<style>` ni script en el documento principal y la CSP no se relaja. Los colores de estilo se validan como `#rrggbb` antes de usarse. |
 | Proyectos y almacenamiento local | `JSON.parse` con *reviver* que descarta `__proto__`, `constructor` y `prototype`; después, validación por esquema campo a campo (tipos, enumerados, longitudes, rangos, ids `^[A-Za-z0-9_-]{1,40}$`). Los objetos se reconstruyen desde cero y nunca se mezclan con los originales. Las agrupaciones usan `Map`/`Set`. |
-| Paletas de color | Los colores se aplican como variables CSS mediante CSSOM (compatible con la CSP, sin estilos en línea). Los colores personalizados de proyectos importados deben cumplir `^#[0-9a-f]{6}# Revisión de seguridad de 4Dash (OWASP)
-
-**Alcance:** `dist/4dash.html` (aplicación de una sola página, sin backend) y su proceso de build.
-**Referencias:** OWASP Top 10 2021, OWASP ASVS 4.0 (capítulos V5, V12, V14) y las cheat sheets de XSS, CSP, XXE,
-CSV Injection, Prototype Pollution y File Upload.
-**Modelo de amenazas:** la entrada no confiable es todo lo que el usuario importa — Excel/CSV recibidos de terceros, proyectos
-`.4dash.json`, imágenes y el contenido de `localStorage` (que en `file://` puede compartirse con otras páginas locales).
-El objetivo del atacante sería ejecutar código en el navegador, exfiltrar datos o bloquear la herramienta.
-
-## Resumen de controles
-
-| Control | Implementación |
-|---|---|
-| Sin dependencias ni red | Cero librerías y cero CDN. La CSP prohíbe toda conexión (`connect-src 'none'`, `default-src 'none'`). El build falla si aparece una URL externa. |
-| CSP estricta por hash | `script-src` y `style-src` solo admiten el hash SHA-256 del bloque incrustado: no se permite `unsafe-inline`, `unsafe-eval` ni scripts inyectados. Además `object-src`, `frame-src`, `worker-src`, `base-uri` y `form-action` a `'none'`. |
-| Trusted Types | `require-trusted-types-for 'script'`: cualquier asignación a `innerHTML` y similares lanza un error en Chromium. La única política (`fourdash-xml`) se usa solo para `DOMParser` en un documento XML inerte. |
-| DOM seguro | Todo el texto se inserta con `textContent`/nodos de texto (`h()` en `01-util.js`). Nombres de hojas, columnas y celdas nunca se interpretan como HTML. |
-| Archivos | Validación por firma binaria (ZIP, OLE, PNG, JPEG, GIF, WEBP), no por extensión. Límites de tamaño, filas, columnas, celdas y hojas. |
-| XML | Se rechaza cualquier `<!DOCTYPE>`/`<!ENTITY>` (XXE y «billion laughs»). |
-| ZIP | Límite de entradas, tamaño descomprimido por entrada y total, y ratio de compresión. La descompresión es en streaming y se aborta al superar el límite (zip bomb). Sin ZIP64 ni entradas cifradas. |
-| Imágenes | Solo PNG/JPEG/WEBP/GIF (SVG rechazado: puede contener script). Se decodifican con `createImageBitmap` y se **recodifican en canvas**, lo que elimina metadatos y cargas ocultas. Las imágenes guardadas deben cumplir `^data:image/(png|jpeg|webp|gif);base64,…$`. |
-| Proyectos y almacenamiento local | `JSON.parse` con *reviver* que descarta `__proto__`, `constructor` y `prototype`; después, validación por esquema campo a campo (tipos, enumerados, longitudes, rangos, ids `^[A-Za-z0-9_-]{1,40}$`). Los objetos se reconstruyen desde cero y nunca se mezclan con los originales. Las agrupaciones usan `Map`/`Set`. |
-; cualquier otro valor se sustituye por el predeterminado. |
+| Paletas de color | Los colores se aplican como variables CSS mediante CSSOM (compatible con la CSP, sin estilos en línea). Los colores personalizados de proyectos importados deben cumplir `^#[0-9a-f]{6}$`; cualquier otro valor se sustituye por el predeterminado. |
+| Columnas condicionales (v1.3) | Las reglas «SI … ENTONCES …» son **datos que se interpretan**, nunca código: sin `eval`, `new Function` ni expresiones regulares construidas a partir de lo que escribe el usuario. Operadores de una lista cerrada, referencias a columnas por nombre exacto y solo hacia columnas anteriores (sin ciclos). Límites de 40 columnas condicionales por origen, 30 reglas por columna y 10 condiciones por regla. Al abrir un proyecto, las reglas se validan por esquema y los valores se **recalculan** a partir de ellas: los valores guardados nunca se toman como fiables. |
 | Exportación CSV | Neutraliza *CSV/Formula Injection*: los textos que empiezan por `= + - @ tab CR` se prefijan con `'`. |
 | Privacidad | Autoguardado opcional y desactivable; botón para borrar los datos locales. `referrer` = `no-referrer`. |
 
@@ -69,12 +48,22 @@ autoguardado). Se documenta como riesgo aceptado.
 - **Inyección CSS / selectores:** los valores dinámicos en selectores pasan por `CSS.escape` y los ids están validados.
 - **ReDoS:** las expresiones regulares sobre datos son lineales y se aplican a cadenas acotadas (p. ej. ≤ 40 caracteres para
   números).
+- **Columnas condicionales (v1.3):** no existe un lenguaje de fórmulas que se pueda inyectar. Cada regla es un objeto
+  `{ columna, operador, valor }` que interpreta `compileCalc()` (`07d-calc.js`) con funciones fijas por operador; las
+  comparaciones de texto usan `includes`/`startsWith`/`endsWith`/igualdad, nunca `RegExp` con texto del usuario, así que
+  tampoco hay ReDoS. Los resultados son valores (texto, número o fecha ISO), se muestran con `textContent` y, al exportar
+  a CSV, pasan por la misma neutralización de *Formula Injection* que el resto de celdas (probado con un resultado `=1+1`).
 
 ### A04 · Diseño inseguro — *Mitigado*
 Límites explícitos en `LIMITS` (`02-parsers.js`): 30 MB por archivo, 150 MB por entrada descomprimida, 300 MB en total,
 ratio 200:1, 10.000 entradas ZIP, 30 hojas, 100.000 filas, 300 columnas, 3 M de celdas, 60 MB por proyecto y 8 MB por
 imagen. Probado con una zip bomb de 200 MB → rechazada. Proyectos limitados a 60 páginas × 300 visuales; cada visual se
 acota al lienzo.
+
+Las columnas condicionales tienen un coste acotado y lineal: filas × condiciones, con un máximo de 40 columnas × 30 reglas
+× 10 condiciones por origen y el límite general de 300 columnas. Una columna condicional solo puede leer columnas normales
+o condicionales **definidas antes** que ella; una referencia a sí misma o a una posterior hace que la condición no se
+cumpla, por lo que no hay recursión ni bucles infinitos posibles. Medido: 100.000 filas con 3 reglas en unos 190 ms.
 
 ### A05 · Configuración de seguridad incorrecta — *Mitigado*
 CSP restrictiva en `<meta>`, `no-referrer`, sin directivas permisivas. **Limitación:** `frame-ancestors` no puede
@@ -104,6 +93,13 @@ No hay autenticación.
 - Deserialización segura de proyectos (reviver anti-*prototype pollution* + validación por esquema). Probado con un
   proyecto que incluye `__proto__`, `constructor.prototype`, un logo `javascript:`, una imagen SVG, un tipo de visual
   inexistente, ids con comillas y coordenadas `1e99`: todo se descarta o se acota.
+- **Columnas condicionales (v1.3).** `sanitizeCalc()` reconstruye cada definición desde cero: id con el patrón de ids
+  (si no, uno nuevo), nombre ≤ 80 caracteres, tipo de una lista cerrada, operadores de la lista blanca (los desconocidos
+  se descartan), operandos solo `{k:'v'}` con número finito o texto ≤ 2.000 caracteres, `{k:'c'}` con un nombre de columna
+  o `{k:'n'}`. Se descartan las definiciones cuyo nombre choca con una columna normal y las columnas marcadas como
+  condicionales sin definición pasan a ser normales. Después, los valores se recalculan siempre con las reglas, de modo que
+  un proyecto manipulado no puede hacer pasar datos arbitrarios por resultados de una regla. Probado con ids `<script>`,
+  operador `eval`, operandos que son objetos, tipo `evil` y claves desconocidas: todo se descarta o se sustituye.
 - **Integridad (v1.2).** `node build.mjs` publica el SHA-256 del archivo en `dist/4dash.html.sha256`, y
   `node build.mjs --check` (o `npm run check`) verifica sin escribir nada que `dist/4dash.html` coincide byte a byte con
   `src/`, que el script y los estilos incrustados coinciden con sus hashes CSP y con el hash publicado. Al arrancar, la
@@ -133,6 +129,17 @@ No existe ninguna petición de red (`connect-src 'none'`); los datos nunca salen
 | A04 · Diseño (exportación) | Caracteres de control de los datos importados podían producir un SVG inválido y romper la exportación. | Se eliminan antes de serializar. |
 | A08 · Integridad | No había forma de verificar que el archivo distribuido es el publicado. | Hash publicado, `--check` en el build y comprobación en ejecución (ver A08). |
 
+## Revisión de la versión 1.3 (columnas condicionales)
+
+| Área | Riesgo considerado | Control |
+|---|---|---|
+| A03 · Inyección de código | Que una regla se convirtiera en un vector de ejecución (fórmulas evaluadas). | Reglas declarativas interpretadas con funciones fijas; el build sigue rechazando `eval`/`new Function`; la CSP no admite `unsafe-eval`. |
+| A03 · ReDoS | Patrones de texto escritos por el usuario. | Sin `RegExp` dinámicas: solo `includes`, `startsWith`, `endsWith`, igualdad y pertenencia a un `Set` (operador «es uno de»). |
+| A03 · CSV / Formula Injection | Resultados de texto que empiezan por `=`, `+`, `-` o `@`. | Se exportan con el prefijo `'`, como el resto de celdas. |
+| A04 · Agotamiento de recursos | Muchas reglas o referencias circulares. | Límites de definiciones, reglas y condiciones; solo referencias a columnas anteriores; coste lineal. |
+| A08 · Proyectos manipulados | Definiciones o valores calculados alterados en `.4dash.json` o `localStorage`. | Validación por esquema (`sanitizeCalc`) y recálculo de todos los valores al cargar. |
+| Integridad de los datos | Borrar o renombrar una columna usada por una regla. | Al renombrar, las reglas se actualizan; no se permite borrar una columna en uso. |
+
 ## Riesgos residuales y recomendaciones
 1. **Datos en `localStorage` sin cifrar.** Recomendación: desactivar el autoguardado en equipos compartidos y usar
    «Borrar datos guardados localmente».
@@ -145,5 +152,7 @@ No existe ninguna petición de red (`connect-src 'none'`); los datos nunca salen
 - `node build.mjs` falla ante APIs peligrosas, URLs externas o errores de sintaxis.
 - `node build.mjs --check` verifica la integridad del archivo publicado (ver A08).
 - Pruebas manuales realizadas: importación de `.xlsx` con XSS en celdas/cabeceras/nombre de hoja, `.xlsx` con DTD/ENTITY,
-  zip bomb de 200 MB, CSV con fórmulas y saltos de línea, proyecto con *prototype pollution*, logo SVG con extensión `.png`.
+  zip bomb de 200 MB, CSV con fórmulas y saltos de línea, proyecto con *prototype pollution*, logo SVG con extensión `.png`,
+  y (v1.3) definiciones de columnas condicionales manipuladas (ids con `<script>`, operador `eval`, operandos-objeto,
+  referencias circulares) y 100.000 filas con varias reglas.
   Resultado: ningún script ejecutado, ninguna violación de CSP, todas las entradas maliciosas rechazadas o neutralizadas.
