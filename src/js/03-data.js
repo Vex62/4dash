@@ -34,25 +34,49 @@ const VIZ = {
   kpi: { label: 'Tarjeta KPI', icon: 'kpi', cat: true, vals: 'num1' },
   gauge: { label: 'Medidor', icon: 'gauge', vals: 'num1' },
   table: { label: 'Tabla', icon: 'table', cat: true, vals: 'any' },
-  slicer: { label: 'Segmentación', icon: 'slicer', cat: true },
+  slicer: { label: 'Selector de filtro', icon: 'slicer', cat: true },
   text: { label: 'Cuadro de texto', icon: 'text' },
-  image: { label: 'Imagen', icon: 'image' }
+  image: { label: 'Imagen', icon: 'image' },
+  shape: { label: 'Forma', icon: 'shape' }
 };
 const DEFAULT_SIZE = {
-  kpi: [288, 128], gauge: [304, 224], slicer: [240, 288], text: [400, 128], image: [240, 160],
+  kpi: [288, 128], gauge: [304, 224], slicer: [240, 288], text: [400, 128], image: [240, 160], shape: [240, 160],
   table: [624, 320], pie: [400, 304], donut: [400, 304], treemap: [480, 304], scatter: [480, 320]
 };
 
+/** Visuales que no usan datos. */
+const NO_DATA_VIZ = ['text', 'image', 'shape'];
+/** Formato visual (relleno, borde, sombra, título, tipografía y gráficos). */
+const WIDGET_STYLE_DEFAULTS = {
+  fillType: 'theme', fill1: '#ffffff', fill2: '#dfe6fb', fillAngle: 135, fillAlpha: 100,
+  borderW: 0, borderColor: null, borderStyle: 'solid', radius: 6, shadow: 'soft',
+  titleSize: 14, titleColor: null, titleAlign: 'left', titleBold: true, titleItalic: false,
+  textColor: null, fontFamily: 'sans', bold: false, italic: false,
+  lineW: 2, smooth: false, markers: false, barRadius: 4, barGap: null, holeSize: 62, areaAlpha: 12,
+  shape: 'round'
+};
+const SHAPES = { rect: 'Rectángulo', round: 'Rectángulo redondeado', ellipse: 'Elipse', triangle: 'Triángulo', diamond: 'Rombo', hexagon: 'Hexágono', arrow: 'Flecha', chevron: 'Cheurón', line: 'Línea', banner: 'Pestaña' };
+const FONTS = {
+  sans: { label: 'Sans (sistema)', css: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' },
+  serif: { label: 'Serif', css: 'Georgia, Cambria, "Times New Roman", serif' },
+  mono: { label: 'Monoespaciada', css: 'ui-monospace, Consolas, "Cascadia Mono", Menlo, monospace' },
+  rounded: { label: 'Redondeada', css: 'ui-rounded, "Trebuchet MS", "Segoe UI", system-ui, sans-serif' },
+  condensed: { label: 'Estrecha', css: '"Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif' }
+};
+const SHADOWS = { none: 'Sin sombra', soft: 'Suave', medium: 'Media', strong: 'Intensa', float: 'Flotante', glow: 'Resplandor' };
 function newWidget(type, ds, extra) {
   const [w, h] = DEFAULT_SIZE[type] || [480, 304];
   return Object.assign({
     id: uid(), type, x: 16, y: 16, w, h,
-    title: '', showTitle: type !== 'text' && type !== 'image', bg: true,
+    title: '', showTitle: !NO_DATA_VIZ.includes(type), bg: true,
     ds: ds ? ds.id : null, cat: null, split: null, vals: [], agg: 'sum', grain: 'auto',
     sort: 'auto', top: 0, fmt: 'auto', dec: null, currency: 'EUR',
     labels: true, showLegend: true, gridlines: true, slot: 0, target: null,
     text: '', fontSize: 14, align: 'left', vcenter: false, img: null,
-    dataBars: true, totals: true, slicerStyle: 'list', z: 0
+    dataBars: true, totals: true, slicerStyle: 'list', z: 0,
+    ...WIDGET_STYLE_DEFAULTS,
+    ...(type === 'shape' ? { fillType: 'solid', fill1: '#3a5ccc', fill2: '#7c96e8', shadow: 'none', textColor: '#ffffff', align: 'center', fontSize: 16 } : null),
+    colors: Array(8).fill(null)
   }, extra || {});
 }
 
@@ -400,7 +424,7 @@ function autoDashboard(ds, opts = {}) {
     rowItems.push(newWidget('scatter', ds, { vals: [main.name, other.name], cat: c1 ? c1.name : null, agg: 'sum' }));
   }
 
-  // Segmentación a la izquierda, preferiblemente con un campo no usado
+  // Selector de filtro a la izquierda, preferiblemente con un campo no usado
   const slicerCat = cats.find(c => c.distinct <= 25 && !used.has(c.name)) || cats.find(c => c.distinct <= 25);
   let x0 = M, avail = W;
   const rowsNeeded = Math.ceil(rowItems.length / 2);
@@ -442,7 +466,7 @@ function sampleGrid() {
   let seed = 42;
   const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
   const regions = ['Norte', 'Sur', 'Este', 'Oeste', 'Centro'];
-  const cats = { Hardware: ['Portátil Pro', 'Monitor 27"', 'Dock USB-C'], Software: ['Licencia ERP', 'Suite Ofimática', 'Antivirus'], Servicios: ['Soporte 24/7', 'Consultoría', 'Implantación'], Formación: ['Curso Power BI', 'Taller Excel'] };
+  const cats = { Hardware: ['Portátil Pro', 'Monitor 27"', 'Dock USB-C'], Software: ['Licencia ERP', 'Suite Ofimática', 'Antivirus'], Servicios: ['Soporte 24/7', 'Consultoría', 'Implantación'], Formación: ['Curso de análisis de datos', 'Taller de hojas de cálculo'] };
   const canales = ['Online', 'Tienda', 'Partner'];
   const grid = [['Informe de ventas 2025'], [], ['Fecha', 'Región', 'Categoría', 'Producto', 'Canal', 'Unidades', 'Ventas (€)', 'Coste (€)', 'Satisfacción']];
   const regionW = [1.3, 0.8, 1, 0.9, 1.5];

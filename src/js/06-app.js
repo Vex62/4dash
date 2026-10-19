@@ -61,9 +61,9 @@ function autoTitle(w) {
   if (w.title) return w.title;
   const ds = dsById(w.ds);
   const def = VIZ[w.type];
-  if (w.type === 'text' || w.type === 'image') return def.label;
+  if (NO_DATA_VIZ.includes(w.type)) return def.label;
   if (!ds) return def.label;
-  if (w.type === 'slicer') return w.cat || 'Segmentación';
+  if (w.type === 'slicer') return w.cat || 'Selector de filtro';
   if (w.type === 'table') return w.cat ? `${w.cat}: resumen` : ds.name;
   if (w.type === 'scatter') return w.vals.length >= 2 ? `${w.vals[1]} frente a ${w.vals[0]}` : def.label;
   const m = w.split ? measureName(ds, w, w.vals[0]) : (w.vals.length > 1 ? w.vals.join(', ') : measureName(ds, w, w.vals[0] || null));
@@ -106,9 +106,9 @@ function redo() { if (!App.fut.length) return; App.hist.push(snapshot()); restor
 function afterChange(opts) {
   scheduleSave();
   applyPalette();
-  if (opts.only === 'widget' && opts.w) { rerenderWidget(opts.w); renderRibbon(); if (!opts.keepProps) renderRight(); return; }
+  if (opts.only === 'widget' && opts.w) { rerenderWidget(opts.w); renderToolbar(); if (!opts.keepProps) renderRight(); return; }
   renderCanvas();
-  renderRibbon();
+  renderToolbar();
   renderPages();
   renderStatus();
   renderFilterBar();
@@ -142,11 +142,12 @@ function refreshData() { renderCanvas(); renderFilterBar(); renderStatus(); if (
 /* ---------- Render: barra superior ---------- */
 function renderTopbar() {
   const brand = clear($('#brand'));
-  brand.append(brandMark(22), h('span', null, h('b', { text: '4' }), 'Dash'));
+  brand.append(brandMark(22), h('span', { class: 'brand-name' }, h('b', { text: '4' }), 'Dash'));
+  brand.title = '4Dash · © Vex62 · Licencia 4Dash (uso comercial con atribución al autor)';
   $('#docTitle').value = App.p.title;
   const vs = clear($('#viewSwitch'));
   for (const [id, label, ic] of [['editor', 'Editor', 'edit'], ['presenter', 'Presentador', 'monitor']]) {
-    const b = h('button', { type: 'button', 'aria-pressed': App.view === id ? 'true' : 'false', title: id === 'editor' ? 'Vista Editor' : 'Vista Presentador (F5)' }, icon(ic, 15), label);
+    const b = h('button', { type: 'button', 'aria-pressed': App.view === id ? 'true' : 'false', title: id === 'editor' ? 'Vista Editor' : 'Vista Presentador (F5)', 'aria-label': label }, icon(ic, 15), h('span', { class: 'seg-lbl', text: label }));
     b.addEventListener('click', () => setView(id));
     vs.appendChild(b);
   }
@@ -202,79 +203,190 @@ function renderSaveState() {
   el.title = el.textContent;
 }
 
-/* ---------- Render: cinta (ribbon) ---------- */
-function rbtn(ic, label, onClick, opts = {}) {
-  const b = h('button', { class: 'rbtn', type: 'button', title: opts.title || label, disabled: !!opts.disabled, 'aria-pressed': opts.pressed == null ? null : String(!!opts.pressed) }, icon(ic, 22), h('span', { text: label }));
+/* ---------- Render: barra de herramientas ----------
+   Una sola fila compacta: los textos se ocultan progresivamente al estrecharse
+   la ventana (o al aumentar el zoom del navegador) y queda el icono con su
+   descripción emergente; si aun así no cabe, la barra se desplaza en horizontal. */
+function tbtn(ic, label, onClick, opts = {}) {
+  const b = h('button', {
+    class: 'tbtn' + (opts.cls ? ' ' + opts.cls : ''), type: 'button', title: opts.title || label, 'aria-label': label,
+    disabled: !!opts.disabled, 'aria-pressed': opts.pressed == null ? null : String(!!opts.pressed), 'aria-haspopup': opts.menu ? 'menu' : null
+  }, icon(ic, 18), h('span', { class: 'tb-lbl', text: label }), opts.menu ? icon('chevD', 12, 'caret') : null);
   b.addEventListener('click', onClick);
   return b;
 }
-function rsm(ic, label, onClick, opts = {}) {
-  const b = h('button', { class: 'rbtn-sm', type: 'button', title: opts.title || label, disabled: !!opts.disabled, 'aria-pressed': opts.pressed == null ? null : String(!!opts.pressed) }, icon(ic, 15), h('span', { text: label }));
-  b.addEventListener('click', onClick);
-  return b;
+function tmenu(ic, label, items, opts = {}) {
+  return tbtn(ic, label, e => openMenu(e.currentTarget, items()), Object.assign({ menu: true }, opts));
 }
-function rgroup(label, ...items) {
-  return h('div', { class: 'rgroup', role: 'group', 'aria-label': label }, h('div', { class: 'rgroup-items' }, items), h('div', { class: 'rgroup-label', text: label }));
+function tgroup(label, items, cls = '') {
+  return h('div', { class: 'tgroup' + (cls ? ' ' + cls : ''), role: 'group', 'aria-label': label }, items);
 }
-function renderRibbon() {
-  const r = clear($('#ribbon'));
+const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+function setZoom(z) { App.zoom = String(z); applyZoom(); renderToolbar(); }
+function zoomBy(dir) {
+  const cur = App.scale;
+  const next = dir > 0 ? ZOOM_STEPS.find(z => z > cur + 0.005) : ZOOM_STEPS.slice().reverse().find(z => z < cur - 0.005);
+  if (next) setZoom(next);
+}
+function openProjectPicker() { $('#projectInput').value = ''; $('#projectInput').click(); }
+function toggleSnap() { App.p.snap = !App.p.snap; scheduleSave(); renderToolbar(); renderCanvas(); }
+function renderToolbar() {
+  const r = clear($('#toolbar'));
   const w = selW();
   const hasData = App.p.datasets.length > 0;
-  const zoomSel = h('select', { class: 'sel zoom-select', 'aria-label': 'Zoom', title: 'Zoom del lienzo' });
-  for (const [v, l] of [['fit', 'Ajustar página'], ['width', 'Ajustar ancho'], ['0.5', '50 %'], ['0.75', '75 %'], ['1', '100 %'], ['1.25', '125 %'], ['1.5', '150 %']]) {
-    zoomSel.appendChild(h('option', { value: v, selected: String(App.zoom) === v, text: l }));
-  }
+  const zoomSel = h('select', { class: 'sel', 'aria-label': 'Zoom del lienzo', title: 'Zoom del lienzo (Ctrl + rueda sobre el lienzo)' });
+  const zopts = [['fit', 'Ajustar página'], ['width', 'Ajustar ancho'], ['0.5', '50 %'], ['0.75', '75 %'], ['1', '100 %'], ['1.25', '125 %'], ['1.5', '150 %'], ['2', '200 %']];
+  if (!zopts.some(o => o[0] === String(App.zoom))) zopts.push([String(App.zoom), Math.round(+App.zoom * 100) + ' %']);
+  for (const [v, l] of zopts) zoomSel.appendChild(h('option', { value: v, selected: String(App.zoom) === v, text: l }));
   zoomSel.addEventListener('change', () => { App.zoom = zoomSel.value; applyZoom(); renderStatus(); });
+  const pal = currentPalette();
   r.append(
-    rgroup('Datos',
-      rbtn('upload', 'Importar Excel', () => openFile(), { title: 'Importar un archivo .xlsx, .xlsm o .csv' }),
-      rbtn('sparkles', 'Datos de ejemplo', loadSample),
-      rbtn('table', 'Ver / editar datos', () => openDataEditor(), { disabled: !hasData })),
-    rgroup('Insertar',
-      rbtn('plus', 'Nuevo visual', e => openMenu(e.currentTarget, Object.keys(VIZ).map(t => ({ label: VIZ[t].label, icon: VIZ[t].icon, onClick: () => insertWidget(t) })))),
-      h('div', { class: 'rstack' },
-        rsm('text', 'Cuadro de texto', () => insertWidget('text')),
-        rsm('image', 'Imagen', () => insertWidget('image')),
-        rsm('slicer', 'Segmentación', () => insertWidget('slicer'), { disabled: !hasData })),
-      rbtn('page', 'Nueva página', addPage)),
-    rgroup('Diseño',
-      rbtn('wand', 'Generar automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Genera un dashboard automático para esta página a partir de un origen de datos' }),
-      rbtn('palette', 'Paleta de colores', openPaletteDialog, { title: 'Cambiar la paleta de colores de la herramienta y del dashboard' })),
-    rgroup('Organizar',
-      h('div', { class: 'rstack' },
-        rsm('copy', 'Duplicar', duplicateSelected, { disabled: !w }),
-        rsm('front', 'Traer al frente', () => reorder(1), { disabled: !w }),
-        rsm('back', 'Enviar atrás', () => reorder(-1), { disabled: !w })),
-      h('div', { class: 'rstack' },
-        rsm('trash', 'Eliminar', deleteSelected, { disabled: !w }),
-        rsm('grid', 'Ajustar a cuadrícula', () => { App.p.snap = !App.p.snap; scheduleSave(); renderRibbon(); renderCanvas(); }, { pressed: App.p.snap }),
-        rsm('fit', 'Alinear a cuadrícula', alignAllToGrid, { disabled: !page().widgets.length }))),
-    rgroup('Vista',
-      h('div', { class: 'rstack' },
-        rsm('panelL', 'Panel izquierdo', () => togglePane('left'), { pressed: !App.prefs.leftCollapsed }),
-        rsm('panelR', 'Panel derecho', () => togglePane('right'), { pressed: !App.prefs.rightCollapsed }),
-        zoomSel)),
-    rgroup('Edición',
-      rbtn('undo', 'Deshacer', undo, { disabled: !App.hist.length, title: 'Deshacer (Ctrl+Z)' }),
-      rbtn('redo', 'Rehacer', redo, { disabled: !App.fut.length, title: 'Rehacer (Ctrl+Y)' })),
-    rgroup('Archivo',
-      h('div', { class: 'rstack' },
-        rsm('file', 'Nuevo', newProjectFlow),
-        rsm('open', 'Abrir proyecto', () => { $('#projectInput').value = ''; $('#projectInput').click(); }),
-        rsm('save', 'Guardar proyecto', saveProjectFile)),
-      rbtn('print', 'Imprimir / PDF', printDashboard, { title: 'Imprimir o guardar como PDF todas las páginas' }))
+    tgroup('Archivo', [
+      tmenu('file', 'Archivo', () => [
+        { label: 'Nuevo dashboard', icon: 'file', onClick: newProjectFlow },
+        { label: 'Abrir proyecto… (Ctrl+O)', icon: 'open', onClick: openProjectPicker },
+        { label: 'Guardar proyecto (Ctrl+S)', icon: 'save', onClick: saveProjectFile },
+        '-',
+        { label: 'Exportar imagen o PDF… (Ctrl+E)', icon: 'export', onClick: () => openExportDialog() },
+        { label: 'Imprimir… (Ctrl+P)', icon: 'print', onClick: printDashboard }
+      ], { cls: 'keep', title: 'Nuevo, abrir, guardar, exportar e imprimir' })]),
+    tgroup('Datos', [
+      tbtn('upload', 'Importar', () => openFile(), { title: 'Importar un archivo .xlsx, .xlsm o .csv' }),
+      tbtn('sparkles', 'Ejemplo', loadSample, { title: 'Cargar datos de ejemplo', cls: 'opt' }),
+      tbtn('table', 'Datos', () => openDataEditor(), { disabled: !hasData, title: 'Ver y editar los datos', cls: 'opt' })]),
+    tgroup('Insertar', [
+      tmenu('plus', 'Visual', () => Object.keys(VIZ).filter(t => !NO_DATA_VIZ.includes(t)).map(t => ({ label: VIZ[t].label, icon: VIZ[t].icon, onClick: () => insertWidget(t) })), { title: 'Insertar un visual' }),
+      tbtn('text', 'Texto', () => insertWidget('text'), { title: 'Insertar un cuadro de texto', cls: 'opt' }),
+      tbtn('image', 'Imagen', () => insertWidget('image'), { title: 'Insertar una imagen', cls: 'opt' }),
+      tmenu('shape', 'Forma', () => Object.keys(SHAPES).map(k => ({ label: SHAPES[k], icon: 'shape', onClick: () => insertShape(k) })), { title: 'Insertar una forma', cls: 'opt' }),
+      tbtn('page', 'Página', addPage, { title: 'Nueva página', cls: 'opt' })]),
+    tgroup('Diseño', [
+      tbtn('wand', 'Automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Generar un dashboard automático para esta página', cls: 'opt' }),
+      tbtn('palette', 'Paleta', openPaletteDialog, { title: 'Paleta de colores de la herramienta y del dashboard', cls: 'opt' }),
+      tmenu('brush', 'Estilos', () => quickStyles(pal).map(q => ({ label: q.name, icon: 'brush', onClick: () => applyQuickStyle(q) })),
+        { title: w ? 'Estilo rápido para el visual seleccionado' : 'Estilo rápido para todos los visuales de la página', disabled: !page().widgets.length })]),
+    tgroup('Organizar', [
+      tbtn('copy', 'Duplicar', duplicateSelected, { disabled: !w, title: 'Duplicar (Ctrl+D)', cls: 'opt' }),
+      tmenu('layers', 'Orden', () => [
+        { label: 'Traer al frente', icon: 'front', onClick: () => reorder(1) },
+        { label: 'Enviar atrás', icon: 'back', onClick: () => reorder(-1) }], { disabled: !w, cls: 'opt' }),
+      tmenu('alignL', 'Alinear', alignMenuItems, { disabled: !page().widgets.length, title: 'Alinear respecto a la página o a la cuadrícula', cls: 'opt' }),
+      tbtn('grid', 'Cuadrícula', toggleSnap, { pressed: App.p.snap, title: 'Ajustar a la cuadrícula al mover (Alt lo desactiva)', cls: 'opt' }),
+      tbtn('trash', 'Eliminar', deleteSelected, { disabled: !w, title: 'Eliminar (Supr)', cls: 'opt' })]),
+    tgroup('Edición', [
+      tbtn('undo', 'Deshacer', undo, { disabled: !App.hist.length, title: 'Deshacer (Ctrl+Z)', cls: 'opt' }),
+      tbtn('redo', 'Rehacer', redo, { disabled: !App.fut.length, title: 'Rehacer (Ctrl+Y)', cls: 'opt' })]),
+    tgroup('Vista', [
+      tbtn('panelL', 'Panel izquierdo', () => togglePane('left'), { pressed: !isCollapsed('left'), cls: 'opt' }),
+      tbtn('panelR', 'Panel derecho', () => togglePane('right'), { pressed: !isCollapsed('right'), cls: 'opt' }),
+      h('div', { class: 'zoom-box' }, zoomSel)], 'push'),
+    tgroup('Exportar', [
+      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG) o PDF tal y como se ve en el Presentador (Ctrl+E)' })], 'sticky-end')
   );
+}
+function insertShape(kind, at) {
+  const pal = currentPalette();
+  const extra = { shape: kind, fill1: pal.primary, fill2: mixHex(pal.primary, '#ffffff', 0.45) };
+  if (kind === 'line') Object.assign(extra, { h: 32, w: 320, borderW: 3, borderColor: pal.primary });
+  if (kind === 'ellipse') Object.assign(extra, { w: 200, h: 200 });
+  insertWidget('shape', at || null, extra);
+}
+/** Alinear el visual seleccionado respecto a la página (margen de 16 px). */
+function alignMenuItems() {
+  const w = selW();
+  const items = [
+    ['l', 'Alinear a la izquierda', 'alignL'], ['c', 'Centrar horizontalmente', 'alignC'], ['r', 'Alinear a la derecha', 'alignR'],
+    ['t', 'Alinear arriba', 'alignT'], ['m', 'Centrar verticalmente', 'alignM'], ['b', 'Alinear abajo', 'alignB']
+  ].map(([k, label, ic]) => ({ label, icon: ic, disabled: !w, onClick: () => alignSelected(k) }));
+  return items.concat(['-', { label: 'Ajustar todo a la cuadrícula', icon: 'fit', onClick: alignAllToGrid }]);
+}
+function alignSelected(mode) {
+  const w = selW();
+  if (!w) return;
+  const pg = page(), M = 16;
+  mutate(() => {
+    if (mode === 'l') w.x = M;
+    if (mode === 'c') w.x = Math.round((pg.w - w.w) / 2);
+    if (mode === 'r') w.x = Math.max(0, pg.w - w.w - M);
+    if (mode === 't') w.y = M;
+    if (mode === 'm') w.y = Math.round((pg.h - w.h) / 2);
+    if (mode === 'b') w.y = Math.max(0, pg.h - w.h - M);
+  }, { only: 'widget', w });
+}
+
+/* ---------- Estilos rápidos ---------- */
+const STYLE_KEYS = ['bg', 'fillType', 'fill1', 'fill2', 'fillAngle', 'fillAlpha', 'borderW', 'borderColor', 'borderStyle', 'radius', 'shadow',
+  'titleSize', 'titleColor', 'titleAlign', 'titleBold', 'titleItalic', 'textColor', 'fontFamily'];
+function quickStyles(pal) {
+  const dark = document.documentElement.dataset.theme === 'dark';
+  const P = pal.primary, base = dark ? '#1a1f29' : '#ffffff';
+  const reset = { bg: true, fillType: 'theme', fillAlpha: 100, borderW: 0, borderColor: null, borderStyle: 'solid', radius: 6, shadow: 'soft', textColor: null, titleColor: null };
+  return [
+    { name: 'Tarjeta', patch: {} },
+    { name: 'Plana con borde', patch: { shadow: 'none', borderW: 1 } },
+    { name: 'Elevada', patch: { shadow: 'strong', radius: 12 } },
+    { name: 'Contorno de acento', patch: { shadow: 'none', borderW: 2, borderColor: P, radius: 10 } },
+    { name: 'Degradado suave', patch: { fillType: 'linear', fill1: base, fill2: mixHex(base, P, dark ? 0.28 : 0.14), fillAngle: 160, radius: 10 } },
+    { name: 'Degradado intenso', patch: { fillType: 'linear', fill1: P, fill2: mixHex(P, '#000000', 0.38), fillAngle: 135, textColor: '#ffffff', titleColor: '#ffffff', radius: 12, shadow: 'medium' } },
+    { name: 'Cristal', patch: { fillType: 'solid', fill1: base, fillAlpha: 62, borderW: 1, borderColor: dark ? '#3a4150' : '#ffffff', radius: 14, shadow: 'float' } },
+    { name: 'Resplandor', patch: { shadow: 'glow', radius: 12, borderW: 1, borderColor: mixHex(P, base, 0.4) } },
+    { name: 'Discontinuo', patch: { shadow: 'none', borderW: 2, borderStyle: 'dashed', borderColor: mixHex(P, base, 0.3), radius: 8 } },
+    { name: 'Sin fondo', patch: { bg: false, shadow: 'none' } }
+  ].map(q => ({ name: q.name, patch: Object.assign({}, reset, q.patch) }));
+}
+function applyQuickStyle(q) {
+  const w = selW();
+  if (w) return upd(w, q.patch);
+  mutate(() => { for (const x of page().widgets) if (x.type !== 'shape') Object.assign(x, q.patch); });
+  toast(`Estilo «${q.name}» aplicado a toda la página · Ctrl+Z para deshacer`, 'ok');
+}
+function copyStyleToPage(w) {
+  const patch = {};
+  for (const k of STYLE_KEYS) patch[k] = w[k];
+  mutate(() => { for (const x of page().widgets) if (x !== w && x.type !== 'shape' && w.type !== 'shape') Object.assign(x, deepClone(patch)); });
+  toast('Estilo copiado a todos los visuales de la página', 'ok');
+}
+/** Vista previa en miniatura de un estilo rápido (para la galería del panel). */
+function quickStylePreview(q) {
+  const p = q.patch;
+  const sw = h('span');
+  const a = (p.fillAlpha ?? 100) / 100;
+  sw.style.background = !p.bg ? 'transparent' : p.fillType === 'theme' ? 'var(--widget-bg)'
+    : p.fillType === 'solid' ? hexA(p.fill1, a) : `linear-gradient(${p.fillAngle}deg, ${hexA(p.fill1, a)}, ${hexA(p.fill2, a)})`;
+  sw.style.borderRadius = Math.min(10, p.radius) + 'px';
+  if (p.borderW) sw.style.border = `${Math.min(2, p.borderW)}px ${p.borderStyle} ${p.borderColor || 'var(--border-strong)'}`;
+  sw.style.boxShadow = { soft: 'var(--shadow-1)', medium: 'var(--shadow-2)', strong: 'var(--shadow-3)', float: '0 8px 10px -6px rgba(16,24,40,.45)', glow: '0 0 8px color-mix(in srgb, var(--primary) 55%, transparent)' }[p.shadow] || 'none';
+  return sw;
 }
 
 /* ---------- Render: panel izquierdo ---------- */
+const narrowMq = matchMedia('(max-width: 980px)');
+App.float = { left: false, right: false };
+function isCollapsed(which) {
+  if (narrowMq.matches) return !App.float[which];
+  return which === 'left' ? App.prefs.leftCollapsed : App.prefs.rightCollapsed;
+}
+narrowMq.addEventListener('change', () => {
+  App.float = { left: false, right: false };
+  if (!App.p) return;
+  renderLeft(); renderRight(); renderToolbar();
+  requestAnimationFrame(applyZoom);
+});
 function togglePane(which) {
-  if (which === 'left') App.prefs.leftCollapsed = !App.prefs.leftCollapsed; else App.prefs.rightCollapsed = !App.prefs.rightCollapsed;
-  savePrefs();
-  renderLeft(); renderRight(); renderRibbon();
+  if (narrowMq.matches) {
+    // Ventana estrecha (o mucho zoom): los paneles flotan sobre el lienzo, de uno en uno
+    const open = !App.float[which];
+    App.float = { left: false, right: false };
+    App.float[which] = open;
+  } else {
+    if (which === 'left') App.prefs.leftCollapsed = !App.prefs.leftCollapsed; else App.prefs.rightCollapsed = !App.prefs.rightCollapsed;
+    savePrefs();
+  }
+  renderLeft(); renderRight(); renderToolbar();
   requestAnimationFrame(applyZoom);
 }
 function paneHead(title, which) {
-  const collapsed = which === 'left' ? App.prefs.leftCollapsed : App.prefs.rightCollapsed;
+  const collapsed = isCollapsed(which);
   const b = h('button', { class: 'icon-btn', type: 'button', title: collapsed ? 'Expandir panel' : 'Contraer panel', 'aria-label': collapsed ? 'Expandir panel' : 'Contraer panel', 'aria-expanded': String(!collapsed) },
     icon(which === 'left' ? (collapsed ? 'chevR' : 'chevL') : (collapsed ? 'chevL' : 'chevR'), 16));
   b.addEventListener('click', () => togglePane(which));
@@ -283,7 +395,7 @@ function paneHead(title, which) {
 let fieldsDsId = null;
 function renderLeft() {
   const pane = clear($('#leftPane'));
-  pane.classList.toggle('collapsed', App.prefs.leftCollapsed);
+  pane.classList.toggle('collapsed', isCollapsed('left'));
   pane.appendChild(paneHead('Visualizaciones', 'left'));
   const body = h('div', { class: 'pane-body' });
   pane.appendChild(body);
@@ -293,7 +405,8 @@ function renderLeft() {
     const b = h('button', { class: 'viz-btn', type: 'button', title: VIZ[t].label, 'aria-label': VIZ[t].label, draggable: 'true', 'aria-pressed': w && w.type === t ? 'true' : 'false' }, icon(VIZ[t].icon, 20));
     b.addEventListener('click', () => {
       const cur = selW();
-      if (cur && !['text', 'image'].includes(cur.type) && !['text', 'image'].includes(t)) changeType(cur, t);
+      if (cur && !NO_DATA_VIZ.includes(cur.type) && !NO_DATA_VIZ.includes(t)) changeType(cur, t);
+      else if (t === 'shape') insertShape('round');
       else insertWidget(t);
     });
     b.addEventListener('dragstart', e => { e.dataTransfer.setData('application/x-4dash-viz', t); e.dataTransfer.effectAllowed = 'copy'; });
@@ -381,20 +494,179 @@ function makeDropTarget(el, onField) {
 }
 function renderRight() {
   const pane = clear($('#rightPane'));
-  pane.classList.toggle('collapsed', App.prefs.rightCollapsed);
+  pane.classList.toggle('collapsed', isCollapsed('right'));
   const w = selW();
   pane.appendChild(paneHead(w ? 'Propiedades del visual' : 'Página y filtros', 'right'));
   const body = h('div', { class: 'pane-body' });
   pane.appendChild(body);
   if (!w) return renderPageProps(body);
   const tabs = h('div', { class: 'tabs', role: 'tablist' });
-  for (const [id, label] of [['data', 'Datos'], ['format', 'Formato']]) {
+  for (const [id, label] of [['data', 'Datos'], ['format', 'Formato'], ['style', 'Estilo']]) {
     const t = h('button', { class: 'tab', type: 'button', role: 'tab', 'aria-selected': App.propsTab === id ? 'true' : 'false', text: label });
     t.addEventListener('click', () => { App.propsTab = id; renderRight(); });
     tabs.appendChild(t);
   }
   body.appendChild(tabs);
-  if (App.propsTab === 'data') renderDataProps(body, w); else renderFormatProps(body, w);
+  if (App.propsTab === 'data') renderDataProps(body, w);
+  else if (App.propsTab === 'style') renderStyleProps(body, w);
+  else renderFormatProps(body, w);
+}
+/** Selector de color HTML (cualquier color) con código hexadecimal y restablecer. */
+function colorEl(value, onChange, opts = {}) {
+  const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': opts.label || 'Color', title: 'Elegir cualquier color' });
+  inp.value = value || opts.fallback || '#000000';
+  const hex = h('span', { class: 'hex', text: value ? value.toUpperCase() : (opts.autoText || 'Automático') });
+  inp.addEventListener('input', () => { hex.textContent = inp.value.toUpperCase(); onChange(inp.value); });
+  inp.addEventListener('change', () => renderRight());
+  const row = h('div', { class: 'color-row' }, inp, hex);
+  if (opts.reset && value) {
+    const r = h('button', { class: 'icon-btn', type: 'button', title: 'Volver al color automático', 'aria-label': 'Restablecer color' }, icon('close', 13));
+    r.addEventListener('click', () => { onChange(null); renderRight(); });
+    row.appendChild(r);
+  }
+  return row;
+}
+function rangeEl(value, min, max, step, onInput, opts = {}) {
+  const inp = h('input', { type: 'range', min, max, step, 'aria-label': opts.label || null });
+  inp.value = String(value);
+  const fmt = opts.fmt || (v => String(v));
+  const out = h('output', { text: fmt(+value) });
+  inp.addEventListener('input', () => { out.textContent = fmt(+inp.value); onInput(+inp.value); });
+  return h('div', { class: 'range-row' }, inp, out);
+}
+function segEl(options, value, onChange, label) {
+  const row = h('div', { class: 'seg-row', role: 'group', 'aria-label': label });
+  for (const [v, l, ic] of options) {
+    const b = h('button', { class: 'btn', type: 'button', 'aria-pressed': String(value === v), title: l, 'aria-label': l }, ic ? icon(ic, 15) : l);
+    b.addEventListener('click', () => onChange(v));
+    row.appendChild(b);
+  }
+  return row;
+}
+/** Color efectivo de una serie (personalizado del visual o de la paleta). */
+function seriesColor(w, k) {
+  return (w.colors && w.colors[k]) || getComputedStyle(document.documentElement).getPropertyValue('--series-' + (k + 1)).trim() || '#2a78d6';
+}
+function renderStyleProps(body, w) {
+  const S = patch => upd(w, patch, { typing: true });
+  const isShape = w.type === 'shape', isLine = isShape && w.shape === 'line';
+  const sec = t => body.appendChild(h('div', { class: 'section-title', text: t }));
+  if (isShape) {
+    sec('Forma');
+    const grid = h('div', { class: 'shape-grid', role: 'radiogroup', 'aria-label': 'Tipo de forma' });
+    for (const k of Object.keys(SHAPES)) {
+      const prev = s('svg', { viewBox: '0 0 40 24', width: 34, height: 20, 'aria-hidden': 'true' });
+      if (k === 'rect' || k === 'round') s('rect', { x: 2, y: 3, width: 36, height: 18, rx: k === 'round' ? 6 : 0, fill: 'currentColor' }, prev);
+      else s('path', { d: shapePath(k, 40, 24, 2), fill: k === 'line' ? 'none' : 'currentColor', stroke: 'currentColor', 'stroke-width': 2 }, prev);
+      const b = h('button', { class: 'viz-btn', type: 'button', role: 'radio', title: SHAPES[k], 'aria-label': SHAPES[k], 'aria-pressed': String(w.shape === k), 'aria-checked': String(w.shape === k) }, prev);
+      b.addEventListener('click', () => upd(w, { shape: k }));
+      grid.appendChild(b);
+    }
+    body.appendChild(grid);
+  } else {
+    sec('Estilos rápidos');
+    const grid = h('div', { class: 'qs-grid' });
+    for (const q of quickStyles(currentPalette())) {
+      const b = h('button', { class: 'qs', type: 'button', title: q.name, 'aria-label': 'Estilo ' + q.name }, quickStylePreview(q));
+      b.addEventListener('click', () => upd(w, q.patch));
+      grid.appendChild(b);
+    }
+    body.appendChild(grid);
+    const cp = h('button', { class: 'btn block', type: 'button' }, icon('brush', 15), 'Copiar este estilo a toda la página');
+    cp.addEventListener('click', () => copyStyleToPage(w));
+    body.appendChild(h('div', { class: 'form-row' }), cp);
+  }
+
+  if (!isLine) {
+    sec('Relleno');
+    body.appendChild(formRow('Tipo', selectEl([['none', 'Sin relleno'], ['theme', 'Automático (tema)'], ['solid', 'Color sólido'], ['linear', 'Degradado lineal'], ['radial', 'Degradado radial']],
+      w.bg ? w.fillType : 'none', v => upd(w, v === 'none' ? { bg: false } : { bg: true, fillType: v }))));
+    if (w.bg && w.fillType !== 'theme') {
+      const grad = w.fillType === 'linear' || w.fillType === 'radial';
+      body.appendChild(h('div', { class: 'form-inline' },
+        formRow(grad ? 'Color inicial' : 'Color', colorEl(w.fill1, v => S({ fill1: v || '#ffffff' }), { label: 'Color de relleno' })),
+        grad ? formRow('Color final', colorEl(w.fill2, v => S({ fill2: v || '#ffffff' }), { label: 'Color final del degradado' })) : null));
+      if (w.fillType === 'linear') body.appendChild(formRow('Ángulo', rangeEl(w.fillAngle, 0, 360, 5, v => S({ fillAngle: v }), { label: 'Ángulo del degradado', fmt: v => v + '°' })));
+    }
+    if (w.bg) body.appendChild(formRow('Transparencia', rangeEl(100 - w.fillAlpha, 0, 100, 5, v => S({ fillAlpha: 100 - v }), { label: 'Transparencia del relleno', fmt: v => v + ' %' })));
+  }
+
+  sec(isLine ? 'Línea' : 'Borde');
+  body.appendChild(formRow('Grosor', rangeEl(w.borderW, isLine ? 1 : 0, 12, 1, v => S({ borderW: v }), { label: 'Grosor', fmt: v => v + ' px' })));
+  if (w.borderW > 0 || isLine) {
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow('Color', colorEl(w.borderColor, v => S({ borderColor: v }), { label: 'Color del borde', reset: true, fallback: isLine ? w.fill1 : '#c3c9d4' })),
+      formRow('Trazo', selectEl([['solid', 'Continuo'], ['dashed', 'Guiones'], ['dotted', 'Puntos']].concat(isShape ? [] : [['double', 'Doble']]), w.borderStyle, v => upd(w, { borderStyle: v })))));
+  }
+  if (!isShape || w.shape === 'round') body.appendChild(formRow('Esquinas redondeadas', rangeEl(w.radius, 0, 40, 1, v => S({ radius: v }), { label: 'Radio de las esquinas', fmt: v => v + ' px' })));
+  body.appendChild(formRow('Sombra', selectEl(Object.entries(SHADOWS), w.shadow, v => upd(w, { shadow: v })), {}));
+
+  if (w.showTitle && !isShape) {
+    sec('Título');
+    body.appendChild(formRow('Tamaño', rangeEl(w.titleSize, 9, 40, 1, v => S({ titleSize: v }), { label: 'Tamaño del título', fmt: v => v + ' px' })));
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow('Color', colorEl(w.titleColor, v => S({ titleColor: v }), { label: 'Color del título', reset: true, fallback: '#10141c' })),
+      formRow('Alineación', segEl([['left', 'Izquierda', 'alignL'], ['center', 'Centro', 'alignC'], ['right', 'Derecha', 'alignR']], w.titleAlign, v => upd(w, { titleAlign: v }), 'Alineación del título'))));
+    body.appendChild(h('div', { class: 'form-inline' }, checkEl('Negrita', w.titleBold, v => upd(w, { titleBold: v })), checkEl('Cursiva', w.titleItalic, v => upd(w, { titleItalic: v }))));
+  }
+
+  if (!isLine) {
+    sec('Texto y tipografía');
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow('Fuente', selectEl(Object.keys(FONTS).map(k => [k, FONTS[k].label]), w.fontFamily, v => upd(w, { fontFamily: v }))),
+      formRow('Color del texto', colorEl(w.textColor, v => S({ textColor: v }), { label: 'Color del texto', reset: true, fallback: '#10141c' }))));
+    if (w.type === 'text' || isShape) body.appendChild(h('div', { class: 'form-inline' }, checkEl('Negrita', w.bold, v => upd(w, { bold: v })), checkEl('Cursiva', w.italic, v => upd(w, { italic: v }))));
+  }
+
+  const lineish = ['line', 'area'].includes(w.type), barish = ['column', 'stacked', 'bar'].includes(w.type);
+  if (lineish || barish || w.type === 'donut') {
+    sec('Gráfico');
+    if (lineish) {
+      body.appendChild(formRow('Grosor de línea', rangeEl(w.lineW, 0.5, 8, 0.5, v => S({ lineW: v }), { label: 'Grosor de línea', fmt: v => String(v).replace('.', ',') + ' px' })));
+      body.appendChild(checkEl('Línea suavizada', w.smooth, v => upd(w, { smooth: v })));
+      body.appendChild(checkEl('Marcadores en cada punto', w.markers, v => upd(w, { markers: v })));
+      if (w.type === 'area') body.appendChild(formRow('Opacidad del área', rangeEl(w.areaAlpha, 0, 80, 2, v => S({ areaAlpha: v }), { label: 'Opacidad del área', fmt: v => v + ' %' })));
+    }
+    if (barish) {
+      body.appendChild(formRow('Redondeo de barras', rangeEl(w.barRadius, 0, 20, 1, v => S({ barRadius: v }), { label: 'Redondeo de barras', fmt: v => v + ' px' })));
+      body.appendChild(checkEl('Ancho de barra automático', w.barGap == null, v => upd(w, { barGap: v ? null : 30 })));
+      if (w.barGap != null) body.appendChild(formRow('Separación entre barras', rangeEl(w.barGap, 0, 90, 5, v => S({ barGap: v }), { label: 'Separación entre barras', fmt: v => v + ' %' })));
+    }
+    if (w.type === 'donut') body.appendChild(formRow('Tamaño del agujero', rangeEl(w.holeSize, 20, 90, 2, v => S({ holeSize: v }), { label: 'Tamaño del agujero', fmt: v => v + ' %' })));
+  }
+
+  if (!NO_DATA_VIZ.includes(w.type) && w.type !== 'slicer') {
+    const multiSeries = (w.vals.length > 1 || w.split) && ['column', 'stacked', 'bar', 'line', 'area'].includes(w.type);
+    const byCat = ['pie', 'donut', 'treemap'].includes(w.type);
+    sec('Colores');
+    if (!multiSeries && !byCat) {
+      const sw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Color' });
+      for (let k = 0; k < 8; k++) {
+        const b = h('button', { class: 'swatch ' + slotCls('bg', k), type: 'button', role: 'radio', 'aria-label': 'Color ' + (k + 1), 'aria-pressed': w.slot === k ? 'true' : 'false', 'aria-checked': w.slot === k ? 'true' : 'false' });
+        if (w.colors[k]) b.style.background = w.colors[k];
+        b.addEventListener('click', () => upd(w, { slot: k }));
+        sw.appendChild(b);
+      }
+      body.appendChild(sw);
+      body.appendChild(formRow('Color personalizado', colorEl(w.colors[w.slot], v => S(x => { const c = x.colors.slice(); c[x.slot] = v; return { colors: c }; }),
+        { label: 'Color personalizado', reset: true, fallback: seriesColor(w, w.slot), autoText: 'De la paleta' })));
+    } else {
+      body.appendChild(h('p', { class: 'hint', text: byCat ? 'Cada categoría conserva su color aunque cambien los filtros. Cambia cualquiera con el selector:' : 'Colores de las series, en orden. Cambia cualquiera con el selector:' }));
+      const grid = h('div', { class: 'series-colors' });
+      for (let k = 0; k < 8; k++) {
+        const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': 'Color de la serie ' + (k + 1), title: w.colors[k] ? 'Color personalizado' : 'Color de la paleta' });
+        inp.value = seriesColor(w, k);
+        inp.addEventListener('input', () => S(x => { const c = x.colors.slice(); c[k] = inp.value; return { colors: c }; }));
+        grid.appendChild(h('label', { class: 'sc' }, inp, h('span', { text: (k + 1) + (w.colors[k] ? ' ✎' : '') })));
+      }
+      body.appendChild(grid);
+    }
+    if (w.colors.some(Boolean)) {
+      const r = h('button', { class: 'btn block', type: 'button', text: 'Volver a los colores de la paleta' });
+      r.addEventListener('click', () => upd(w, { colors: Array(8).fill(null) }));
+      body.appendChild(h('div', { class: 'form-row' }), r);
+    }
+  }
 }
 function upd(w, patch, opts = {}) {
   const f = () => Object.assign(w, typeof patch === 'function' ? patch(w) : patch);
@@ -404,7 +676,7 @@ function upd(w, patch, opts = {}) {
 function renderDataProps(body, w) {
   const def = VIZ[w.type];
   body.appendChild(formRow('Tipo de visual', selectEl(Object.keys(VIZ).map(t => [t, VIZ[t].label]), w.type, v => changeType(w, v))));
-  if (w.type === 'text' || w.type === 'image') {
+  if (NO_DATA_VIZ.includes(w.type)) {
     body.appendChild(h('p', { class: 'hint', text: 'Este visual no usa datos. Configúralo en la pestaña Formato.' }));
     return;
   }
@@ -474,15 +746,14 @@ function renderFormatProps(body, w) {
   const chartish = ['column', 'stacked', 'bar', 'line', 'area', 'pie', 'donut', 'treemap', 'scatter'].includes(w.type);
   body.appendChild(formRow('Título', inputEl(w.title, v => upd(w, { title: v.slice(0, 200) }, { typing: true }), { placeholder: autoTitle(Object.assign({}, w, { title: '' })), max: 200 })));
   body.appendChild(checkEl('Mostrar título', w.showTitle, v => upd(w, { showTitle: v }, { keepProps: true })));
-  body.appendChild(checkEl('Fondo de tarjeta', w.bg, v => upd(w, { bg: v }, { keepProps: true })));
-  if (w.type === 'text') {
+  if (w.type === 'text' || w.type === 'shape') {
     body.appendChild(h('div', { class: 'section-title', text: 'Texto' }));
     body.appendChild(formRow('Contenido', inputEl(w.text, v => upd(w, { text: v.slice(0, 20000) }, { typing: true }), { multiline: true, placeholder: '# Título\nTexto del párrafo\n- Elemento de lista' })));
-    body.appendChild(h('p', { class: 'hint', text: 'Usa «# » para encabezados y «- » para listas.' }));
+    body.appendChild(h('p', { class: 'hint', text: 'Usa «# » para encabezados y «- » para listas. Colores, fuente y relleno en la pestaña Estilo.' }));
     body.appendChild(h('div', { class: 'form-inline' },
       formRow('Tamaño', inputEl(w.fontSize, v => upd(w, { fontSize: clamp(+v || 14, 8, 72) }, { typing: true }), { type: 'number', min: 8 })),
       formRow('Alineación', selectEl([['left', 'Izquierda'], ['center', 'Centro'], ['right', 'Derecha']], w.align, v => upd(w, { align: v }, { keepProps: true })))));
-    body.appendChild(checkEl('Centrar verticalmente', w.vcenter, v => upd(w, { vcenter: v }, { keepProps: true })));
+    if (w.type === 'text') body.appendChild(checkEl('Centrar verticalmente', w.vcenter, v => upd(w, { vcenter: v }, { keepProps: true })));
   }
   if (w.type === 'image') {
     const b = h('button', { class: 'btn block', type: 'button' }, icon('upload', 16), w.img ? 'Reemplazar imagen' : 'Subir imagen');
@@ -494,7 +765,7 @@ function renderFormatProps(body, w) {
       body.appendChild(h('div', { class: 'form-row' }), rm);
     }
   }
-  if (!['text', 'image', 'slicer'].includes(w.type)) {
+  if (!NO_DATA_VIZ.includes(w.type) && w.type !== 'slicer') {
     body.appendChild(h('div', { class: 'section-title', text: 'Números' }));
     body.appendChild(formRow('Formato', selectEl([['auto', 'Automático'], ['int', 'Entero'], ['compact', 'Compacto (1,2 mil)'], ['currency', 'Moneda'], ['currencyCompact', 'Moneda compacta'], ['percent', 'Porcentaje (0,25 → 25 %)'], ['percentRaw', 'Porcentaje (25 → 25 %)']], w.fmt, v => upd(w, { fmt: v }))));
     body.appendChild(h('div', { class: 'form-inline' },
@@ -516,19 +787,7 @@ function renderFormatProps(body, w) {
     body.appendChild(formRow('Estilo', selectEl([['list', 'Lista (selección múltiple)'], ['single', 'Lista (selección única)'], ['tiles', 'Mosaicos']], w.slicerStyle, v => upd(w, { slicerStyle: v }))));
   }
   if (w.type === 'kpi') body.appendChild(formRow('Alineación', selectEl([['left', 'Izquierda'], ['center', 'Centro']], w.align, v => upd(w, { align: v }))));
-  const multiSeries = (w.vals.length > 1 || w.split) && ['column', 'stacked', 'bar', 'line', 'area'].includes(w.type);
-  if (!['text', 'image', 'slicer', 'pie', 'donut', 'treemap'].includes(w.type) && !multiSeries) {
-    body.appendChild(h('div', { class: 'section-title', text: 'Color' }));
-    const sw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Color' });
-    for (let k = 0; k < 8; k++) {
-      const b = h('button', { class: 'swatch ' + slotCls('bg', k), type: 'button', role: 'radio', 'aria-label': 'Color ' + (k + 1), 'aria-pressed': w.slot === k ? 'true' : 'false', 'aria-checked': w.slot === k ? 'true' : 'false' });
-      b.addEventListener('click', () => upd(w, { slot: k }));
-      sw.appendChild(b);
-    }
-    body.appendChild(sw);
-  } else if (multiSeries || ['pie', 'donut', 'treemap'].includes(w.type)) {
-    body.appendChild(h('p', { class: 'hint', text: 'Los colores siguen un orden fijo y accesible: cada categoría conserva su color aunque cambien los filtros.' }));
-  }
+  if (!NO_DATA_VIZ.includes(w.type) && w.type !== 'slicer') body.appendChild(h('p', { class: 'hint', text: 'Colores, relleno, bordes, sombras y grosor de líneas: pestaña Estilo.' }));
   body.appendChild(h('div', { class: 'section-title', text: 'Posición y tamaño' }));
   const geo = (k, label) => formRow(label, inputEl(Math.round(w[k]), v => {
     const n = parseInt(v, 10);
@@ -548,7 +807,7 @@ function renderFormatProps(body, w) {
 function renderPageProps(body) {
   const pg = page();
   body.appendChild(h('div', { class: 'section-title', text: 'Filtros activos' }));
-  if (!App.p.filters.length) body.appendChild(h('p', { class: 'hint', text: 'Sin filtros. Usa segmentaciones o haz clic en los gráficos para filtrar.' }));
+  if (!App.p.filters.length) body.appendChild(h('p', { class: 'hint', text: 'Sin filtros. Usa selectores de filtro o haz clic en los gráficos para filtrar.' }));
   for (const f of App.p.filters) {
     const ds = dsById(f.ds);
     const c = ds ? colOf(ds, f.field) : null;
@@ -577,6 +836,19 @@ function renderPageProps(body) {
   const fit = h('button', { class: 'btn block', type: 'button', text: 'Ajustar alto al contenido' });
   fit.addEventListener('click', () => mutate(() => { const hh = Math.max(240, Math.ceil((Math.max(0, ...pg.widgets.map(w => w.y + w.h)) + 16) / 8) * 8); pg.size = 'custom'; pg.h = hh; }));
   body.appendChild(fit);
+
+  body.appendChild(h('div', { class: 'section-title', text: 'Fondo de la página' }));
+  const bg = pg.bg;
+  const setBg = (patch, typing) => (typing ? mutateTyping : mutate)(() => { pg.bg = patch && Object.assign({ type: 'solid', c1: '#ffffff', c2: '#e4e8ee', angle: 180 }, pg.bg || {}, patch); }, { keepProps: !!typing });
+  body.appendChild(formRow('Tipo', selectEl([['theme', 'Automático (tema)'], ['solid', 'Color sólido'], ['linear', 'Degradado lineal'], ['radial', 'Degradado radial']], bg ? bg.type : 'theme',
+    v => (v === 'theme' ? setBg(null) : setBg({ type: v })))));
+  if (bg) {
+    const grad = bg.type !== 'solid';
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow(grad ? 'Color inicial' : 'Color', colorEl(bg.c1, v => setBg({ c1: v || '#ffffff' }, true), { label: 'Color de fondo' })),
+      grad ? formRow('Color final', colorEl(bg.c2, v => setBg({ c2: v || '#ffffff' }, true), { label: 'Color final del fondo' })) : null));
+    if (bg.type === 'linear') body.appendChild(formRow('Ángulo', rangeEl(bg.angle, 0, 360, 5, v => setBg({ angle: v }, true), { label: 'Ángulo del degradado', fmt: v => v + '°' })));
+  }
 
   body.appendChild(h('div', { class: 'section-title', text: 'Orígenes de datos' }));
   if (!App.p.datasets.length) body.appendChild(h('p', { class: 'hint', text: 'Ninguno. Importa un Excel para empezar.' }));
@@ -612,6 +884,7 @@ function renderCanvas() {
   el.classList.toggle('snap', !!App.p.snap);
   el.style.width = pg.w + 'px';
   el.style.height = pg.h + 'px';
+  applyPageBg(pg, el);
   pg.widgets.forEach((w, i) => el.appendChild(widgetEl(w, i, { editable: App.view === 'editor' })));
   const empty = $('#emptyState');
   const show = !pg.widgets.length && App.view === 'editor';
@@ -639,11 +912,19 @@ function renderEmpty(root) {
     h('p', { text: App.p.datasets.length ? 'Inserta visuales desde el panel izquierdo, arrastra campos al lienzo o genera un diseño automático.' : 'Arrastra aquí un archivo .xlsx o .csv. 4Dash detecta los títulos de filas y columnas y genera un dashboard automáticamente. Todo se procesa en tu navegador.' }),
     h('div', { class: 'empty-actions' }, actions)));
 }
+function applyPageBg(pg, el) {
+  const b = pg.bg;
+  el.style.background = !b ? '' : b.type === 'solid' ? b.c1
+    : b.type === 'radial' ? `radial-gradient(circle at 30% 20%, ${b.c1}, ${b.c2})` : `linear-gradient(${b.angle}deg, ${b.c1}, ${b.c2})`;
+}
+/** Contenido de la cabecera del Presentador (también se usa al exportar). */
+function presHeaderNodes(pg) {
+  const sub = [pg.name, new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })].join(' · ');
+  return [App.p.logo ? h('div', { class: 'pres-logo-bg' }, h('img', { src: App.p.logo, alt: 'Logo' })) : null,
+    h('div', null, h('h1', { text: App.p.title }), h('div', { class: 'ph-sub', text: sub }))];
+}
 function renderPresHeader() {
-  const hd = clear($('#presHeader'));
-  if (App.p.logo) hd.appendChild(h('div', { class: 'pres-logo-bg' }, h('img', { src: App.p.logo, alt: 'Logo' })));
-  const sub = [page().name, new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })].join(' · ');
-  hd.appendChild(h('div', null, h('h1', { text: App.p.title }), h('div', { class: 'ph-sub', text: sub })));
+  clear($('#presHeader')).append(...presHeaderNodes(page()).filter(Boolean));
 }
 function widgetCtx(w, W, H) {
   return {
@@ -661,7 +942,36 @@ function widgetCtx(w, W, H) {
     rerender: () => rerenderWidget(w)
   };
 }
-function bodySize(w) { return { W: w.w - 20, H: w.h - (w.showTitle ? 32 : 8) - 8 }; }
+const headH = w => Math.max(32, Math.round((w.titleSize || 14) * 1.55 + 10));
+function bodySize(w) {
+  const b = w.type === 'shape' ? 0 : 2 * (+w.borderW || 0);
+  return { W: w.w - 20 - b, H: w.h - (w.showTitle ? headH(w) : 8) - 8 - b };
+}
+/** Aplica el formato visual del widget mediante CSSOM (compatible con la CSP). */
+function applyWidgetStyle(w, el) {
+  const st = el.style;
+  if (w.type === 'shape') el.classList.add('is-shape');
+  else {
+    const a = clamp(+w.fillAlpha, 0, 100) / 100;
+    if (w.bg && w.fillType !== 'theme') {
+      const c1 = hexA(w.fill1, a), c2 = hexA(w.fill2, a);
+      st.background = w.fillType === 'solid' ? c1 : w.fillType === 'radial' ? `radial-gradient(circle at 30% 25%, ${c1}, ${c2})` : `linear-gradient(${+w.fillAngle || 0}deg, ${c1}, ${c2})`;
+    } else if (w.bg && a < 1) st.background = `color-mix(in srgb, var(--widget-bg) ${Math.round(a * 100)}%, transparent)`;
+    if (w.borderW > 0) st.border = `${w.borderW}px ${w.borderStyle} ${w.borderColor || 'var(--border-strong)'}`;
+    st.borderRadius = clamp(+w.radius, 0, 60) + 'px';
+    el.classList.add('sh-' + (w.shadow || 'soft'));
+  }
+  if (w.textColor) { st.setProperty('--ink-1', w.textColor); st.setProperty('--ink-2', w.textColor); st.setProperty('--ink-muted', hexA(w.textColor, 0.72)); }
+  if (w.titleColor) st.setProperty('--wt-color', w.titleColor);
+  if (w.titleSize !== 14) st.setProperty('--wt-size', w.titleSize + 'px');
+  if (!w.titleBold) st.setProperty('--wt-weight', '400');
+  if (w.titleItalic) st.setProperty('--wt-style', 'italic');
+  if (w.titleAlign !== 'left') st.setProperty('--wt-align', w.titleAlign);
+  if (w.fontFamily && w.fontFamily !== 'sans' && FONTS[w.fontFamily]) st.setProperty('--font', FONTS[w.fontFamily].css);
+  if (w.lineW !== 2) st.setProperty('--line-w', String(w.lineW));
+  if (w.areaAlpha !== 12) st.setProperty('--area-a', String(w.areaAlpha / 100));
+  (w.colors || []).forEach((c, i) => { if (c) st.setProperty('--series-' + (i + 1), c); });
+}
 function widgetEl(w, index, opts) {
   const editable = !!opts.editable;
   const title = autoTitle(w);
@@ -670,16 +980,19 @@ function widgetEl(w, index, opts) {
     dataset: { id: w.id }, role: 'figure', 'aria-label': title, tabindex: editable ? 0 : null
   });
   Object.assign(el.style, { left: w.x + 'px', top: w.y + 'px', width: w.w + 'px', height: w.h + 'px', zIndex: String(index + 1) });
+  applyWidgetStyle(w, el);
   const actions = h('div', { class: 'w-actions' });
   if (!opts.print) {
-    if (!['text', 'image'].includes(w.type)) {
+    if (!NO_DATA_VIZ.includes(w.type)) {
       actions.appendChild(actBtn('eye', 'Ver datos', () => showWidgetData(w)));
-      actions.appendChild(actBtn('focus', 'Modo foco', () => focusWidget(w)));
+      actions.appendChild(actBtn('focus', 'Ampliar', () => focusWidget(w)));
     }
     if (editable) actions.appendChild(actBtn('more', 'Más opciones', e => widgetMenu(e.currentTarget, w)));
-    else if (!['text', 'image'].includes(w.type)) actions.appendChild(actBtn('download', 'Exportar datos (CSV)', () => exportWidgetCsv(w)));
+    else if (!NO_DATA_VIZ.includes(w.type)) actions.appendChild(actBtn('download', 'Exportar datos (CSV)', () => exportWidgetCsv(w)));
   }
-  el.appendChild(h('div', { class: 'w-head' }, h('div', { class: 'w-title', text: title, title }), actions));
+  const head = h('div', { class: 'w-head' }, h('div', { class: 'w-title', text: title, title }), actions);
+  if (w.showTitle && w.titleSize !== 14) head.style.height = headH(w) + 'px';
+  el.appendChild(head);
   const body = h('div', { class: 'w-body' });
   el.appendChild(body);
   if (editable) {
@@ -717,7 +1030,7 @@ function widgetMenu(anchor, w) {
     { label: 'Duplicar', icon: 'copy', onClick: () => { select(w.id); duplicateSelected(); } },
     { label: 'Traer al frente', icon: 'front', onClick: () => { select(w.id); reorder(1); } },
     { label: 'Enviar atrás', icon: 'back', onClick: () => { select(w.id); reorder(-1); } },
-    { label: 'Exportar datos (CSV)', icon: 'download', onClick: () => exportWidgetCsv(w), hidden: ['text', 'image'].includes(w.type) },
+    { label: 'Exportar datos (CSV)', icon: 'download', onClick: () => exportWidgetCsv(w), hidden: NO_DATA_VIZ.includes(w.type) },
     { label: 'Editar datos de origen', icon: 'table', onClick: () => openDataEditor(w.ds), hidden: !dsById(w.ds) },
     '-',
     { label: 'Eliminar', icon: 'trash', danger: true, onClick: () => { select(w.id); deleteSelected(); } }
@@ -727,7 +1040,7 @@ function select(id) {
   App.sel = id;
   document.querySelectorAll('#page .widget.selected').forEach(x => x.classList.remove('selected'));
   if (id) { const el = $(`#page .widget[data-id="${CSS.escape(id)}"]`); if (el) el.classList.add('selected'); }
-  renderRight(); renderRibbon(); renderLeft();
+  renderRight(); renderToolbar(); renderLeft();
 }
 
 /* ---------- Zoom ---------- */
@@ -849,7 +1162,7 @@ function findFreeSpot(pg, ww, hh) {
 function insertWidget(type, at, extra) {
   const pg = page();
   const ds = dsById(fieldsDsId) || App.p.datasets[0] || null;
-  const w = newWidget(type, ['text', 'image'].includes(type) ? null : ds, extra);
+  const w = newWidget(type, NO_DATA_VIZ.includes(type) ? null : ds, extra);
   if (ds && !extra) defaultFields(w, ds);
   if (type === 'text' && !w.text) w.text = '# Título\nEscribe aquí tu texto.';
   w.w = Math.min(w.w, pg.w - 32);
@@ -896,7 +1209,7 @@ function dropFieldOnWidget(w, dsId, col) {
   const ds = dsById(dsId);
   const c = ds && colOf(ds, col);
   if (!c) return;
-  if (w.type === 'text' || w.type === 'image') return toast('Este visual no usa datos', 'info');
+  if (NO_DATA_VIZ.includes(w.type)) return toast('Este visual no usa datos', 'info');
   if (w.ds !== dsId) {
     mutate(() => { w.ds = dsId; w.cat = null; w.split = null; w.vals = []; });
   }
@@ -1080,7 +1393,7 @@ function gotoPage(i) {
   App.p.active = pg.id;
   App.sel = null;
   scheduleSave();
-  renderCanvas(); renderPages(); renderRight(); renderRibbon(); renderStatus();
+  renderCanvas(); renderPages(); renderRight(); renderToolbar(); renderStatus();
   $('#scroller').scrollTop = 0;
 }
 
@@ -1108,7 +1421,13 @@ function renderStatus() {
   if (App.p.datasets.length) st.appendChild(h('span', { text: `${App.p.datasets.length} origen(es) · ${fmtNum(n)} filas` }));
   if (App.p.filters.length) st.appendChild(h('span', { text: `${App.p.filters.length} filtro(s)` }));
   st.appendChild(h('span', { text: `${pg.widgets.length} visual(es)` }));
-  st.appendChild(h('span', { text: `Zoom ${Math.round(App.scale * 100)} %` }));
+  const zm = h('button', { class: 'icon-btn', type: 'button', title: 'Reducir zoom', 'aria-label': 'Reducir zoom' }, icon('minus', 13));
+  const zp = h('button', { class: 'icon-btn', type: 'button', title: 'Aumentar zoom', 'aria-label': 'Aumentar zoom' }, icon('plus', 13));
+  const zf = h('button', { class: 'linklike', type: 'button', title: 'Ajustar a la ventana', text: `${Math.round(App.scale * 100)} %` });
+  zm.addEventListener('click', () => zoomBy(-1));
+  zp.addEventListener('click', () => zoomBy(1));
+  zf.addEventListener('click', () => setZoom('fit'));
+  st.appendChild(h('span', { class: 'zoom-status' }, zm, zf, zp));
   st.appendChild(h('span', { title: 'Sin conexiones de red' }, icon('lock', 13)));
 }
 
@@ -1121,7 +1440,7 @@ function setView(v) {
   document.body.classList.toggle('mode-presenter', v === 'presenter');
   if (v === 'editor' && document.fullscreenElement) document.exitFullscreen().catch(() => {});
   Tip.hide(); closeMenu();
-  renderTopbar(); renderRibbon(); renderLeft(); renderRight(); renderPages();
+  renderTopbar(); renderToolbar(); renderLeft(); renderRight(); renderPages();
   requestAnimationFrame(() => renderCanvas());
 }
 function toggleFullscreen() {
@@ -1170,7 +1489,7 @@ async function handleImport(file) {
     App.p.active = newPages[0] ? newPages[0].id : App.p.pages[0].id;
     App.sel = null;
   });
-  if (mode === 'replace') { App.hist = []; renderRibbon(); }
+  if (mode === 'replace') { App.hist = []; renderToolbar(); }
   const t0 = use[0];
   const notes = [];
   notes.push(t0.info.hasHeader ? 'títulos de columna detectados' : 'sin títulos de columna (se han nombrado automáticamente)');
@@ -1217,7 +1536,7 @@ function loadSample() {
     App.sel = null;
   });
   const hasContent = App.p.datasets.length || App.p.pages.some(p => p.widgets.length);
-  if (!hasContent) { run(); App.hist = []; renderRibbon(); return; }
+  if (!hasContent) { run(); App.hist = []; renderToolbar(); return; }
   confirmDialog('Cargar datos de ejemplo', 'Se reemplazará el dashboard actual por uno de ejemplo. Podrás deshacerlo con Ctrl+Z.', 'Cargar ejemplo').then(ok => { if (ok) run(); });
 }
 async function autoLayoutCurrent(dsId) {
@@ -1281,6 +1600,7 @@ function printDashboard() {
     frame.style.height = Math.round(pg.h * scale) + 'px';
     const pe = h('div', { class: 'page' });
     Object.assign(pe.style, { width: pg.w + 'px', height: pg.h + 'px', transform: `scale(${scale})` });
+    applyPageBg(pg, pe);
     pg.widgets.forEach((w, i) => pe.appendChild(widgetEl(w, i, { editable: false, print: true })));
     frame.appendChild(pe);
     wrap.append(head, frame);

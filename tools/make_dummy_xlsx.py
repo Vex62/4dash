@@ -4,7 +4,7 @@
   comercial, unidades, precio, importe, coste, margen y descuento.
 - Empleados: 120 empleados con departamento, puesto, sede, fecha de alta, salario,
   antigüedad, evaluación y teletrabajo.
-- Proyectos: 40 proyectos (estilo Azure DevOps) con estado, prioridad, horas, presupuesto y avance.
+- Proyectos: 40 proyectos (seguimiento de proyectos) con estado, prioridad, horas, presupuesto y avance.
 - Presupuesto mensual: tabla cruzada con departamentos en filas y meses en columnas.
 """
 import random
@@ -77,7 +77,7 @@ catalogo = {
     "Hardware": [("Portátil Pro 14", 1150), ("Monitor 27\" 4K", 420), ("Dock USB-C", 180), ("Teclado inalámbrico", 65)],
     "Software": [("Licencia ERP", 890), ("Suite Ofimática", 120), ("Antivirus Empresa", 45), ("CRM Cloud (anual)", 600)],
     "Servicios": [("Soporte 24/7", 1500), ("Consultoría (jornada)", 750), ("Implantación", 3200)],
-    "Formación": [("Curso Power BI", 450), ("Taller Excel avanzado", 280), ("Certificación Azure", 990)],
+    "Formación": [("Curso de análisis de datos", 450), ("Taller de hojas de cálculo", 280), ("Certificación en la nube", 990)],
 }
 canales = ["Online", "Tienda", "Partner", "Venta directa"]
 clientes = [f"{n} {s}" for n, s in [("Acme", "S.L."), ("Globex", "S.A."), ("Initech", "S.L."), ("Umbrella", "Corp."),
@@ -127,7 +127,7 @@ for i in range(120):
                 random.randint(0, 80), random.choice(["Sí", "No", "Híbrido"])])
 emp_xml = sheet(emp, {7: 2})
 
-# ---------- Hoja 3: Proyectos (estilo Azure DevOps) ----------
+# ---------- Hoja 3: Proyectos (seguimiento de proyectos) ----------
 estados = ["Nuevo", "Activo", "En revisión", "Bloqueado", "Cerrado"]
 proy = [["Proyecto", "Área", "Responsable", "Estado", "Prioridad", "Fecha inicio", "Fecha fin prevista",
          "Horas estimadas", "Horas reales", "Presupuesto (€)", "Gasto (€)", "Avance %", "Bugs abiertos"]]

@@ -3,7 +3,7 @@
    ========================================================================== */
 
 function renderAll() {
-  renderTopbar(); renderRibbon(); renderLeft(); renderRight(); renderPages(); renderFilterBar(); renderCanvas(); renderStatus(); renderSaveState();
+  renderTopbar(); renderToolbar(); renderLeft(); renderRight(); renderPages(); renderFilterBar(); renderCanvas(); renderStatus(); renderSaveState();
 }
 const isTyping = t => t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
 
@@ -51,6 +51,7 @@ function bindEvents() {
     const inside = at.x >= 0 && at.y >= 0 && at.x <= page().w && at.y <= page().h;
     if (hasFiles(e)) { const f = e.dataTransfer.files[0]; if (f) handleImport(f); return; }
     const viz = e.dataTransfer.getData('application/x-4dash-viz');
+    if (viz === 'shape') return insertShape('round', inside ? at : null);
     if (viz && VIZ[viz]) return insertWidget(viz, inside ? at : null);
     const field = e.dataTransfer.getData('application/x-4dash-field');
     if (field) { try { const f = safeJsonParse(field); createFromField(f.ds, String(f.col), inside ? at : null); } catch { /* ignorar */ } }
@@ -63,6 +64,20 @@ function bindEvents() {
   $('#scroller').addEventListener('pointerdown', e => {
     if (App.view === 'editor' && (e.target.id === 'page' || e.target.id === 'scroller' || e.target.id === 'pageFrame') && App.sel) select(null);
   });
+
+  // Ctrl + rueda sobre el lienzo: zoom del lienzo (no el del navegador)
+  $('#scroller').addEventListener('wheel', e => {
+    if (!(e.ctrlKey || e.metaKey)) return;
+    e.preventDefault();
+    zoomBy(e.deltaY < 0 ? 1 : -1);
+  }, { passive: false });
+  // Rueda vertical sobre la barra de herramientas: desplazamiento horizontal
+  $('#toolbar').addEventListener('wheel', e => {
+    const tb = e.currentTarget;
+    if (tb.scrollWidth <= tb.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    tb.scrollLeft += e.deltaY;
+  }, { passive: false });
 
   let zoomRaf = 0;
   new ResizeObserver(() => { cancelAnimationFrame(zoomRaf); zoomRaf = requestAnimationFrame(applyZoom); }).observe($('#scroller'));
@@ -89,8 +104,9 @@ function onKey(e) {
   if (k === 'F1') { e.preventDefault(); openTutorial(); return; }
   if (k === 'F5') { e.preventDefault(); setView(App.view === 'editor' ? 'presenter' : 'editor'); return; }
   if (ctrl && k.toLowerCase() === 's') { e.preventDefault(); saveProjectFile(); return; }
-  if (ctrl && k.toLowerCase() === 'o') { e.preventDefault(); $('#projectInput').value = ''; $('#projectInput').click(); return; }
+  if (ctrl && k.toLowerCase() === 'o') { e.preventDefault(); openProjectPicker(); return; }
   if (ctrl && k.toLowerCase() === 'p') { e.preventDefault(); printDashboard(); return; }
+  if (ctrl && k.toLowerCase() === 'e') { e.preventDefault(); openExportDialog(); return; }
   if (isTyping(e.target)) return;
   if (App.view === 'presenter') {
     const idx = App.p.pages.findIndex(p => p.id === App.p.active);

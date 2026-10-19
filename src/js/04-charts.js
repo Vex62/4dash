@@ -13,6 +13,12 @@ const Tip = {
   show(evt, title, rows) {
     const el = this.el || (this.el = $('#tooltip'));
     clear(el);
+    // Colores personalizados del visual de origen
+    const src = evt && evt.target && evt.target.closest ? evt.target.closest('.widget') : null;
+    for (let i = 1; i <= 8; i++) {
+      const c = src ? src.style.getPropertyValue('--series-' + i) : '';
+      if (c) el.style.setProperty('--series-' + i, c); else el.style.removeProperty('--series-' + i);
+    }
     if (title) el.appendChild(h('div', { class: 'tt-title', text: title }));
     for (const r of rows) {
       el.appendChild(h('div', { class: 'tt-row' },
@@ -57,16 +63,35 @@ function niceCeil(v) {
   for (const m of [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10]) if (m * mag >= v) return m * mag;
   return 10 * mag;
 }
-/** Barra con extremo de datos redondeado (4px) y base recta. */
-function barPath(x, y, w, h, dir) {
+/** Barra con extremo de datos redondeado (4px por defecto) y base recta. */
+function barPath(x, y, w, h, dir, rad = 4) {
   if (w <= 0 || h <= 0) return '';
-  const r = dir === 'right' || dir === 'left' ? Math.min(4, h / 2, w) : Math.min(4, w / 2, h);
+  const r = dir === 'right' || dir === 'left' ? Math.min(rad, h / 2, w) : Math.min(rad, w / 2, h);
+  if (r <= 0) return `M${x},${y}h${w}v${h}h${-w}Z`;
   switch (dir) {
     case 'up': return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
     case 'down': return `M${x},${y}V${y + h - r}Q${x},${y + h} ${x + r},${y + h}H${x + w - r}Q${x + w},${y + h} ${x + w},${y + h - r}V${y}Z`;
     case 'right': return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`;
     default: return `M${x + w},${y}H${x + r}Q${x},${y} ${x},${y + r}V${y + h - r}Q${x},${y + h} ${x + r},${y + h}H${x + w}Z`;
   }
+}
+/** Curva suave (Catmull-Rom → Bézier cúbica) que pasa por todos los puntos. */
+function smoothPath(pts) {
+  if (pts.length < 3) return pts.map((p, j) => (j ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const t = 0.18;
+    const c1 = [p1[0] + (p2[0] - p0[0]) * t, p1[1] + (p2[1] - p0[1]) * t];
+    const c2 = [p2[0] - (p3[0] - p1[0]) * t, p2[1] - (p3[1] - p1[1]) * t];
+    d += `C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d;
+}
+/** Ancho de barra: automático (fino) o según el «ancho del intervalo» elegido. */
+function barWidth(w, band, gN) {
+  if (w.barGap == null) return Math.max(2, Math.min(24, (band * 0.72 - (gN - 1) * 2) / gN));
+  return Math.max(2, (band * (1 - w.barGap / 100) - (gN - 1) * 2) / gN);
 }
 function arcPath(cx, cy, r0, r1, a0, a1) {
   const large = a1 - a0 > Math.PI ? 1 : 0;
@@ -170,7 +195,7 @@ function renderCartesian(w, body, ctx, data) {
     s('line', { class: 'base-line', x1: Math.round(sx(Math.max(tlo, Math.min(0, thi)))) + .5, x2: Math.round(sx(Math.max(tlo, Math.min(0, thi)))) + .5, y1: y0, y2: y1 }, gAxis);
     const gHit = s('g', null, svg), gMarks = s('g', null, svg);
     const gN = series.length;
-    const barH = Math.max(2, Math.min(24, (band * 0.72 - (gN - 1) * 2) / gN));
+    const barH = barWidth(w, band, gN);
     const groupH = gN * barH + (gN - 1) * 2;
     const step = Math.max(1, Math.ceil(13 / band));
     for (let i = 0; i < n; i++) {
@@ -185,7 +210,7 @@ function renderCartesian(w, body, ctx, data) {
         if (v == null) return;
         const by = cy - groupH / 2 + k * (barH + 2);
         const a = sx(0 < tlo ? tlo : 0), b = sx(v);
-        const d = barPath(Math.min(a, b), by, Math.abs(b - a), barH, v >= 0 ? 'right' : 'left');
+        const d = barPath(Math.min(a, b), by, Math.abs(b - a), barH, v >= 0 ? 'right' : 'left', w.barRadius);
         if (d) s('path', { d, class: 'mark ' + slotCls('f', sr.slot) + (dimmed(i) ? ' dim' : ''), 'pointer-events': 'none' }, gMarks);
         if (showLabels && !multi) {
           const t = s('text', { class: 'val-label', x: v >= 0 ? b + 5 : b - 5, y: by + barH / 2 + 4, 'text-anchor': v >= 0 ? 'start' : 'end', 'pointer-events': 'none' }, gMarks);
@@ -225,7 +250,7 @@ function renderCartesian(w, body, ctx, data) {
   if (kind === 'column' || kind === 'stacked') {
     const gHit = s('g', null, svg), gMarks = s('g', null, svg);
     const gN = kind === 'stacked' ? 1 : series.length;
-    const barW = Math.max(2, Math.min(24, (band * 0.72 - (gN - 1) * 2) / gN));
+    const barW = barWidth(w, band, gN);
     const groupW = gN * barW + (gN - 1) * 2;
     for (let i = 0; i < n; i++) {
       const cx = x0 + band * (i + 0.5);
@@ -249,7 +274,7 @@ function renderCartesian(w, body, ctx, data) {
           const isEnd = sg.v >= 0 ? k === lastPos : k === lastNeg;
           // separación de 2px entre segmentos
           if (from !== 0 && hgt > 2) { if (sg.v >= 0) hgt -= 2; else { top += 2; hgt -= 2; } }
-          const d = isEnd ? barPath(cx - barW / 2, top, barW, hgt, sg.v >= 0 ? 'up' : 'down')
+          const d = isEnd ? barPath(cx - barW / 2, top, barW, hgt, sg.v >= 0 ? 'up' : 'down', w.barRadius)
             : `M${cx - barW / 2},${top}h${barW}v${hgt}h${-barW}Z`;
           if (d && hgt > 0) s('path', { d, class: 'mark ' + slotCls('f', sg.sr.slot) + dim, 'pointer-events': 'none' }, gMarks);
         });
@@ -263,7 +288,7 @@ function renderCartesian(w, body, ctx, data) {
           if (v == null) return;
           const bx = cx - groupW / 2 + k * (barW + 2);
           const zero = sy(Math.max(tlo, Math.min(0, thi))), yv = sy(v);
-          const d = barPath(bx, Math.min(zero, yv), barW, Math.abs(zero - yv), v >= 0 ? 'up' : 'down');
+          const d = barPath(bx, Math.min(zero, yv), barW, Math.abs(zero - yv), v >= 0 ? 'up' : 'down', w.barRadius);
           if (d) s('path', { d, class: 'mark ' + slotCls('f', sr.slot) + dim, 'pointer-events': 'none' }, gMarks);
           if (showLabels && !multi) {
             const lbl = fmtV(v);
@@ -286,15 +311,16 @@ function renderCartesian(w, body, ctx, data) {
     let d = '', ad = '', run = [];
     const flush = () => {
       if (!run.length) return;
-      d += run.map((p, j) => (j ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
-      if (kind === 'area') ad += `M${run[0][0].toFixed(1)},${zeroY}` + run.map(p => 'L' + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('') + `L${run[run.length - 1][0].toFixed(1)},${zeroY}Z`;
+      const seg = w.smooth ? smoothPath(run) : run.map((p, j) => (j ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+      d += seg;
+      if (kind === 'area') ad += `M${run[0][0].toFixed(1)},${zeroY}L` + seg.slice(1) + `L${run[run.length - 1][0].toFixed(1)},${zeroY}Z`;
       run = [];
     };
     sr.values.forEach((v, i) => { if (v == null) flush(); else run.push([px(i), sy(v)]); });
     flush();
     if (kind === 'area' && ad) s('path', { d: ad, class: 'area ' + slotCls('f', sr.slot), 'pointer-events': 'none' }, gMarks);
     if (d) s('path', { d, class: 'line ' + slotCls('st', sr.slot), 'pointer-events': 'none' }, gMarks);
-    if (n === 1 || n <= 2) sr.values.forEach((v, i) => { if (v != null) s('circle', { cx: px(i), cy: sy(v), r: 4, class: 'dot ' + slotCls('f', sr.slot) }, gMarks); });
+    if (n <= 2 || w.markers) sr.values.forEach((v, i) => { if (v != null) s('circle', { cx: px(i), cy: sy(v), r: 4, class: 'dot ' + slotCls('f', sr.slot) }, gMarks); });
     const li = lastIdx(sr.values);
     if (li >= 0) {
       s('circle', { cx: px(li), cy: sy(sr.values[li]), r: 4, class: 'dot ' + slotCls('f', sr.slot), 'pointer-events': 'none' }, gMarks);
@@ -362,7 +388,7 @@ function renderPie(w, body, ctx, data, donut) {
     if (side) lg.classList.add('side');
     row.appendChild(lg);
   }
-  const r1 = Math.max(10, Math.min(cw, ch) / 2 - 6), r0 = donut ? r1 * 0.62 : 0;
+  const r1 = Math.max(10, Math.min(cw, ch) / 2 - 6), r0 = donut ? r1 * clamp(w.holeSize || 62, 20, 90) / 100 : 0;
   const cx = cw / 2, cy = Math.max(40, ch) / 2;
   let a = -Math.PI / 2;
   cats.forEach((c, i) => {
@@ -467,7 +493,7 @@ function renderScatter(w, body, ctx) {
   const ci = colIdx(ds, w.cat);
   let seriesItems = null;
   if (ci >= 0) {
-    // Un punto por categoría (valores agregados), como en Power BI
+    // Un punto por categoría (valores agregados)
     const t = ds.columns[ci].type, g = effectiveGrain(ds, w);
     const groups = new Map();
     for (const r of rows) {
@@ -744,7 +770,7 @@ function renderTable(w, body, ctx) {
   if (rows.length > MAX) body.appendChild(h('div', { class: 'tbl-note', text: `Mostrando ${fmtNum(MAX)} de ${fmtNum(rows.length)} filas. Exporta los datos para verlas todas.` }));
 }
 
-/* ---------- Segmentación (filtro) ---------- */
+/* ---------- Selector de filtro ---------- */
 function renderSlicer(w, body, ctx) {
   const ds = ctx.ds;
   const ci = colIdx(ds, w.cat);
@@ -807,9 +833,11 @@ function renderSlicer(w, body, ctx) {
 }
 
 /* ---------- Texto e imagen ---------- */
-function renderText(w, body) {
-  const box = h('div', { class: 'textbox' + (w.align === 'center' ? ' center' : w.align === 'right' ? ' right' : '') + (w.vcenter ? ' vcenter' : '') });
+function renderText(w, body, box) {
+  box = box || h('div', { class: 'textbox' + (w.align === 'center' ? ' center' : w.align === 'right' ? ' right' : '') + (w.vcenter ? ' vcenter' : '') });
   box.style.fontSize = clamp(+w.fontSize || 14, 8, 72) + 'px';
+  if (w.bold) box.style.fontWeight = '600';
+  if (w.italic) box.style.fontStyle = 'italic';
   const lines = String(w.text || '').split(/\r?\n/);
   let ul = null, para = [];
   const flushP = () => { if (para.length) { box.appendChild(h('p', { text: para.join(' ') })); para = []; } };
@@ -821,8 +849,77 @@ function renderText(w, body) {
     else { ul = null; para.push(line); }
   }
   flushP();
-  if (!w.text) box.appendChild(h('p', { class: 'hint', text: 'Escribe el texto en el panel Formato.' }));
+  if (!w.text && w.type === 'text') box.appendChild(h('p', { class: 'hint', text: 'Escribe el texto en el panel Formato.' }));
   body.appendChild(box);
+}
+/** Geometría de cada forma en un rectángulo W×H (con margen m para el borde). */
+function shapePath(kind, W, H, m) {
+  const x0 = m, y0 = m, x1 = W - m, y1 = H - m, w = x1 - x0, hh = y1 - y0, cx = W / 2, cy = H / 2;
+  const P = pts => 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z';
+  switch (kind) {
+    case 'ellipse': return `M${x0},${cy}A${w / 2},${hh / 2} 0 1 0 ${x1},${cy}A${w / 2},${hh / 2} 0 1 0 ${x0},${cy}Z`;
+    case 'triangle': return P([[cx, y0], [x1, y1], [x0, y1]]);
+    case 'diamond': return P([[cx, y0], [x1, cy], [cx, y1], [x0, cy]]);
+    case 'hexagon': { const k = Math.min(w * 0.25, hh * 0.58); return P([[x0 + k, y0], [x1 - k, y0], [x1, cy], [x1 - k, y1], [x0 + k, y1], [x0, cy]]); }
+    case 'arrow': { const head = Math.min(w * 0.4, hh * 0.9), t = hh * 0.22; return P([[x0, cy - t], [x1 - head, cy - t], [x1 - head, y0], [x1, cy], [x1 - head, y1], [x1 - head, cy + t], [x0, cy + t]]); }
+    case 'chevron': { const k = Math.min(w * 0.35, hh * 0.5); return P([[x0, y0], [x1 - k, y0], [x1, cy], [x1 - k, y1], [x0, y1], [x0 + k, cy]]); }
+    case 'banner': { const k = Math.min(w * 0.18, hh * 0.5); return P([[x0, y0], [x1, y0], [x1 - k, cy], [x1, y1], [x0, y1]]); }
+    case 'line': return `M${x0},${cy}H${x1}`;
+    default: return null;
+  }
+}
+/** Forma decorativa: relleno sólido o degradado, borde y texto opcional. */
+function renderShape(w, body) {
+  const W = Math.max(4, w.w), H = Math.max(4, w.h);
+  const bw = clamp(+w.borderW || 0, 0, 16);
+  const isLine = w.shape === 'line';
+  const svg = s('svg', { class: 'shape-svg sh-' + (w.shadow || 'none'), width: W, height: H, viewBox: `0 0 ${W} ${H}`, 'aria-hidden': 'true' });
+  const fill = shapeFill(w, svg);
+  const m = isLine ? Math.max(2, bw) : Math.max(0.5, bw / 2);
+  let el;
+  if (w.shape === 'rect' || w.shape === 'round') {
+    const r = w.shape === 'round' ? Math.min(clamp(+w.radius || 0, 0, 60) || 14, (W - 2 * m) / 2, (H - 2 * m) / 2) : 0;
+    el = s('rect', { x: m, y: m, width: Math.max(0, W - 2 * m), height: Math.max(0, H - 2 * m), rx: r, ry: r }, svg);
+  } else el = s('path', { d: shapePath(w.shape, W, H, m) }, svg);
+  if (isLine) {
+    el.setAttribute('stroke', w.borderColor || w.fill1 || '#3a5ccc');
+    el.setAttribute('stroke-width', Math.max(1, bw || 3));
+    el.setAttribute('stroke-linecap', 'round');
+    el.setAttribute('fill', 'none');
+  } else {
+    if (fill === 'theme') el.setAttribute('class', 'shape-fill-theme'); else el.setAttribute('fill', fill);
+    if (bw > 0) {
+      if (w.borderColor) el.setAttribute('stroke', w.borderColor); else el.classList.add('shape-stroke-theme');
+      el.setAttribute('stroke-width', bw);
+      el.setAttribute('stroke-linejoin', 'round');
+    }
+  }
+  if (bw > 0 && w.borderStyle === 'dashed') el.setAttribute('stroke-dasharray', `${Math.max(2, bw) * 3} ${Math.max(2, bw) * 2}`);
+  if (bw > 0 && w.borderStyle === 'dotted') { el.setAttribute('stroke-dasharray', `0 ${Math.max(2, bw) * 2}`); el.setAttribute('stroke-linecap', 'round'); }
+  body.appendChild(svg);
+  if (w.text && !isLine) renderText(w, body, h('div', { class: 'shape-text' + (w.align === 'left' ? ' left' : w.align === 'right' ? ' right' : '') }));
+}
+/** Relleno SVG de una forma: color, url(#degradado), 'theme' o 'none'. */
+function shapeFill(w, svg) {
+  const a = clamp(w.fillAlpha == null ? 100 : +w.fillAlpha, 0, 100) / 100;
+  if (!w.bg) return 'none';
+  if (w.fillType === 'theme') return 'theme';
+  if (w.fillType === 'solid') return hexA(w.fill1, a);
+  const id = 'g4d' + uid();
+  const defs = s('defs', null, svg);
+  const g = w.fillType === 'radial'
+    ? s('radialGradient', { id, cx: '35%', cy: '30%', r: '80%' }, defs)
+    : s('linearGradient', { id, gradientTransform: `rotate(${(+w.fillAngle || 0) - 90} .5 .5)` }, defs);
+  s('stop', { offset: '0%', 'stop-color': w.fill1, 'stop-opacity': a }, g);
+  s('stop', { offset: '100%', 'stop-color': w.fill2, 'stop-opacity': a }, g);
+  return `url(#${id})`;
+}
+/** #rrggbb + opacidad (0-1) → color CSS. */
+function hexA(hex, a) {
+  if (!/^#[0-9a-f]{6}$/i.test(hex || '')) return 'transparent';
+  if (a >= 1) return hex;
+  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  return `rgba(${r},${g},${b},${+a.toFixed(3)})`;
 }
 function renderImage(w, body) {
   if (!w.img) return emptyMsg(body, 'image', 'Sube una imagen desde el panel Formato');
@@ -838,6 +935,7 @@ function renderVisual(w, body, ctx) {
   if (!def) return emptyMsg(body, 'info', 'Tipo de visual desconocido');
   if (w.type === 'text') return renderText(w, body);
   if (w.type === 'image') return renderImage(w, body);
+  if (w.type === 'shape') return renderShape(w, body);
   const ds = ctx.ds;
   if (!ds) return emptyMsg(body, def.icon, 'Sin origen de datos', 'Importa un Excel o elige un origen en el panel Datos');
   try {

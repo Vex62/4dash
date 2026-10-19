@@ -199,8 +199,26 @@ function sanitizeWidget(w) {
     slot: num(w.slot, 0, 7, 0), target: optNum(w.target), gaugeMax: optNum(w.gaugeMax),
     text: str(w.text, 20000), fontSize: num(w.fontSize, 8, 72, 14), align: oneOf(w.align, ['left', 'center', 'right'], 'left'),
     vcenter: bool(w.vcenter, false), img: isSafeImageDataUrl(w.img) ? w.img : null,
-    dataBars: bool(w.dataBars, true), totals: bool(w.totals, true), slicerStyle: oneOf(w.slicerStyle, ['list', 'tiles', 'single'], 'list')
+    dataBars: bool(w.dataBars, true), totals: bool(w.totals, true), slicerStyle: oneOf(w.slicerStyle, ['list', 'tiles', 'single'], 'list'),
+    fillType: oneOf(w.fillType, ['theme', 'solid', 'linear', 'radial'], base.fillType), fill1: hexOr(w.fill1, base.fill1), fill2: hexOr(w.fill2, base.fill2),
+    fillAngle: num(w.fillAngle, 0, 360, base.fillAngle), fillAlpha: num(w.fillAlpha, 0, 100, base.fillAlpha),
+    borderW: num(w.borderW, 0, 16, base.borderW), borderColor: hexOr(w.borderColor, null), borderStyle: oneOf(w.borderStyle, ['solid', 'dashed', 'dotted', 'double'], 'solid'),
+    radius: num(w.radius, 0, 60, base.radius), shadow: oneOf(w.shadow, Object.keys(SHADOWS), base.shadow),
+    titleSize: num(w.titleSize, 9, 40, 14), titleColor: hexOr(w.titleColor, null), titleAlign: oneOf(w.titleAlign, ['left', 'center', 'right'], 'left'),
+    titleBold: bool(w.titleBold, true), titleItalic: bool(w.titleItalic, false),
+    textColor: 'textColor' in w ? hexOr(w.textColor, null) : base.textColor, fontFamily: oneOf(w.fontFamily, Object.keys(FONTS), 'sans'), bold: bool(w.bold, false), italic: bool(w.italic, false),
+    lineW: num(w.lineW, 0.5, 10, 2), smooth: bool(w.smooth, false), markers: bool(w.markers, false), barRadius: num(w.barRadius, 0, 30, 4),
+    barGap: w.barGap == null ? null : num(w.barGap, 0, 95, null), holeSize: num(w.holeSize, 20, 90, 62), areaAlpha: num(w.areaAlpha, 0, 100, 12),
+    shape: oneOf(w.shape, Object.keys(SHAPES), base.shape),
+    colors: Array.from({ length: 8 }, (_, i) => hexOr(Array.isArray(w.colors) ? w.colors[i] : null, null))
   });
+}
+function hexOr(v, def) { return typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v.toLowerCase() : def; }
+function sanitizePageBg(b) {
+  if (!b || typeof b !== 'object') return null;
+  const type = oneOf(b.type, ['solid', 'linear', 'radial'], null);
+  if (!type) return null;
+  return { type, c1: hexOr(b.c1, '#ffffff'), c2: hexOr(b.c2, '#e4e8ee'), angle: num(b.angle, 0, 360, 180) };
 }
 function sanitizePage(pg) {
   if (!pg || typeof pg !== 'object') return null;
@@ -208,7 +226,8 @@ function sanitizePage(pg) {
   const out = {
     id: ID_RE.test(pg.id) ? pg.id : uid(), name: str(pg.name, 60, 'Página') || 'Página', size,
     w: num(pg.w, 320, 4000, PAGE_SIZES[size].w), h: num(pg.h, 240, 12000, PAGE_SIZES[size].h),
-    widgets: Array.isArray(pg.widgets) ? pg.widgets.slice(0, 300).map(sanitizeWidget).filter(Boolean) : []
+    widgets: Array.isArray(pg.widgets) ? pg.widgets.slice(0, 300).map(sanitizeWidget).filter(Boolean) : [],
+    bg: sanitizePageBg(pg.bg)
   };
   // Mantener cada visual dentro del lienzo y con ids únicos
   const ids = new Set();
@@ -247,26 +266,27 @@ const jsonReplacer = (k, v) => (typeof k === 'string' && k.startsWith('_') ? und
 /* ---------- Tutorial ---------- */
 const TUTORIAL = [
   { icon: 'sparkles', title: 'Bienvenido a 4Dash', text: [
-    '4Dash convierte tus hojas de Excel en un dashboard interactivo en segundos, al estilo de Power BI.',
+    '4Dash convierte tus hojas de cálculo (.xlsx, .csv) en un dashboard interactivo en segundos.',
     'Todo se procesa en tu navegador: no se envía ningún dato a Internet y el archivo HTML no carga recursos externos.'],
-    list: ['Vista Editor: diseña y configura el dashboard.', 'Vista Presentador: muéstralo a tu cliente a pantalla completa.', 'Pulsa el botón ? cuando quieras volver a ver esta guía.'] },
-  { icon: 'upload', title: '1. Importa tus datos', text: ['Pulsa «Importar Excel» en la cinta o arrastra un archivo .xlsx / .csv sobre el lienzo.'],
-    list: ['Si la primera fila tiene títulos, se usan como nombres de columna.', 'Si la primera columna tiene títulos de fila (p. ej. una tabla por meses), se detecta y se crea también la versión transpuesta.', 'Cada hoja del libro se convierte en un origen de datos y en una página.', 'Se genera automáticamente un dashboard con KPIs, gráficos, segmentación y tabla.'] },
-  { icon: 'grid', title: '2. Diseña en la vista Editor', text: ['Organiza el lienzo como en Power BI:'],
-    list: ['Arrastra un visual para moverlo; usa los tiradores azules para cambiar su tamaño.', 'Aparecen guías magenta para alinear con otros visuales; mantén Alt para mover sin ajustar a la cuadrícula.', 'Inserta visuales desde el panel «Visualizaciones» (clic o arrastrar al lienzo).', 'Arrastra campos del panel «Datos» a un visual o al lienzo vacío.'] },
+    list: ['Vista Editor: diseña y configura el dashboard.', 'Vista Presentador: muéstralo a tu cliente a pantalla completa.', 'Pulsa el botón ? cuando quieras volver a ver esta guía.', '4Dash © Vex62 — licencia 4Dash: el uso comercial exige citar claramente al autor.'] },
+  { icon: 'upload', title: '1. Importa tus datos', text: ['Pulsa «Importar» en la barra de herramientas o arrastra un archivo .xlsx / .csv sobre el lienzo.'],
+    list: ['Si la primera fila tiene títulos, se usan como nombres de columna.', 'Si la primera columna tiene títulos de fila (p. ej. una tabla por meses), se detecta y se crea también la versión transpuesta.', 'Cada hoja del libro se convierte en un origen de datos y en una página.', 'Se genera automáticamente un dashboard con KPIs, gráficos, selector de filtro y tabla.'] },
+  { icon: 'grid', title: '2. Diseña en la vista Editor', text: ['Organiza el lienzo libremente:'],
+    list: ['Arrastra un visual para moverlo; usa los tiradores azules para cambiar su tamaño.', 'Aparecen guías de color para alinear con otros visuales; mantén Alt para mover sin ajustar a la cuadrícula.', 'Inserta visuales, formas y textos desde el panel «Visualizaciones» o la barra de herramientas.', 'Usa «Alinear» para colocar el visual respecto a la página.', 'Arrastra campos del panel «Datos» a un visual o al lienzo vacío.'] },
   { icon: 'edit', title: '3. Configura cada visual', text: ['Selecciona un visual y usa el panel «Propiedades» de la derecha:'],
     list: ['Datos: origen, eje, leyenda, valores, agregación (suma, promedio…), agrupación de fechas, orden y Top N.', 'Formato: título, formato numérico y moneda, etiquetas, leyenda, color, objetivo del KPI…',
-      'Paleta de colores (cinta «Diseño» o icono de paleta): elige Verde esmeralda, Azul eléctrico u otras, o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
+      'Estilo: relleno sólido o degradado, borde (grosor, color, trazo), esquinas, sombras, tipografía, grosor de líneas y colores libres con el selector de color.',
+      'Paleta de colores (icono de paleta): elige una paleta incluida o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
   { icon: 'filter', title: '4. Filtra e interactúa', text: ['Los visuales están conectados entre sí (filtrado cruzado):'],
-    list: ['Haz clic en una barra, sector o fila para filtrar el resto de la página. Ctrl+clic suma selecciones.', 'En el Editor, el primer clic selecciona el visual y el segundo filtra.', 'Las segmentaciones filtran todos los visuales del mismo origen.', 'Los filtros activos aparecen sobre el lienzo; pulsa × para quitarlos.'] },
+    list: ['Haz clic en una barra, sector o fila para filtrar el resto de la página. Ctrl+clic suma selecciones.', 'En el Editor, el primer clic selecciona el visual y el segundo filtra.', 'Los selectores de filtro filtran todos los visuales del mismo origen.', 'Los filtros activos aparecen sobre el lienzo; pulsa × para quitarlos.'] },
   { icon: 'monitor', title: '5. Presenta', text: ['Cambia a «Presentador» en la barra superior.'],
-    list: ['Sube el logo de la empresa o cliente en el recuadro «Logo»: aparecerá en la cabecera.', 'Usa ← → para cambiar de página y F para pantalla completa.', 'Pasa el ratón por los visuales para ver los valores; usa el modo foco para ampliarlos.'] },
+    list: ['Sube el logo de la empresa o cliente en el recuadro «Logo»: aparecerá en la cabecera.', 'Usa ← → para cambiar de página y F para pantalla completa.', 'Pasa el ratón por los visuales para ver los valores; usa «Ampliar» para verlos a pantalla completa.'] },
   { icon: 'save', title: '6. Guarda y comparte', text: ['Tu trabajo se autoguarda en este navegador.'],
-    list: ['«Guardar» descarga un archivo .4dash.json con datos y diseño que puedes abrir más tarde o enviar.', '«Imprimir / PDF» genera una página por cada página del dashboard.', 'Exporta a CSV los datos de cualquier visual desde su menú.'], shortcuts: true }
+    list: ['«Guardar» descarga un archivo .4dash.json con datos y diseño que puedes abrir más tarde o enviar.', '«Exportar» guarda el dashboard como imagen PNG, SVG o PDF tal y como se ve en el Presentador.', '«Imprimir» genera una página por cada página del dashboard.', 'Exporta a CSV los datos de cualquier visual desde su menú.'], shortcuts: true }
 ];
 const SHORTCUTS = [
   ['Ctrl + Z / Ctrl + Y', 'Deshacer / rehacer'], ['Supr', 'Eliminar el visual seleccionado'], ['Ctrl + D', 'Duplicar visual'],
-  ['Ctrl + C / Ctrl + V', 'Copiar / pegar visual'], ['Flechas (Mayús = 10 px)', 'Mover el visual seleccionado'], ['Ctrl + S / Ctrl + O', 'Guardar / abrir proyecto'],
+  ['Ctrl + C / Ctrl + V', 'Copiar / pegar visual'], ['Flechas (Mayús = 10 px)', 'Mover el visual seleccionado'], ['Ctrl + S / Ctrl + O', 'Guardar / abrir proyecto'], ['Ctrl + E', 'Exportar como imagen o PDF'], ['Ctrl + rueda (sobre el lienzo)', 'Zoom del lienzo'],
   ['F5', 'Ir a la vista Presentador'], ['← → / F', 'Páginas y pantalla completa (Presentador)'], ['Esc', 'Deseleccionar / cerrar / salir'], ['F1', 'Abrir este tutorial']
 ];
 function openTutorial(start = 0) {

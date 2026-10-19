@@ -52,7 +52,10 @@ function s(tag, attrs, parent) {
   return el;
 }
 
-/* ---------- Iconos (trazos 24x24 dibujados a mano, sin fuentes externas) ---------- */
+/* ---------- Iconos (trazos 24x24, sin fuentes externas) ----------
+   Parte de los trazos se basan en Feather Icons (© 2013-2023 Cole Bemis, licencia MIT)
+   y Lucide (© Lucide Contributors, licencia ISC); ver THIRD_PARTY_NOTICES.md.
+   El resto (marca, formas, alineación, exportación…) son propios de 4Dash. */
 const ICONS = {
   upload: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4|M17 8l-5-5-5 5|M12 3v12',
   download: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4|M7 10l5 5 5-5|M12 15V3',
@@ -115,6 +118,17 @@ const ICONS = {
   info: 'M12 22a10 10 0 1 0 0-20a10 10 0 1 0 0 20z|M12 16v-4|M12 8h.01',
   focus: 'M3 7V3h4|M17 3h4v4|M21 17v4h-4|M7 21H3v-4',
   lock: 'M5 11h14v10H5z|M8 11V7a4 4 0 0 1 8 0v4',
+  export: 'M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9|M3 16l5-5 4 4|M17 3h4v4|M14 10l7-7',
+  shape: 'M3 14h8v7H3z|M17 10a4 4 0 1 0 0-8a4 4 0 1 0 0 8z|M7 3l4 7H3z',
+  brush: 'M19 3l2 2-8.5 8.5-2-2z|M10.5 11.5L8 12c-2 .5-2.5 2-3 4-.3 1.2-1.2 2.4-2 3 3 .5 6.5-.5 8-3l.5-2.5',
+  minus: 'M5 12h14',
+  alignL: 'M4 3v18|M8 6h11v4H8z|M8 14h7v4H8z',
+  alignC: 'M12 3v18|M6 6h12v4H6z|M8 14h8v4H8z',
+  alignR: 'M20 3v18|M5 6h11v4H5z|M9 14h7v4H9z',
+  alignT: 'M3 4h18|M6 8h4v11H6z|M14 8h4v7h-4z',
+  alignM: 'M3 12h18|M6 6h4v12H6z|M14 8h4v8h-4z',
+  alignB: 'M3 20h18|M6 5h4v11H6z|M14 9h4v7h-4z',
+  layers: 'M12 3l9 5-9 5-9-5z|M3 13l9 5 9-5',
   palette: 'M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.4 3.4A1.6 1.6 0 0 1 12 22z|M7.5 11.5h.01|M10.5 7.5h.01|M15.5 8.5h.01'
 };
 const BOLD_ICONS = new Set(['more', 'scatter']);
@@ -129,10 +143,12 @@ function icon(name, size = 16, extraClass = '') {
   return svg;
 }
 function brandMark(size = 22) {
+  // Marca de 4Dash: cuatro mosaicos de un tablero, uno destacado
   const svg = s('svg', { viewBox: '0 0 32 32', width: size, height: size, class: 'brand-mark', 'aria-hidden': 'true' });
-  s('rect', { x: 4, y: 17, width: 6, height: 11, rx: 1.5, class: 'brand-fill' }, svg);
-  s('rect', { x: 13, y: 10, width: 6, height: 18, rx: 1.5, class: 'brand-fill', opacity: .85 }, svg);
-  s('rect', { x: 22, y: 4, width: 6, height: 24, rx: 1.5, class: 'brand-fill', opacity: .7 }, svg);
+  s('rect', { x: 3, y: 3, width: 15, height: 15, rx: 4, class: 'brand-fill' }, svg);
+  s('rect', { x: 20, y: 3, width: 9, height: 15, rx: 3, class: 'brand-fill', opacity: .55 }, svg);
+  s('rect', { x: 3, y: 20, width: 9, height: 9, rx: 3, class: 'brand-fill', opacity: .55 }, svg);
+  s('rect', { x: 14, y: 20, width: 15, height: 9, rx: 3, class: 'brand-fill', opacity: .8 }, svg);
   return svg;
 }
 
@@ -228,7 +244,7 @@ function toCsv(header, rows) {
 /* Medición de texto con canvas (sin tocar el DOM) */
 const measureCtx = document.createElement('canvas').getContext('2d');
 function textWidth(text, px = 11, weight = 400) {
-  measureCtx.font = `${weight} ${px}px "Segoe UI", system-ui, sans-serif`;
+  measureCtx.font = `${weight} ${px}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
   return measureCtx.measureText(String(text)).width;
 }
 function truncateText(text, maxPx, px = 11, weight = 400) {

@@ -189,7 +189,7 @@ function openDataEditor(dsId) {
     const tr = transposeDataset(ds);
     App.p.datasets.push(tr);
     scheduleSave();
-    renderLeft(); renderRight(); renderRibbon(); renderStatus();
+    renderLeft(); renderRight(); renderToolbar(); renderStatus();
     cur = tr; load(tr); drawAll();
     toast(`Nuevo origen creado: «${tr.name}». Úsalo con «Generar automático» o en cualquier visual.`, 'ok', 6000);
   }

@@ -13,7 +13,7 @@ function seriesFrom(lead, order) {
   return { light: [lead[0], ...order.map(i => HUES_L[i])], dark: [lead[1], ...order.map(i => HUES_D[i])] };
 }
 const PALETTES = {
-  default: { name: '4Dash (predeterminada)', topbar: '#252423', primary: '#0078d4', brand: '#f2c811', ...seriesFrom(['#2a78d6', '#3987e5'], [1, 2, 3, 4, 5, 6, 7]) },
+  default: { name: '4Dash (predeterminada)', topbar: '#1b2130', primary: '#3a5ccc', brand: '#ff8a5b', ...seriesFrom(['#2a78d6', '#3987e5'], [1, 2, 3, 4, 5, 6, 7]) },
   emerald: { name: 'Verde esmeralda', topbar: '#047857', primary: '#047857', brand: '#ffffff', ...seriesFrom(['#059669', '#10a37a'], [1, 0, 3, 4, 6, 7, 5]) },
   electric: { name: 'Azul eléctrico', topbar: '#0047ff', primary: '#0050e6', brand: '#ffffff', ...seriesFrom(['#0062ff', '#3b82ff'], [1, 2, 3, 4, 5, 6, 7]) },
   navy: { name: 'Corporativo marino', topbar: '#1f2a44', primary: '#2f5597', brand: '#d4a72c', ...seriesFrom(['#2f5597', '#4a74c9'], [1, 2, 3, 4, 6, 5, 7]) },
@@ -101,7 +101,7 @@ function applyPalette() {
   set('--brand', pal.brand);
   const top = dark ? mixHex(pal.topbar, '#000000', 0.35) : pal.topbar;
   set('--brand-top', contrast(pal.brand, top) >= 1.8 ? pal.brand : topFg);
-  const pane = dark ? '#252423' : '#ffffff';
+  const pane = dark ? '#1f2430' : '#ffffff';
   const primary = dark ? mixHex(pal.primary, '#ffffff', luminance(pal.primary) < 0.2 ? 0.3 : 0.1) : pal.primary;
   set('--primary', primary);
   set('--primary-hover', mixHex(primary, dark ? '#ffffff' : '#000000', 0.12));
@@ -187,7 +187,14 @@ function openPaletteDialog() {
     body.appendChild(grid);
 
     if (sel.id !== 'custom') {
-      body.appendChild(h('p', { class: 'hint', text: 'Las paletas incluidas están validadas para daltonismo y contraste en modo claro y oscuro. Elige «Personalizada» para usar los colores de tu marca (parte de la paleta seleccionada).' }));
+      const p = PALETTES[sel.id] || PALETTES.default;
+      const edit = h('button', { class: 'btn', type: 'button' }, icon('palette', 15), `Personalizar los colores de «${p.name}»`);
+      edit.addEventListener('click', () => {
+        draft = { topbar: p.topbar, primary: p.primary, brand: p.brand, series: p.light.slice() };
+        preview({ id: 'custom', custom: deepClone(draft) });
+      });
+      body.appendChild(h('div', { class: 'form-row' }, edit));
+      body.appendChild(h('p', { class: 'hint', text: 'Las paletas incluidas están validadas para daltonismo y contraste en modo claro y oscuro. Personalízala para elegir cualquier color con el selector (barra superior, color principal, acento y los 8 colores de los gráficos). Cada visual puede además tener sus propios colores en la pestaña Estilo.' }));
       return;
     }
     // Editor personalizado
@@ -195,11 +202,16 @@ function openPaletteDialog() {
     draft = deepClone(c);
     const update = () => preview({ id: 'custom', custom: deepClone(draft) });
     const colorField = (label, get, setv) => {
-      const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': label });
+      const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': label, title: 'Elegir cualquier color' });
       inp.value = get();
       const hex = h('input', { class: 'inp hex-inp', maxlength: 7, 'aria-label': label + ' (hex)', spellcheck: 'false' });
       hex.value = get();
-      inp.addEventListener('input', () => { hex.value = inp.value; setv(inp.value); });
+      // Vista previa en vivo mientras se arrastra en el selector (limitada a un fotograma)
+      let raf = 0;
+      inp.addEventListener('input', () => {
+        hex.value = inp.value; setv(inp.value);
+        if (!raf) raf = requestAnimationFrame(() => { raf = 0; App.p.palette = { id: 'custom', custom: deepClone(draft) }; applyPalette(); });
+      });
       inp.addEventListener('change', update);
       hex.addEventListener('change', () => {
         const v = hex.value.trim().startsWith('#') ? hex.value.trim() : '#' + hex.value.trim();

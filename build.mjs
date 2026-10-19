@@ -20,7 +20,7 @@ const template = read(join(src, 'index.html'));
 const css = read(join(src, 'styles.css')).trim();
 const jsFiles = readdirSync(join(src, 'js')).filter(f => f.endsWith('.js')).sort();
 const js = [
-  `/*! 4Dash v${pkg.version} — HTML autocontenido, sin dependencias externas. */`,
+  `/*! 4Dash v${pkg.version} — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */`,
   '(() => {',
   "'use strict';",
   ...jsFiles.map(f => `/* ---- ${f} ---- */\n` + read(join(src, 'js', f))),

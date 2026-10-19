@@ -3,60 +3,61 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-NHynDKf4FiHfE5gwe3y1U093dEmjSDE1lG2e379nkSU='; style-src 'sha256-rkGrjtXS2Go4Ac//dyr7VQuJtwCq1vYQwe/w//rVPiM='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-5N8QCWqrxv8SaegdP1o83qyoI0waG795O3uOL4Vy240='; style-src 'sha256-8Gfq0MY25a1v++52K5rKhfhVgaC+PLMvYp4LoFvnVco='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
-<meta name="generator" content="4Dash 1.0.0">
+<meta name="generator" content="4Dash 1.1.0">
+<meta name="author" content="Vex62">
 <title>4Dash</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23252423'/%3E%3Crect x='7' y='17' width='4' height='8' rx='1' fill='%23f2c811'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1' fill='%23f2c811'/%3E%3Crect x='21' y='6' width='4' height='19' rx='1' fill='%23f2c811'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b2130'/%3E%3Crect x='5' y='5' width='13' height='13' rx='3.5' fill='%23ff8a5b'/%3E%3Crect x='20' y='5' width='7' height='13' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='5' y='20' width='7' height='7' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='14' y='20' width='13' height='7' rx='2.5' fill='%23ff8a5b' opacity='.8'/%3E%3C/svg%3E">
 <style>/* ==========================================================================
-   4Dash — estilos. Look & feel inspirado en Fluent UI (Power BI / Azure DevOps)
-   Todos los colores se definen como tokens; el modo oscuro tiene sus propios
-   pasos (no es una inversión automática).
+   4Dash — estilos propios. Todos los colores se definen como tokens; el modo
+   oscuro tiene sus propios pasos (no es una inversión automática).
    ========================================================================== */
 
 :root {
   color-scheme: light;
-  --font: "Segoe UI", "Segoe UI Web (West European)", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Cromo de la aplicación */
-  --topbar-bg: #252423;
+  --topbar-bg: #1b2130;
   --topbar-fg: #ffffff;
-  --topbar-fg-2: #c8c6c4;
-  --topbar-hover: #3b3a39;
-  --brand: #f2c811;
-  --tab-accent: #f2c811;
-  --primary: #0078d4;
-  --primary-hover: #106ebe;
+  --topbar-fg-2: #b9c0cf;
+  --topbar-hover: #2c3446;
+  --brand: #ff8a5b;
+  --tab-accent: #ff8a5b;
+  --primary: #3a5ccc;
+  --primary-hover: #2f4db3;
   --primary-fg: #ffffff;
-  --primary-soft: #deecf9;
-  --app-bg: #f3f2f1;
+  --primary-soft: #e3e9fb;
+  --app-bg: #f2f4f7;
   --pane-bg: #ffffff;
-  --pane-head: #faf9f8;
-  --canvas-bg: #e8e6e4;
+  --pane-head: #f8f9fb;
+  --canvas-bg: #e4e8ee;
   --page-bg: #ffffff;
-  --border: #e1dfdd;
-  --border-strong: #c8c6c4;
-  --text: #323130;
-  --text-2: #605e5c;
-  --text-3: #8a8886;
-  --hover: #f3f2f1;
-  --pressed: #edebe9;
-  --focus: #0078d4;
-  --shadow-1: 0 1.6px 3.6px rgba(0,0,0,.13), 0 .3px .9px rgba(0,0,0,.11);
-  --shadow-2: 0 6.4px 14.4px rgba(0,0,0,.13), 0 1.2px 3.6px rgba(0,0,0,.11);
-  --shadow-3: 0 25.6px 57.6px rgba(0,0,0,.22), 0 4.8px 14.4px rgba(0,0,0,.18);
-  --overlay: rgba(0,0,0,.4);
-  --danger: #a4262c;
-  --danger-soft: #fde7e9;
+  --border: #dde1e8;
+  --border-strong: #c3c9d4;
+  --text: #1f2633;
+  --text-2: #4f5868;
+  --text-3: #7b8494;
+  --hover: #eef1f5;
+  --pressed: #e3e7ee;
+  --focus: #3a5ccc;
+  --shadow-1: 0 1px 2px rgba(16,24,40,.07), 0 1px 4px rgba(16,24,40,.08);
+  --shadow-2: 0 4px 10px rgba(16,24,40,.10), 0 2px 4px rgba(16,24,40,.06);
+  --shadow-3: 0 18px 40px rgba(16,24,40,.20), 0 6px 12px rgba(16,24,40,.10);
+  --overlay: rgba(10,14,22,.45);
+  --danger: #b42318;
+  --danger-soft: #fdeceb;
+  --guide: #f43f5e;
 
   /* Gráficos (paleta de referencia validada) */
   --widget-bg: #ffffff;
-  --ink-1: #0b0b0b;
-  --ink-2: #52514e;
-  --ink-muted: #898781;
-  --gridline: #e1e0d9;
-  --axis: #c3c2b7;
+  --ink-1: #10141c;
+  --ink-2: #4a5160;
+  --ink-muted: #858b97;
+  --gridline: #e3e6ec;
+  --axis: #c2c7d0;
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
@@ -65,7 +66,7 @@
   --series-6: #008300;
   --series-7: #6250d6;
   --series-8: #e34948;
-  --series-other: #b4b2a9;
+  --series-other: #b2b6be;
   --good: #0ca30c;
   --good-text: #006300;
   --critical: #d03b3b;
@@ -74,37 +75,37 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --topbar-bg: #11100f;
-  --topbar-fg: #f3f2f1;
-  --topbar-fg-2: #a19f9d;
-  --topbar-hover: #2b2a29;
-  --primary: #2899f5;
-  --primary-hover: #4aa8f7;
-  --primary-fg: #0b0b0b;
-  --primary-soft: #0f3a5f;
-  --app-bg: #1b1a19;
-  --pane-bg: #252423;
-  --pane-head: #201f1e;
-  --canvas-bg: #0d0d0d;
-  --page-bg: #161615;
-  --border: #3b3a39;
-  --border-strong: #605e5c;
-  --text: #f3f2f1;
-  --text-2: #c8c6c4;
-  --text-3: #a19f9d;
-  --hover: #323130;
-  --pressed: #3b3a39;
-  --focus: #2899f5;
+  --topbar-bg: #0f131b;
+  --topbar-fg: #eef1f6;
+  --topbar-fg-2: #9aa3b4;
+  --topbar-hover: #232a38;
+  --primary: #6f8ff0;
+  --primary-hover: #8aa4f3;
+  --primary-fg: #0b0e14;
+  --primary-soft: #23315a;
+  --app-bg: #161a22;
+  --pane-bg: #1f2430;
+  --pane-head: #1a1f29;
+  --canvas-bg: #0e1117;
+  --page-bg: #141821;
+  --border: #2e3543;
+  --border-strong: #4a5366;
+  --text: #eef1f6;
+  --text-2: #c2c8d3;
+  --text-3: #8e97a8;
+  --hover: #2a303d;
+  --pressed: #333a49;
+  --focus: #6f8ff0;
   --overlay: rgba(0,0,0,.6);
-  --danger: #f1707b;
-  --danger-soft: #442726;
+  --danger: #f97066;
+  --danger-soft: #45201d;
 
-  --widget-bg: #1a1a19;
-  --ink-1: #f0efec;
-  --ink-2: #c3c2b7;
-  --ink-muted: #898781;
-  --gridline: #2c2c2a;
-  --axis: #383835;
+  --widget-bg: #1a1f29;
+  --ink-1: #eef0f4;
+  --ink-2: #c0c5cf;
+  --ink-muted: #878e9b;
+  --gridline: #2a303c;
+  --axis: #3a4150;
   --series-1: #3987e5;
   --series-2: #d95926;
   --series-3: #199e70;
@@ -113,7 +114,7 @@
   --series-6: #008300;
   --series-7: #9085e9;
   --series-8: #e66767;
-  --series-other: #5f5e5a;
+  --series-other: #5d636e;
   --good: #0ca30c;
   --good-text: #0ca30c;
   --critical: #d03b3b;
@@ -143,8 +144,11 @@ svg.ico { flex: none; display: block; }
   display: flex; align-items: center; gap: 12px;
   padding: 0 12px 0 0;
   background: var(--topbar-bg); color: var(--topbar-fg);
-  min-width: 0;
+  min-width: 0; overflow: hidden;
 }
+.topbar > * { flex: none; }
+.topbar > .doc-title { flex: 0 1 280px; }
+.topbar > .spacer { flex: 1 1 0; }
 .brand {
   display: flex; align-items: center; gap: 8px; height: 100%;
   padding: 0 14px; font-weight: 600; font-size: 16px; letter-spacing: .2px;
@@ -155,7 +159,7 @@ svg.ico { flex: none; display: block; }
 .brand-fill { fill: var(--brand-top, var(--brand)); }
 .doc-title {
   background: transparent; border: 1px solid transparent; color: var(--topbar-fg);
-  font-size: 14px; padding: 5px 8px; border-radius: 2px; min-width: 120px; width: 280px; max-width: 32vw;
+  font-size: 14px; padding: 5px 8px; border-radius: 4px; min-width: 60px; width: 280px; max-width: 32vw;
 }
 .doc-title:hover { border-color: var(--topbar-hover); }
 .doc-title:focus { background: var(--topbar-hover); outline: none; border-color: var(--primary); }
@@ -197,36 +201,35 @@ body.mode-presenter .logo-remove { display: none !important; }
 .top-btn:hover { background: var(--topbar-hover); }
 .help-btn { border: 1.5px solid var(--topbar-fg-2); width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: 14px; }
 
-/* ---------- Ribbon ---------- */
-.ribbon {
-  display: flex; align-items: stretch; gap: 0; overflow-x: auto; overflow-y: hidden;
+/* ---------- Barra de herramientas ---------- */
+.toolbar {
+  display: flex; align-items: center; gap: 2px; overflow-x: auto; overflow-y: hidden;
   background: var(--pane-bg); border-bottom: 1px solid var(--border);
-  padding: 4px 8px; min-height: 76px; scrollbar-width: thin;
+  padding: 4px 8px; min-height: 46px; scrollbar-width: thin; scroll-behavior: smooth;
 }
-.rgroup { display: flex; flex-direction: column; padding: 0 6px; border-right: 1px solid var(--border); }
-.rgroup:last-child { border-right: 0; }
-.rgroup-items { display: flex; gap: 2px; flex: 1; align-items: flex-start; }
-.rgroup-label { font-size: 11px; color: var(--text-3); text-align: center; padding-top: 2px; white-space: nowrap; }
-.rbtn {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  min-width: 56px; max-width: 76px; padding: 5px 4px; border: 1px solid transparent; border-radius: 3px;
-  background: transparent; color: var(--text); font-size: 11.5px; line-height: 1.15; text-align: center;
+.tgroup { display: flex; align-items: center; gap: 2px; padding: 0 6px; flex: none; position: relative; }
+.tgroup + .tgroup::before { content: ""; position: absolute; left: -1px; top: 6px; bottom: 6px; width: 1px; background: var(--border); }
+.tgroup.push { margin-left: auto; }
+.tgroup.sticky-end { position: sticky; right: -8px; background: var(--pane-bg); padding-right: 8px; margin-right: -8px; z-index: 1; }
+.tbtn {
+  display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 9px;
+  border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--text);
+  font-size: 12.5px; white-space: nowrap; flex: none;
 }
-.rbtn .ico { color: var(--primary); }
-.rbtn:hover:not(:disabled) { background: var(--hover); }
-.rbtn:active:not(:disabled) { background: var(--pressed); }
-.rbtn:disabled { opacity: .4; cursor: default; }
-.rbtn[aria-pressed="true"] { background: var(--primary-soft); border-color: var(--primary); }
-.rstack { display: flex; flex-direction: column; gap: 2px; }
-.rbtn-sm {
-  display: flex; align-items: center; gap: 6px; padding: 3px 8px; border: 1px solid transparent; border-radius: 3px;
-  background: transparent; font-size: 12px; white-space: nowrap;
-}
-.rbtn-sm .ico { color: var(--primary); }
-.rbtn-sm:hover:not(:disabled) { background: var(--hover); }
-.rbtn-sm:disabled { opacity: .4; cursor: default; }
-.rbtn-sm[aria-pressed="true"] { background: var(--primary-soft); }
-.zoom-select { margin-top: 6px; }
+.tbtn .ico { color: var(--primary); }
+.tbtn:hover:not(:disabled) { background: var(--hover); }
+.tbtn:active:not(:disabled) { background: var(--pressed); }
+.tbtn:disabled { opacity: .4; cursor: default; }
+.tbtn[aria-pressed="true"] { background: var(--primary-soft); border-color: color-mix(in srgb, var(--primary) 45%, transparent); }
+.tbtn.accent { background: var(--primary); color: var(--primary-fg); font-weight: 600; }
+.tbtn.accent .ico { color: var(--primary-fg); }
+.tbtn.accent:hover:not(:disabled) { background: var(--primary-hover); }
+.tbtn .caret { color: var(--text-3); margin-left: -2px; }
+.zoom-box { display: inline-flex; align-items: center; gap: 2px; }
+.zoom-box .sel { width: auto; min-height: 30px; padding: 3px 6px; }
+.tbtn.icon-only { padding: 0 7px; }
+@media (max-width: 1760px) { .tbtn.opt .tb-lbl { display: none; } .tbtn.opt { padding: 0 7px; } }
+@media (max-width: 1100px) { .tbtn:not(.keep) .tb-lbl { display: none; } .tbtn { padding: 0 7px; } .tgroup { padding: 0 3px; } }
 
 /* ---------- Área de trabajo ---------- */
 .workspace { display: flex; min-height: 0; }
@@ -359,17 +362,18 @@ body.mode-presenter .logo-remove { display: none !important; }
   position: absolute; left: 0; top: 0; transform-origin: 0 0;
   background: var(--page-bg); box-shadow: var(--shadow-2);
 }
-body.mode-editor .page.snap {
+body.mode-editor .page.snap::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .7;
   background-image: radial-gradient(circle, var(--border-strong) 1px, transparent 1.2px);
   background-size: 16px 16px; background-position: -8px -8px;
 }
 .page-header {
   position: absolute; left: 0; right: 0; top: 0; height: 0;
 }
-.guide { position: absolute; background: #e3008c; pointer-events: none; z-index: 9999; }
+.guide { position: absolute; background: var(--guide); pointer-events: none; z-index: 9999; }
 .guide.v { width: 1px; top: 0; bottom: 0; }
 .guide.h { height: 1px; left: 0; right: 0; }
-.marquee { position: absolute; border: 1px solid var(--primary); background: rgba(0,120,212,.08); pointer-events: none; z-index: 9998; }
+.marquee { position: absolute; border: 1px solid var(--primary); background: color-mix(in srgb, var(--primary) 8%, transparent); pointer-events: none; z-index: 9998; }
 
 .empty-state {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px;
@@ -384,7 +388,7 @@ body.mode-editor .page.snap {
 .empty-card .ico { margin: 0 auto; color: var(--primary); }
 .empty-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .drop-overlay {
-  position: absolute; inset: 0; z-index: 50; background: rgba(0,120,212,.12); border: 3px dashed var(--primary);
+  position: absolute; inset: 0; z-index: 50; background: color-mix(in srgb, var(--primary) 12%, transparent); border: 3px dashed var(--primary);
   display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; color: var(--primary);
   pointer-events: none;
 }
@@ -392,11 +396,31 @@ body.mode-editor .page.snap {
 /* ---------- Widgets ---------- */
 .widget {
   position: absolute; display: flex; flex-direction: column;
-  background: var(--widget-bg); border-radius: 4px; box-shadow: var(--shadow-1);
-  color: var(--ink-1); overflow: visible;
+  background: var(--widget-bg); border-radius: 6px; box-shadow: var(--shadow-1);
+  color: var(--ink-1); overflow: visible; font-family: var(--font);
 }
-.widget.nobg { background: transparent; box-shadow: none; }
-.widget.border { box-shadow: none; border: 1px solid var(--border); }
+.widget.nobg { background: transparent; }
+.widget.sh-none, .widget.nobg.sh-soft { box-shadow: none; }
+.widget.sh-medium { box-shadow: var(--shadow-2); }
+.widget.sh-strong { box-shadow: var(--shadow-3); }
+.widget.sh-glow { box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 35%, transparent), 0 0 22px color-mix(in srgb, var(--primary) 40%, transparent); }
+.widget.sh-float { box-shadow: 0 22px 30px -18px rgba(16,24,40,.45); }
+.widget.is-shape { background: transparent !important; box-shadow: none !important; border: 0 !important; }
+.widget.is-shape .w-body { padding: 0 !important; }
+.shape-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.shape-svg.sh-soft { filter: drop-shadow(0 1px 3px rgba(16,24,40,.18)); }
+.shape-svg.sh-medium { filter: drop-shadow(0 4px 8px rgba(16,24,40,.22)); }
+.shape-svg.sh-strong { filter: drop-shadow(0 12px 18px rgba(16,24,40,.32)); }
+.shape-svg.sh-glow { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--primary) 60%, transparent)); }
+.shape-svg.sh-float { filter: drop-shadow(0 16px 10px rgba(16,24,40,.28)); }
+.shape-fill-theme { fill: var(--widget-bg); }
+.shape-stroke-theme { stroke: var(--border-strong); }
+.shape-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 8px 12px; color: var(--ink-1); line-height: 1.3; overflow: hidden; word-wrap: break-word; pointer-events: none;
+}
+.shape-text.left { justify-content: flex-start; text-align: left; }
+.shape-text.right { justify-content: flex-end; text-align: right; }
 body.mode-editor .widget { cursor: move; }
 body.mode-editor .widget:hover { outline: 1px solid var(--border-strong); }
 .widget.selected { outline: 2px solid var(--primary) !important; z-index: 5000 !important; }
@@ -404,7 +428,11 @@ body.mode-editor .widget:hover { outline: 1px solid var(--border-strong); }
 .w-head {
   display: flex; align-items: center; gap: 4px; height: 32px; padding: 0 6px 0 12px; flex: none; min-width: 0;
 }
-.w-title { flex: 1; font-size: 14px; font-weight: 600; color: var(--ink-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.w-title {
+  flex: 1; font-size: var(--wt-size, 14px); font-weight: var(--wt-weight, 600); color: var(--wt-color, var(--ink-1));
+  text-align: var(--wt-align, left); font-style: var(--wt-style, normal);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .w-actions {
   display: flex; gap: 0; opacity: 0; transition: opacity .1s;
   background: var(--widget-bg); border-radius: 3px;
@@ -448,8 +476,8 @@ svg.chart text { font-family: var(--font); }
 .hit { fill: transparent; cursor: pointer; }
 .hit:hover + .mark, .mark:hover { filter: brightness(1.08); }
 body.mode-editor .hit { cursor: inherit; }
-.line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.area { opacity: .12; }
+.line { fill: none; stroke-width: var(--line-w, 2); stroke-linejoin: round; stroke-linecap: round; }
+.area { opacity: var(--area-a, .12); }
 .dot { stroke: var(--widget-bg); stroke-width: 2; }
 .slice { stroke: var(--widget-bg); stroke-width: 2; stroke-linejoin: round; }
 .tm-cell { stroke: var(--widget-bg); stroke-width: 2; }
@@ -549,10 +577,13 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 12px; font-varian
 .ptab:hover { background: var(--hover); color: var(--text); }
 .ptab[aria-selected="true"] { color: var(--text); font-weight: 600; border-top-color: var(--tab-accent); background: var(--app-bg); }
 .ptab-input { width: 140px; border: 1px solid var(--primary); padding: 2px 6px; font-size: 12.5px; background: var(--pane-bg); }
+.zoom-status { display: inline-flex; align-items: center; gap: 2px; }
+.zoom-status .icon-btn { width: 22px; height: 22px; }
+.zoom-status .linklike { min-width: 44px; font-size: 12px; }
 .status { display: flex; align-items: center; gap: 14px; color: var(--text-2); font-size: 12px; white-space: nowrap; padding-left: 8px; }
 
 /* Presentador */
-body.mode-presenter .ribbon,
+body.mode-presenter .toolbar,
 body.mode-presenter .pane,
 body.mode-presenter .handle,
 body.mode-presenter .editor-only { display: none !important; }
@@ -710,12 +741,72 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 @media (forced-colors: active) {
   .mark, .slice, .tm-cell { forced-color-adjust: none; }
 }
-@media (max-width: 900px) {
-  .pane { width: 220px; }
-  .pane.right { width: 240px; }
-  .doc-title { width: 140px; }
-  .save-state { display: none; }
+
+/* ---------- Estilo de formato (panel derecho) ---------- */
+.color-row { display: flex; align-items: center; gap: 6px; }
+.color-row .color-inp { width: 34px; height: 30px; }
+.color-row .hex { font-family: Consolas, "Cascadia Mono", ui-monospace, monospace; font-size: 11.5px; color: var(--text-2); }
+.color-row .icon-btn { width: 26px; height: 26px; }
+.range-row { display: flex; align-items: center; gap: 8px; }
+.range-row input[type=range] { flex: 1; accent-color: var(--primary); min-width: 0; }
+.range-row output { font-size: 11.5px; color: var(--text-2); min-width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
+.qs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.qs {
+  height: 42px; border: 1px solid var(--border); border-radius: 6px; background: var(--app-bg); padding: 6px; display: flex;
 }
+.qs:hover { border-color: var(--primary); }
+.qs span { flex: 1; display: block; }
+.shape-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.shape-grid .viz-btn { aspect-ratio: auto; height: 34px; }
+.swatch.custom { background: conic-gradient(#e34948, #eda100, #1baf7a, #2a78d6, #6250d6, #e34948); }
+.series-colors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.series-colors .sc { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: var(--text-3); }
+.series-colors .color-inp { width: 100%; height: 26px; }
+.seg-row { display: flex; gap: 2px; }
+.seg-row .btn { flex: 1; min-height: 28px; padding: 3px 6px; }
+.seg-row .btn[aria-pressed="true"] { background: var(--primary-soft); border-color: var(--primary); }
+.export-opts .form-row { margin-bottom: 12px; }
+.export-preview { max-width: 100%; max-height: 220px; border: 1px solid var(--border); border-radius: 4px; display: block; margin: 4px auto 0; background: var(--canvas-bg); }
+
+/* ---------- Adaptación a zoom del navegador y pantallas estrechas ---------- */
+@media (max-width: 1280px) {
+  .pane:not(.collapsed) { width: 236px; }
+  .pane.right:not(.collapsed) { width: 268px; }
+  .doc-title { width: 200px; }
+}
+@media (max-width: 1100px) {
+  .save-state { display: none; }
+  .logo-slot { min-width: 40px; }
+  .logo-slot:not(.has-logo) span { display: none; }
+}
+@media (max-width: 980px) {
+  /* Los paneles pasan a flotar sobre el lienzo para no estrecharlo */
+  .workspace { position: relative; }
+  .pane:not(.collapsed) { position: absolute; top: 0; bottom: 0; z-index: 70; box-shadow: var(--shadow-3); }
+  .pane.left:not(.collapsed) { left: 0; }
+  .pane.right:not(.collapsed) { right: 0; }
+  .segmented button .seg-lbl { display: none; }
+  .doc-title { width: auto; flex: 1 1 80px; min-width: 60px; }
+  .topbar { gap: 6px; }
+}
+@media (max-width: 640px) {
+  .brand .brand-name { display: none; }
+  .brand { padding: 0 10px; }
+  .pane:not(.collapsed) { width: min(300px, calc(100vw - 40px)); }
+  .status > span:not(:last-child):not(.zoom-status) { display: none; }
+  .ptab { padding: 0 10px; }
+}
+@media (max-height: 560px) {
+  #app { grid-template-rows: 40px auto 1fr auto; }
+  .toolbar { min-height: 38px; padding: 2px 6px; }
+  .tbtn { height: 30px; }
+  .tbtn:not(.keep) .tb-lbl { display: none; }
+  .bottombar { height: 30px; }
+  .top-btn { width: 30px; height: 30px; }
+  .logo-slot { height: 30px; }
+  .pane-head { height: 30px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }</style>
@@ -736,7 +827,7 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
     <button class="top-btn" id="themeBtn" type="button" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"></button>
     <button class="top-btn help-btn" id="helpBtn" type="button" title="Tutorial y ayuda" aria-label="Abrir tutorial">?</button>
   </header>
-  <nav class="ribbon" id="ribbon" aria-label="Herramientas del editor"></nav>
+  <nav class="toolbar" id="toolbar" aria-label="Herramientas del editor"></nav>
   <main class="workspace">
     <aside class="pane left" id="leftPane" aria-label="Visualizaciones y campos"></aside>
     <section class="canvas-area" id="canvasArea" aria-label="Lienzo del dashboard">
@@ -760,7 +851,7 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 <input type="file" id="fileInput" class="hidden" accept=".xlsx,.xlsm,.csv,.tsv,.txt">
 <input type="file" id="projectInput" class="hidden" accept=".json,.4dash">
 <input type="file" id="imageInput" class="hidden" accept="image/png,image/jpeg,image/webp,image/gif">
-<script>/*! 4Dash v1.0.0 — HTML autocontenido, sin dependencias externas. */
+<script>/*! 4Dash v1.1.0 — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */
 (() => {
 'use strict';
 /* ---- 01-util.js ---- */
@@ -818,7 +909,10 @@ function s(tag, attrs, parent) {
   return el;
 }
 
-/* ---------- Iconos (trazos 24x24 dibujados a mano, sin fuentes externas) ---------- */
+/* ---------- Iconos (trazos 24x24, sin fuentes externas) ----------
+   Parte de los trazos se basan en Feather Icons (© 2013-2023 Cole Bemis, licencia MIT)
+   y Lucide (© Lucide Contributors, licencia ISC); ver THIRD_PARTY_NOTICES.md.
+   El resto (marca, formas, alineación, exportación…) son propios de 4Dash. */
 const ICONS = {
   upload: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4|M17 8l-5-5-5 5|M12 3v12',
   download: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4|M7 10l5 5 5-5|M12 15V3',
@@ -881,6 +975,17 @@ const ICONS = {
   info: 'M12 22a10 10 0 1 0 0-20a10 10 0 1 0 0 20z|M12 16v-4|M12 8h.01',
   focus: 'M3 7V3h4|M17 3h4v4|M21 17v4h-4|M7 21H3v-4',
   lock: 'M5 11h14v10H5z|M8 11V7a4 4 0 0 1 8 0v4',
+  export: 'M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9|M3 16l5-5 4 4|M17 3h4v4|M14 10l7-7',
+  shape: 'M3 14h8v7H3z|M17 10a4 4 0 1 0 0-8a4 4 0 1 0 0 8z|M7 3l4 7H3z',
+  brush: 'M19 3l2 2-8.5 8.5-2-2z|M10.5 11.5L8 12c-2 .5-2.5 2-3 4-.3 1.2-1.2 2.4-2 3 3 .5 6.5-.5 8-3l.5-2.5',
+  minus: 'M5 12h14',
+  alignL: 'M4 3v18|M8 6h11v4H8z|M8 14h7v4H8z',
+  alignC: 'M12 3v18|M6 6h12v4H6z|M8 14h8v4H8z',
+  alignR: 'M20 3v18|M5 6h11v4H5z|M9 14h7v4H9z',
+  alignT: 'M3 4h18|M6 8h4v11H6z|M14 8h4v7h-4z',
+  alignM: 'M3 12h18|M6 6h4v12H6z|M14 8h4v8h-4z',
+  alignB: 'M3 20h18|M6 5h4v11H6z|M14 9h4v7h-4z',
+  layers: 'M12 3l9 5-9 5-9-5z|M3 13l9 5 9-5',
   palette: 'M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.4 3.4A1.6 1.6 0 0 1 12 22z|M7.5 11.5h.01|M10.5 7.5h.01|M15.5 8.5h.01'
 };
 const BOLD_ICONS = new Set(['more', 'scatter']);
@@ -895,10 +1000,12 @@ function icon(name, size = 16, extraClass = '') {
   return svg;
 }
 function brandMark(size = 22) {
+  // Marca de 4Dash: cuatro mosaicos de un tablero, uno destacado
   const svg = s('svg', { viewBox: '0 0 32 32', width: size, height: size, class: 'brand-mark', 'aria-hidden': 'true' });
-  s('rect', { x: 4, y: 17, width: 6, height: 11, rx: 1.5, class: 'brand-fill' }, svg);
-  s('rect', { x: 13, y: 10, width: 6, height: 18, rx: 1.5, class: 'brand-fill', opacity: .85 }, svg);
-  s('rect', { x: 22, y: 4, width: 6, height: 24, rx: 1.5, class: 'brand-fill', opacity: .7 }, svg);
+  s('rect', { x: 3, y: 3, width: 15, height: 15, rx: 4, class: 'brand-fill' }, svg);
+  s('rect', { x: 20, y: 3, width: 9, height: 15, rx: 3, class: 'brand-fill', opacity: .55 }, svg);
+  s('rect', { x: 3, y: 20, width: 9, height: 9, rx: 3, class: 'brand-fill', opacity: .55 }, svg);
+  s('rect', { x: 14, y: 20, width: 15, height: 9, rx: 3, class: 'brand-fill', opacity: .8 }, svg);
   return svg;
 }
 
@@ -994,7 +1101,7 @@ function toCsv(header, rows) {
 /* Medición de texto con canvas (sin tocar el DOM) */
 const measureCtx = document.createElement('canvas').getContext('2d');
 function textWidth(text, px = 11, weight = 400) {
-  measureCtx.font = `${weight} ${px}px "Segoe UI", system-ui, sans-serif`;
+  measureCtx.font = `${weight} ${px}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
   return measureCtx.measureText(String(text)).width;
 }
 function truncateText(text, maxPx, px = 11, weight = 400) {
@@ -1550,25 +1657,49 @@ const VIZ = {
   kpi: { label: 'Tarjeta KPI', icon: 'kpi', cat: true, vals: 'num1' },
   gauge: { label: 'Medidor', icon: 'gauge', vals: 'num1' },
   table: { label: 'Tabla', icon: 'table', cat: true, vals: 'any' },
-  slicer: { label: 'Segmentación', icon: 'slicer', cat: true },
+  slicer: { label: 'Selector de filtro', icon: 'slicer', cat: true },
   text: { label: 'Cuadro de texto', icon: 'text' },
-  image: { label: 'Imagen', icon: 'image' }
+  image: { label: 'Imagen', icon: 'image' },
+  shape: { label: 'Forma', icon: 'shape' }
 };
 const DEFAULT_SIZE = {
-  kpi: [288, 128], gauge: [304, 224], slicer: [240, 288], text: [400, 128], image: [240, 160],
+  kpi: [288, 128], gauge: [304, 224], slicer: [240, 288], text: [400, 128], image: [240, 160], shape: [240, 160],
   table: [624, 320], pie: [400, 304], donut: [400, 304], treemap: [480, 304], scatter: [480, 320]
 };
 
+/** Visuales que no usan datos. */
+const NO_DATA_VIZ = ['text', 'image', 'shape'];
+/** Formato visual (relleno, borde, sombra, título, tipografía y gráficos). */
+const WIDGET_STYLE_DEFAULTS = {
+  fillType: 'theme', fill1: '#ffffff', fill2: '#dfe6fb', fillAngle: 135, fillAlpha: 100,
+  borderW: 0, borderColor: null, borderStyle: 'solid', radius: 6, shadow: 'soft',
+  titleSize: 14, titleColor: null, titleAlign: 'left', titleBold: true, titleItalic: false,
+  textColor: null, fontFamily: 'sans', bold: false, italic: false,
+  lineW: 2, smooth: false, markers: false, barRadius: 4, barGap: null, holeSize: 62, areaAlpha: 12,
+  shape: 'round'
+};
+const SHAPES = { rect: 'Rectángulo', round: 'Rectángulo redondeado', ellipse: 'Elipse', triangle: 'Triángulo', diamond: 'Rombo', hexagon: 'Hexágono', arrow: 'Flecha', chevron: 'Cheurón', line: 'Línea', banner: 'Pestaña' };
+const FONTS = {
+  sans: { label: 'Sans (sistema)', css: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' },
+  serif: { label: 'Serif', css: 'Georgia, Cambria, "Times New Roman", serif' },
+  mono: { label: 'Monoespaciada', css: 'ui-monospace, Consolas, "Cascadia Mono", Menlo, monospace' },
+  rounded: { label: 'Redondeada', css: 'ui-rounded, "Trebuchet MS", "Segoe UI", system-ui, sans-serif' },
+  condensed: { label: 'Estrecha', css: '"Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif' }
+};
+const SHADOWS = { none: 'Sin sombra', soft: 'Suave', medium: 'Media', strong: 'Intensa', float: 'Flotante', glow: 'Resplandor' };
 function newWidget(type, ds, extra) {
   const [w, h] = DEFAULT_SIZE[type] || [480, 304];
   return Object.assign({
     id: uid(), type, x: 16, y: 16, w, h,
-    title: '', showTitle: type !== 'text' && type !== 'image', bg: true,
+    title: '', showTitle: !NO_DATA_VIZ.includes(type), bg: true,
     ds: ds ? ds.id : null, cat: null, split: null, vals: [], agg: 'sum', grain: 'auto',
     sort: 'auto', top: 0, fmt: 'auto', dec: null, currency: 'EUR',
     labels: true, showLegend: true, gridlines: true, slot: 0, target: null,
     text: '', fontSize: 14, align: 'left', vcenter: false, img: null,
-    dataBars: true, totals: true, slicerStyle: 'list', z: 0
+    dataBars: true, totals: true, slicerStyle: 'list', z: 0,
+    ...WIDGET_STYLE_DEFAULTS,
+    ...(type === 'shape' ? { fillType: 'solid', fill1: '#3a5ccc', fill2: '#7c96e8', shadow: 'none', textColor: '#ffffff', align: 'center', fontSize: 16 } : null),
+    colors: Array(8).fill(null)
   }, extra || {});
 }
 
@@ -1916,7 +2047,7 @@ function autoDashboard(ds, opts = {}) {
     rowItems.push(newWidget('scatter', ds, { vals: [main.name, other.name], cat: c1 ? c1.name : null, agg: 'sum' }));
   }
 
-  // Segmentación a la izquierda, preferiblemente con un campo no usado
+  // Selector de filtro a la izquierda, preferiblemente con un campo no usado
   const slicerCat = cats.find(c => c.distinct <= 25 && !used.has(c.name)) || cats.find(c => c.distinct <= 25);
   let x0 = M, avail = W;
   const rowsNeeded = Math.ceil(rowItems.length / 2);
@@ -1958,7 +2089,7 @@ function sampleGrid() {
   let seed = 42;
   const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
   const regions = ['Norte', 'Sur', 'Este', 'Oeste', 'Centro'];
-  const cats = { Hardware: ['Portátil Pro', 'Monitor 27"', 'Dock USB-C'], Software: ['Licencia ERP', 'Suite Ofimática', 'Antivirus'], Servicios: ['Soporte 24/7', 'Consultoría', 'Implantación'], Formación: ['Curso Power BI', 'Taller Excel'] };
+  const cats = { Hardware: ['Portátil Pro', 'Monitor 27"', 'Dock USB-C'], Software: ['Licencia ERP', 'Suite Ofimática', 'Antivirus'], Servicios: ['Soporte 24/7', 'Consultoría', 'Implantación'], Formación: ['Curso de análisis de datos', 'Taller de hojas de cálculo'] };
   const canales = ['Online', 'Tienda', 'Partner'];
   const grid = [['Informe de ventas 2025'], [], ['Fecha', 'Región', 'Categoría', 'Producto', 'Canal', 'Unidades', 'Ventas (€)', 'Coste (€)', 'Satisfacción']];
   const regionW = [1.3, 0.8, 1, 0.9, 1.5];
@@ -1996,6 +2127,12 @@ const Tip = {
   show(evt, title, rows) {
     const el = this.el || (this.el = $('#tooltip'));
     clear(el);
+    // Colores personalizados del visual de origen
+    const src = evt && evt.target && evt.target.closest ? evt.target.closest('.widget') : null;
+    for (let i = 1; i <= 8; i++) {
+      const c = src ? src.style.getPropertyValue('--series-' + i) : '';
+      if (c) el.style.setProperty('--series-' + i, c); else el.style.removeProperty('--series-' + i);
+    }
     if (title) el.appendChild(h('div', { class: 'tt-title', text: title }));
     for (const r of rows) {
       el.appendChild(h('div', { class: 'tt-row' },
@@ -2040,16 +2177,35 @@ function niceCeil(v) {
   for (const m of [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10]) if (m * mag >= v) return m * mag;
   return 10 * mag;
 }
-/** Barra con extremo de datos redondeado (4px) y base recta. */
-function barPath(x, y, w, h, dir) {
+/** Barra con extremo de datos redondeado (4px por defecto) y base recta. */
+function barPath(x, y, w, h, dir, rad = 4) {
   if (w <= 0 || h <= 0) return '';
-  const r = dir === 'right' || dir === 'left' ? Math.min(4, h / 2, w) : Math.min(4, w / 2, h);
+  const r = dir === 'right' || dir === 'left' ? Math.min(rad, h / 2, w) : Math.min(rad, w / 2, h);
+  if (r <= 0) return `M${x},${y}h${w}v${h}h${-w}Z`;
   switch (dir) {
     case 'up': return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
     case 'down': return `M${x},${y}V${y + h - r}Q${x},${y + h} ${x + r},${y + h}H${x + w - r}Q${x + w},${y + h} ${x + w},${y + h - r}V${y}Z`;
     case 'right': return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`;
     default: return `M${x + w},${y}H${x + r}Q${x},${y} ${x},${y + r}V${y + h - r}Q${x},${y + h} ${x + r},${y + h}H${x + w}Z`;
   }
+}
+/** Curva suave (Catmull-Rom → Bézier cúbica) que pasa por todos los puntos. */
+function smoothPath(pts) {
+  if (pts.length < 3) return pts.map((p, j) => (j ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const t = 0.18;
+    const c1 = [p1[0] + (p2[0] - p0[0]) * t, p1[1] + (p2[1] - p0[1]) * t];
+    const c2 = [p2[0] - (p3[0] - p1[0]) * t, p2[1] - (p3[1] - p1[1]) * t];
+    d += `C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d;
+}
+/** Ancho de barra: automático (fino) o según el «ancho del intervalo» elegido. */
+function barWidth(w, band, gN) {
+  if (w.barGap == null) return Math.max(2, Math.min(24, (band * 0.72 - (gN - 1) * 2) / gN));
+  return Math.max(2, (band * (1 - w.barGap / 100) - (gN - 1) * 2) / gN);
 }
 function arcPath(cx, cy, r0, r1, a0, a1) {
   const large = a1 - a0 > Math.PI ? 1 : 0;
@@ -2153,7 +2309,7 @@ function renderCartesian(w, body, ctx, data) {
     s('line', { class: 'base-line', x1: Math.round(sx(Math.max(tlo, Math.min(0, thi)))) + .5, x2: Math.round(sx(Math.max(tlo, Math.min(0, thi)))) + .5, y1: y0, y2: y1 }, gAxis);
     const gHit = s('g', null, svg), gMarks = s('g', null, svg);
     const gN = series.length;
-    const barH = Math.max(2, Math.min(24, (band * 0.72 - (gN - 1) * 2) / gN));
+    const barH = barWidth(w, band, gN);
     const groupH = gN * barH + (gN - 1) * 2;
     const step = Math.max(1, Math.ceil(13 / band));
     for (let i = 0; i < n; i++) {
@@ -2168,7 +2324,7 @@ function renderCartesian(w, body, ctx, data) {
         if (v == null) return;
         const by = cy - groupH / 2 + k * (barH + 2);
         const a = sx(0 < tlo ? tlo : 0), b = sx(v);
-        const d = barPath(Math.min(a, b), by, Math.abs(b - a), barH, v >= 0 ? 'right' : 'left');
+        const d = barPath(Math.min(a, b), by, Math.abs(b - a), barH, v >= 0 ? 'right' : 'left', w.barRadius);
         if (d) s('path', { d, class: 'mark ' + slotCls('f', sr.slot) + (dimmed(i) ? ' dim' : ''), 'pointer-events': 'none' }, gMarks);
         if (showLabels && !multi) {
           const t = s('text', { class: 'val-label', x: v >= 0 ? b + 5 : b - 5, y: by + barH / 2 + 4, 'text-anchor': v >= 0 ? 'start' : 'end', 'pointer-events': 'none' }, gMarks);
@@ -2208,7 +2364,7 @@ function renderCartesian(w, body, ctx, data) {
   if (kind === 'column' || kind === 'stacked') {
     const gHit = s('g', null, svg), gMarks = s('g', null, svg);
     const gN = kind === 'stacked' ? 1 : series.length;
-    const barW = Math.max(2, Math.min(24, (band * 0.72 - (gN - 1) * 2) / gN));
+    const barW = barWidth(w, band, gN);
     const groupW = gN * barW + (gN - 1) * 2;
     for (let i = 0; i < n; i++) {
       const cx = x0 + band * (i + 0.5);
@@ -2232,7 +2388,7 @@ function renderCartesian(w, body, ctx, data) {
           const isEnd = sg.v >= 0 ? k === lastPos : k === lastNeg;
           // separación de 2px entre segmentos
           if (from !== 0 && hgt > 2) { if (sg.v >= 0) hgt -= 2; else { top += 2; hgt -= 2; } }
-          const d = isEnd ? barPath(cx - barW / 2, top, barW, hgt, sg.v >= 0 ? 'up' : 'down')
+          const d = isEnd ? barPath(cx - barW / 2, top, barW, hgt, sg.v >= 0 ? 'up' : 'down', w.barRadius)
             : `M${cx - barW / 2},${top}h${barW}v${hgt}h${-barW}Z`;
           if (d && hgt > 0) s('path', { d, class: 'mark ' + slotCls('f', sg.sr.slot) + dim, 'pointer-events': 'none' }, gMarks);
         });
@@ -2246,7 +2402,7 @@ function renderCartesian(w, body, ctx, data) {
           if (v == null) return;
           const bx = cx - groupW / 2 + k * (barW + 2);
           const zero = sy(Math.max(tlo, Math.min(0, thi))), yv = sy(v);
-          const d = barPath(bx, Math.min(zero, yv), barW, Math.abs(zero - yv), v >= 0 ? 'up' : 'down');
+          const d = barPath(bx, Math.min(zero, yv), barW, Math.abs(zero - yv), v >= 0 ? 'up' : 'down', w.barRadius);
           if (d) s('path', { d, class: 'mark ' + slotCls('f', sr.slot) + dim, 'pointer-events': 'none' }, gMarks);
           if (showLabels && !multi) {
             const lbl = fmtV(v);
@@ -2269,15 +2425,16 @@ function renderCartesian(w, body, ctx, data) {
     let d = '', ad = '', run = [];
     const flush = () => {
       if (!run.length) return;
-      d += run.map((p, j) => (j ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
-      if (kind === 'area') ad += `M${run[0][0].toFixed(1)},${zeroY}` + run.map(p => 'L' + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('') + `L${run[run.length - 1][0].toFixed(1)},${zeroY}Z`;
+      const seg = w.smooth ? smoothPath(run) : run.map((p, j) => (j ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+      d += seg;
+      if (kind === 'area') ad += `M${run[0][0].toFixed(1)},${zeroY}L` + seg.slice(1) + `L${run[run.length - 1][0].toFixed(1)},${zeroY}Z`;
       run = [];
     };
     sr.values.forEach((v, i) => { if (v == null) flush(); else run.push([px(i), sy(v)]); });
     flush();
     if (kind === 'area' && ad) s('path', { d: ad, class: 'area ' + slotCls('f', sr.slot), 'pointer-events': 'none' }, gMarks);
     if (d) s('path', { d, class: 'line ' + slotCls('st', sr.slot), 'pointer-events': 'none' }, gMarks);
-    if (n === 1 || n <= 2) sr.values.forEach((v, i) => { if (v != null) s('circle', { cx: px(i), cy: sy(v), r: 4, class: 'dot ' + slotCls('f', sr.slot) }, gMarks); });
+    if (n <= 2 || w.markers) sr.values.forEach((v, i) => { if (v != null) s('circle', { cx: px(i), cy: sy(v), r: 4, class: 'dot ' + slotCls('f', sr.slot) }, gMarks); });
     const li = lastIdx(sr.values);
     if (li >= 0) {
       s('circle', { cx: px(li), cy: sy(sr.values[li]), r: 4, class: 'dot ' + slotCls('f', sr.slot), 'pointer-events': 'none' }, gMarks);
@@ -2345,7 +2502,7 @@ function renderPie(w, body, ctx, data, donut) {
     if (side) lg.classList.add('side');
     row.appendChild(lg);
   }
-  const r1 = Math.max(10, Math.min(cw, ch) / 2 - 6), r0 = donut ? r1 * 0.62 : 0;
+  const r1 = Math.max(10, Math.min(cw, ch) / 2 - 6), r0 = donut ? r1 * clamp(w.holeSize || 62, 20, 90) / 100 : 0;
   const cx = cw / 2, cy = Math.max(40, ch) / 2;
   let a = -Math.PI / 2;
   cats.forEach((c, i) => {
@@ -2450,7 +2607,7 @@ function renderScatter(w, body, ctx) {
   const ci = colIdx(ds, w.cat);
   let seriesItems = null;
   if (ci >= 0) {
-    // Un punto por categoría (valores agregados), como en Power BI
+    // Un punto por categoría (valores agregados)
     const t = ds.columns[ci].type, g = effectiveGrain(ds, w);
     const groups = new Map();
     for (const r of rows) {
@@ -2727,7 +2884,7 @@ function renderTable(w, body, ctx) {
   if (rows.length > MAX) body.appendChild(h('div', { class: 'tbl-note', text: `Mostrando ${fmtNum(MAX)} de ${fmtNum(rows.length)} filas. Exporta los datos para verlas todas.` }));
 }
 
-/* ---------- Segmentación (filtro) ---------- */
+/* ---------- Selector de filtro ---------- */
 function renderSlicer(w, body, ctx) {
   const ds = ctx.ds;
   const ci = colIdx(ds, w.cat);
@@ -2790,9 +2947,11 @@ function renderSlicer(w, body, ctx) {
 }
 
 /* ---------- Texto e imagen ---------- */
-function renderText(w, body) {
-  const box = h('div', { class: 'textbox' + (w.align === 'center' ? ' center' : w.align === 'right' ? ' right' : '') + (w.vcenter ? ' vcenter' : '') });
+function renderText(w, body, box) {
+  box = box || h('div', { class: 'textbox' + (w.align === 'center' ? ' center' : w.align === 'right' ? ' right' : '') + (w.vcenter ? ' vcenter' : '') });
   box.style.fontSize = clamp(+w.fontSize || 14, 8, 72) + 'px';
+  if (w.bold) box.style.fontWeight = '600';
+  if (w.italic) box.style.fontStyle = 'italic';
   const lines = String(w.text || '').split(/\r?\n/);
   let ul = null, para = [];
   const flushP = () => { if (para.length) { box.appendChild(h('p', { text: para.join(' ') })); para = []; } };
@@ -2804,8 +2963,77 @@ function renderText(w, body) {
     else { ul = null; para.push(line); }
   }
   flushP();
-  if (!w.text) box.appendChild(h('p', { class: 'hint', text: 'Escribe el texto en el panel Formato.' }));
+  if (!w.text && w.type === 'text') box.appendChild(h('p', { class: 'hint', text: 'Escribe el texto en el panel Formato.' }));
   body.appendChild(box);
+}
+/** Geometría de cada forma en un rectángulo W×H (con margen m para el borde). */
+function shapePath(kind, W, H, m) {
+  const x0 = m, y0 = m, x1 = W - m, y1 = H - m, w = x1 - x0, hh = y1 - y0, cx = W / 2, cy = H / 2;
+  const P = pts => 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z';
+  switch (kind) {
+    case 'ellipse': return `M${x0},${cy}A${w / 2},${hh / 2} 0 1 0 ${x1},${cy}A${w / 2},${hh / 2} 0 1 0 ${x0},${cy}Z`;
+    case 'triangle': return P([[cx, y0], [x1, y1], [x0, y1]]);
+    case 'diamond': return P([[cx, y0], [x1, cy], [cx, y1], [x0, cy]]);
+    case 'hexagon': { const k = Math.min(w * 0.25, hh * 0.58); return P([[x0 + k, y0], [x1 - k, y0], [x1, cy], [x1 - k, y1], [x0 + k, y1], [x0, cy]]); }
+    case 'arrow': { const head = Math.min(w * 0.4, hh * 0.9), t = hh * 0.22; return P([[x0, cy - t], [x1 - head, cy - t], [x1 - head, y0], [x1, cy], [x1 - head, y1], [x1 - head, cy + t], [x0, cy + t]]); }
+    case 'chevron': { const k = Math.min(w * 0.35, hh * 0.5); return P([[x0, y0], [x1 - k, y0], [x1, cy], [x1 - k, y1], [x0, y1], [x0 + k, cy]]); }
+    case 'banner': { const k = Math.min(w * 0.18, hh * 0.5); return P([[x0, y0], [x1, y0], [x1 - k, cy], [x1, y1], [x0, y1]]); }
+    case 'line': return `M${x0},${cy}H${x1}`;
+    default: return null;
+  }
+}
+/** Forma decorativa: relleno sólido o degradado, borde y texto opcional. */
+function renderShape(w, body) {
+  const W = Math.max(4, w.w), H = Math.max(4, w.h);
+  const bw = clamp(+w.borderW || 0, 0, 16);
+  const isLine = w.shape === 'line';
+  const svg = s('svg', { class: 'shape-svg sh-' + (w.shadow || 'none'), width: W, height: H, viewBox: `0 0 ${W} ${H}`, 'aria-hidden': 'true' });
+  const fill = shapeFill(w, svg);
+  const m = isLine ? Math.max(2, bw) : Math.max(0.5, bw / 2);
+  let el;
+  if (w.shape === 'rect' || w.shape === 'round') {
+    const r = w.shape === 'round' ? Math.min(clamp(+w.radius || 0, 0, 60) || 14, (W - 2 * m) / 2, (H - 2 * m) / 2) : 0;
+    el = s('rect', { x: m, y: m, width: Math.max(0, W - 2 * m), height: Math.max(0, H - 2 * m), rx: r, ry: r }, svg);
+  } else el = s('path', { d: shapePath(w.shape, W, H, m) }, svg);
+  if (isLine) {
+    el.setAttribute('stroke', w.borderColor || w.fill1 || '#3a5ccc');
+    el.setAttribute('stroke-width', Math.max(1, bw || 3));
+    el.setAttribute('stroke-linecap', 'round');
+    el.setAttribute('fill', 'none');
+  } else {
+    if (fill === 'theme') el.setAttribute('class', 'shape-fill-theme'); else el.setAttribute('fill', fill);
+    if (bw > 0) {
+      if (w.borderColor) el.setAttribute('stroke', w.borderColor); else el.classList.add('shape-stroke-theme');
+      el.setAttribute('stroke-width', bw);
+      el.setAttribute('stroke-linejoin', 'round');
+    }
+  }
+  if (bw > 0 && w.borderStyle === 'dashed') el.setAttribute('stroke-dasharray', `${Math.max(2, bw) * 3} ${Math.max(2, bw) * 2}`);
+  if (bw > 0 && w.borderStyle === 'dotted') { el.setAttribute('stroke-dasharray', `0 ${Math.max(2, bw) * 2}`); el.setAttribute('stroke-linecap', 'round'); }
+  body.appendChild(svg);
+  if (w.text && !isLine) renderText(w, body, h('div', { class: 'shape-text' + (w.align === 'left' ? ' left' : w.align === 'right' ? ' right' : '') }));
+}
+/** Relleno SVG de una forma: color, url(#degradado), 'theme' o 'none'. */
+function shapeFill(w, svg) {
+  const a = clamp(w.fillAlpha == null ? 100 : +w.fillAlpha, 0, 100) / 100;
+  if (!w.bg) return 'none';
+  if (w.fillType === 'theme') return 'theme';
+  if (w.fillType === 'solid') return hexA(w.fill1, a);
+  const id = 'g4d' + uid();
+  const defs = s('defs', null, svg);
+  const g = w.fillType === 'radial'
+    ? s('radialGradient', { id, cx: '35%', cy: '30%', r: '80%' }, defs)
+    : s('linearGradient', { id, gradientTransform: `rotate(${(+w.fillAngle || 0) - 90} .5 .5)` }, defs);
+  s('stop', { offset: '0%', 'stop-color': w.fill1, 'stop-opacity': a }, g);
+  s('stop', { offset: '100%', 'stop-color': w.fill2, 'stop-opacity': a }, g);
+  return `url(#${id})`;
+}
+/** #rrggbb + opacidad (0-1) → color CSS. */
+function hexA(hex, a) {
+  if (!/^#[0-9a-f]{6}$/i.test(hex || '')) return 'transparent';
+  if (a >= 1) return hex;
+  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+  return `rgba(${r},${g},${b},${+a.toFixed(3)})`;
 }
 function renderImage(w, body) {
   if (!w.img) return emptyMsg(body, 'image', 'Sube una imagen desde el panel Formato');
@@ -2821,6 +3049,7 @@ function renderVisual(w, body, ctx) {
   if (!def) return emptyMsg(body, 'info', 'Tipo de visual desconocido');
   if (w.type === 'text') return renderText(w, body);
   if (w.type === 'image') return renderImage(w, body);
+  if (w.type === 'shape') return renderShape(w, body);
   const ds = ctx.ds;
   if (!ds) return emptyMsg(body, def.icon, 'Sin origen de datos', 'Importa un Excel o elige un origen en el panel Datos');
   try {
@@ -3068,8 +3297,26 @@ function sanitizeWidget(w) {
     slot: num(w.slot, 0, 7, 0), target: optNum(w.target), gaugeMax: optNum(w.gaugeMax),
     text: str(w.text, 20000), fontSize: num(w.fontSize, 8, 72, 14), align: oneOf(w.align, ['left', 'center', 'right'], 'left'),
     vcenter: bool(w.vcenter, false), img: isSafeImageDataUrl(w.img) ? w.img : null,
-    dataBars: bool(w.dataBars, true), totals: bool(w.totals, true), slicerStyle: oneOf(w.slicerStyle, ['list', 'tiles', 'single'], 'list')
+    dataBars: bool(w.dataBars, true), totals: bool(w.totals, true), slicerStyle: oneOf(w.slicerStyle, ['list', 'tiles', 'single'], 'list'),
+    fillType: oneOf(w.fillType, ['theme', 'solid', 'linear', 'radial'], base.fillType), fill1: hexOr(w.fill1, base.fill1), fill2: hexOr(w.fill2, base.fill2),
+    fillAngle: num(w.fillAngle, 0, 360, base.fillAngle), fillAlpha: num(w.fillAlpha, 0, 100, base.fillAlpha),
+    borderW: num(w.borderW, 0, 16, base.borderW), borderColor: hexOr(w.borderColor, null), borderStyle: oneOf(w.borderStyle, ['solid', 'dashed', 'dotted', 'double'], 'solid'),
+    radius: num(w.radius, 0, 60, base.radius), shadow: oneOf(w.shadow, Object.keys(SHADOWS), base.shadow),
+    titleSize: num(w.titleSize, 9, 40, 14), titleColor: hexOr(w.titleColor, null), titleAlign: oneOf(w.titleAlign, ['left', 'center', 'right'], 'left'),
+    titleBold: bool(w.titleBold, true), titleItalic: bool(w.titleItalic, false),
+    textColor: 'textColor' in w ? hexOr(w.textColor, null) : base.textColor, fontFamily: oneOf(w.fontFamily, Object.keys(FONTS), 'sans'), bold: bool(w.bold, false), italic: bool(w.italic, false),
+    lineW: num(w.lineW, 0.5, 10, 2), smooth: bool(w.smooth, false), markers: bool(w.markers, false), barRadius: num(w.barRadius, 0, 30, 4),
+    barGap: w.barGap == null ? null : num(w.barGap, 0, 95, null), holeSize: num(w.holeSize, 20, 90, 62), areaAlpha: num(w.areaAlpha, 0, 100, 12),
+    shape: oneOf(w.shape, Object.keys(SHAPES), base.shape),
+    colors: Array.from({ length: 8 }, (_, i) => hexOr(Array.isArray(w.colors) ? w.colors[i] : null, null))
   });
+}
+function hexOr(v, def) { return typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v.toLowerCase() : def; }
+function sanitizePageBg(b) {
+  if (!b || typeof b !== 'object') return null;
+  const type = oneOf(b.type, ['solid', 'linear', 'radial'], null);
+  if (!type) return null;
+  return { type, c1: hexOr(b.c1, '#ffffff'), c2: hexOr(b.c2, '#e4e8ee'), angle: num(b.angle, 0, 360, 180) };
 }
 function sanitizePage(pg) {
   if (!pg || typeof pg !== 'object') return null;
@@ -3077,7 +3324,8 @@ function sanitizePage(pg) {
   const out = {
     id: ID_RE.test(pg.id) ? pg.id : uid(), name: str(pg.name, 60, 'Página') || 'Página', size,
     w: num(pg.w, 320, 4000, PAGE_SIZES[size].w), h: num(pg.h, 240, 12000, PAGE_SIZES[size].h),
-    widgets: Array.isArray(pg.widgets) ? pg.widgets.slice(0, 300).map(sanitizeWidget).filter(Boolean) : []
+    widgets: Array.isArray(pg.widgets) ? pg.widgets.slice(0, 300).map(sanitizeWidget).filter(Boolean) : [],
+    bg: sanitizePageBg(pg.bg)
   };
   // Mantener cada visual dentro del lienzo y con ids únicos
   const ids = new Set();
@@ -3116,26 +3364,27 @@ const jsonReplacer = (k, v) => (typeof k === 'string' && k.startsWith('_') ? und
 /* ---------- Tutorial ---------- */
 const TUTORIAL = [
   { icon: 'sparkles', title: 'Bienvenido a 4Dash', text: [
-    '4Dash convierte tus hojas de Excel en un dashboard interactivo en segundos, al estilo de Power BI.',
+    '4Dash convierte tus hojas de cálculo (.xlsx, .csv) en un dashboard interactivo en segundos.',
     'Todo se procesa en tu navegador: no se envía ningún dato a Internet y el archivo HTML no carga recursos externos.'],
-    list: ['Vista Editor: diseña y configura el dashboard.', 'Vista Presentador: muéstralo a tu cliente a pantalla completa.', 'Pulsa el botón ? cuando quieras volver a ver esta guía.'] },
-  { icon: 'upload', title: '1. Importa tus datos', text: ['Pulsa «Importar Excel» en la cinta o arrastra un archivo .xlsx / .csv sobre el lienzo.'],
-    list: ['Si la primera fila tiene títulos, se usan como nombres de columna.', 'Si la primera columna tiene títulos de fila (p. ej. una tabla por meses), se detecta y se crea también la versión transpuesta.', 'Cada hoja del libro se convierte en un origen de datos y en una página.', 'Se genera automáticamente un dashboard con KPIs, gráficos, segmentación y tabla.'] },
-  { icon: 'grid', title: '2. Diseña en la vista Editor', text: ['Organiza el lienzo como en Power BI:'],
-    list: ['Arrastra un visual para moverlo; usa los tiradores azules para cambiar su tamaño.', 'Aparecen guías magenta para alinear con otros visuales; mantén Alt para mover sin ajustar a la cuadrícula.', 'Inserta visuales desde el panel «Visualizaciones» (clic o arrastrar al lienzo).', 'Arrastra campos del panel «Datos» a un visual o al lienzo vacío.'] },
+    list: ['Vista Editor: diseña y configura el dashboard.', 'Vista Presentador: muéstralo a tu cliente a pantalla completa.', 'Pulsa el botón ? cuando quieras volver a ver esta guía.', '4Dash © Vex62 — licencia 4Dash: el uso comercial exige citar claramente al autor.'] },
+  { icon: 'upload', title: '1. Importa tus datos', text: ['Pulsa «Importar» en la barra de herramientas o arrastra un archivo .xlsx / .csv sobre el lienzo.'],
+    list: ['Si la primera fila tiene títulos, se usan como nombres de columna.', 'Si la primera columna tiene títulos de fila (p. ej. una tabla por meses), se detecta y se crea también la versión transpuesta.', 'Cada hoja del libro se convierte en un origen de datos y en una página.', 'Se genera automáticamente un dashboard con KPIs, gráficos, selector de filtro y tabla.'] },
+  { icon: 'grid', title: '2. Diseña en la vista Editor', text: ['Organiza el lienzo libremente:'],
+    list: ['Arrastra un visual para moverlo; usa los tiradores azules para cambiar su tamaño.', 'Aparecen guías de color para alinear con otros visuales; mantén Alt para mover sin ajustar a la cuadrícula.', 'Inserta visuales, formas y textos desde el panel «Visualizaciones» o la barra de herramientas.', 'Usa «Alinear» para colocar el visual respecto a la página.', 'Arrastra campos del panel «Datos» a un visual o al lienzo vacío.'] },
   { icon: 'edit', title: '3. Configura cada visual', text: ['Selecciona un visual y usa el panel «Propiedades» de la derecha:'],
     list: ['Datos: origen, eje, leyenda, valores, agregación (suma, promedio…), agrupación de fechas, orden y Top N.', 'Formato: título, formato numérico y moneda, etiquetas, leyenda, color, objetivo del KPI…',
-      'Paleta de colores (cinta «Diseño» o icono de paleta): elige Verde esmeralda, Azul eléctrico u otras, o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
+      'Estilo: relleno sólido o degradado, borde (grosor, color, trazo), esquinas, sombras, tipografía, grosor de líneas y colores libres con el selector de color.',
+      'Paleta de colores (icono de paleta): elige una paleta incluida o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
   { icon: 'filter', title: '4. Filtra e interactúa', text: ['Los visuales están conectados entre sí (filtrado cruzado):'],
-    list: ['Haz clic en una barra, sector o fila para filtrar el resto de la página. Ctrl+clic suma selecciones.', 'En el Editor, el primer clic selecciona el visual y el segundo filtra.', 'Las segmentaciones filtran todos los visuales del mismo origen.', 'Los filtros activos aparecen sobre el lienzo; pulsa × para quitarlos.'] },
+    list: ['Haz clic en una barra, sector o fila para filtrar el resto de la página. Ctrl+clic suma selecciones.', 'En el Editor, el primer clic selecciona el visual y el segundo filtra.', 'Los selectores de filtro filtran todos los visuales del mismo origen.', 'Los filtros activos aparecen sobre el lienzo; pulsa × para quitarlos.'] },
   { icon: 'monitor', title: '5. Presenta', text: ['Cambia a «Presentador» en la barra superior.'],
-    list: ['Sube el logo de la empresa o cliente en el recuadro «Logo»: aparecerá en la cabecera.', 'Usa ← → para cambiar de página y F para pantalla completa.', 'Pasa el ratón por los visuales para ver los valores; usa el modo foco para ampliarlos.'] },
+    list: ['Sube el logo de la empresa o cliente en el recuadro «Logo»: aparecerá en la cabecera.', 'Usa ← → para cambiar de página y F para pantalla completa.', 'Pasa el ratón por los visuales para ver los valores; usa «Ampliar» para verlos a pantalla completa.'] },
   { icon: 'save', title: '6. Guarda y comparte', text: ['Tu trabajo se autoguarda en este navegador.'],
-    list: ['«Guardar» descarga un archivo .4dash.json con datos y diseño que puedes abrir más tarde o enviar.', '«Imprimir / PDF» genera una página por cada página del dashboard.', 'Exporta a CSV los datos de cualquier visual desde su menú.'], shortcuts: true }
+    list: ['«Guardar» descarga un archivo .4dash.json con datos y diseño que puedes abrir más tarde o enviar.', '«Exportar» guarda el dashboard como imagen PNG, SVG o PDF tal y como se ve en el Presentador.', '«Imprimir» genera una página por cada página del dashboard.', 'Exporta a CSV los datos de cualquier visual desde su menú.'], shortcuts: true }
 ];
 const SHORTCUTS = [
   ['Ctrl + Z / Ctrl + Y', 'Deshacer / rehacer'], ['Supr', 'Eliminar el visual seleccionado'], ['Ctrl + D', 'Duplicar visual'],
-  ['Ctrl + C / Ctrl + V', 'Copiar / pegar visual'], ['Flechas (Mayús = 10 px)', 'Mover el visual seleccionado'], ['Ctrl + S / Ctrl + O', 'Guardar / abrir proyecto'],
+  ['Ctrl + C / Ctrl + V', 'Copiar / pegar visual'], ['Flechas (Mayús = 10 px)', 'Mover el visual seleccionado'], ['Ctrl + S / Ctrl + O', 'Guardar / abrir proyecto'], ['Ctrl + E', 'Exportar como imagen o PDF'], ['Ctrl + rueda (sobre el lienzo)', 'Zoom del lienzo'],
   ['F5', 'Ir a la vista Presentador'], ['← → / F', 'Páginas y pantalla completa (Presentador)'], ['Esc', 'Deseleccionar / cerrar / salir'], ['F1', 'Abrir este tutorial']
 ];
 function openTutorial(start = 0) {
@@ -3239,9 +3488,9 @@ function autoTitle(w) {
   if (w.title) return w.title;
   const ds = dsById(w.ds);
   const def = VIZ[w.type];
-  if (w.type === 'text' || w.type === 'image') return def.label;
+  if (NO_DATA_VIZ.includes(w.type)) return def.label;
   if (!ds) return def.label;
-  if (w.type === 'slicer') return w.cat || 'Segmentación';
+  if (w.type === 'slicer') return w.cat || 'Selector de filtro';
   if (w.type === 'table') return w.cat ? `${w.cat}: resumen` : ds.name;
   if (w.type === 'scatter') return w.vals.length >= 2 ? `${w.vals[1]} frente a ${w.vals[0]}` : def.label;
   const m = w.split ? measureName(ds, w, w.vals[0]) : (w.vals.length > 1 ? w.vals.join(', ') : measureName(ds, w, w.vals[0] || null));
@@ -3284,9 +3533,9 @@ function redo() { if (!App.fut.length) return; App.hist.push(snapshot()); restor
 function afterChange(opts) {
   scheduleSave();
   applyPalette();
-  if (opts.only === 'widget' && opts.w) { rerenderWidget(opts.w); renderRibbon(); if (!opts.keepProps) renderRight(); return; }
+  if (opts.only === 'widget' && opts.w) { rerenderWidget(opts.w); renderToolbar(); if (!opts.keepProps) renderRight(); return; }
   renderCanvas();
-  renderRibbon();
+  renderToolbar();
   renderPages();
   renderStatus();
   renderFilterBar();
@@ -3320,11 +3569,12 @@ function refreshData() { renderCanvas(); renderFilterBar(); renderStatus(); if (
 /* ---------- Render: barra superior ---------- */
 function renderTopbar() {
   const brand = clear($('#brand'));
-  brand.append(brandMark(22), h('span', null, h('b', { text: '4' }), 'Dash'));
+  brand.append(brandMark(22), h('span', { class: 'brand-name' }, h('b', { text: '4' }), 'Dash'));
+  brand.title = '4Dash · © Vex62 · Licencia 4Dash (uso comercial con atribución al autor)';
   $('#docTitle').value = App.p.title;
   const vs = clear($('#viewSwitch'));
   for (const [id, label, ic] of [['editor', 'Editor', 'edit'], ['presenter', 'Presentador', 'monitor']]) {
-    const b = h('button', { type: 'button', 'aria-pressed': App.view === id ? 'true' : 'false', title: id === 'editor' ? 'Vista Editor' : 'Vista Presentador (F5)' }, icon(ic, 15), label);
+    const b = h('button', { type: 'button', 'aria-pressed': App.view === id ? 'true' : 'false', title: id === 'editor' ? 'Vista Editor' : 'Vista Presentador (F5)', 'aria-label': label }, icon(ic, 15), h('span', { class: 'seg-lbl', text: label }));
     b.addEventListener('click', () => setView(id));
     vs.appendChild(b);
   }
@@ -3380,79 +3630,190 @@ function renderSaveState() {
   el.title = el.textContent;
 }
 
-/* ---------- Render: cinta (ribbon) ---------- */
-function rbtn(ic, label, onClick, opts = {}) {
-  const b = h('button', { class: 'rbtn', type: 'button', title: opts.title || label, disabled: !!opts.disabled, 'aria-pressed': opts.pressed == null ? null : String(!!opts.pressed) }, icon(ic, 22), h('span', { text: label }));
+/* ---------- Render: barra de herramientas ----------
+   Una sola fila compacta: los textos se ocultan progresivamente al estrecharse
+   la ventana (o al aumentar el zoom del navegador) y queda el icono con su
+   descripción emergente; si aun así no cabe, la barra se desplaza en horizontal. */
+function tbtn(ic, label, onClick, opts = {}) {
+  const b = h('button', {
+    class: 'tbtn' + (opts.cls ? ' ' + opts.cls : ''), type: 'button', title: opts.title || label, 'aria-label': label,
+    disabled: !!opts.disabled, 'aria-pressed': opts.pressed == null ? null : String(!!opts.pressed), 'aria-haspopup': opts.menu ? 'menu' : null
+  }, icon(ic, 18), h('span', { class: 'tb-lbl', text: label }), opts.menu ? icon('chevD', 12, 'caret') : null);
   b.addEventListener('click', onClick);
   return b;
 }
-function rsm(ic, label, onClick, opts = {}) {
-  const b = h('button', { class: 'rbtn-sm', type: 'button', title: opts.title || label, disabled: !!opts.disabled, 'aria-pressed': opts.pressed == null ? null : String(!!opts.pressed) }, icon(ic, 15), h('span', { text: label }));
-  b.addEventListener('click', onClick);
-  return b;
+function tmenu(ic, label, items, opts = {}) {
+  return tbtn(ic, label, e => openMenu(e.currentTarget, items()), Object.assign({ menu: true }, opts));
 }
-function rgroup(label, ...items) {
-  return h('div', { class: 'rgroup', role: 'group', 'aria-label': label }, h('div', { class: 'rgroup-items' }, items), h('div', { class: 'rgroup-label', text: label }));
+function tgroup(label, items, cls = '') {
+  return h('div', { class: 'tgroup' + (cls ? ' ' + cls : ''), role: 'group', 'aria-label': label }, items);
 }
-function renderRibbon() {
-  const r = clear($('#ribbon'));
+const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+function setZoom(z) { App.zoom = String(z); applyZoom(); renderToolbar(); }
+function zoomBy(dir) {
+  const cur = App.scale;
+  const next = dir > 0 ? ZOOM_STEPS.find(z => z > cur + 0.005) : ZOOM_STEPS.slice().reverse().find(z => z < cur - 0.005);
+  if (next) setZoom(next);
+}
+function openProjectPicker() { $('#projectInput').value = ''; $('#projectInput').click(); }
+function toggleSnap() { App.p.snap = !App.p.snap; scheduleSave(); renderToolbar(); renderCanvas(); }
+function renderToolbar() {
+  const r = clear($('#toolbar'));
   const w = selW();
   const hasData = App.p.datasets.length > 0;
-  const zoomSel = h('select', { class: 'sel zoom-select', 'aria-label': 'Zoom', title: 'Zoom del lienzo' });
-  for (const [v, l] of [['fit', 'Ajustar página'], ['width', 'Ajustar ancho'], ['0.5', '50 %'], ['0.75', '75 %'], ['1', '100 %'], ['1.25', '125 %'], ['1.5', '150 %']]) {
-    zoomSel.appendChild(h('option', { value: v, selected: String(App.zoom) === v, text: l }));
-  }
+  const zoomSel = h('select', { class: 'sel', 'aria-label': 'Zoom del lienzo', title: 'Zoom del lienzo (Ctrl + rueda sobre el lienzo)' });
+  const zopts = [['fit', 'Ajustar página'], ['width', 'Ajustar ancho'], ['0.5', '50 %'], ['0.75', '75 %'], ['1', '100 %'], ['1.25', '125 %'], ['1.5', '150 %'], ['2', '200 %']];
+  if (!zopts.some(o => o[0] === String(App.zoom))) zopts.push([String(App.zoom), Math.round(+App.zoom * 100) + ' %']);
+  for (const [v, l] of zopts) zoomSel.appendChild(h('option', { value: v, selected: String(App.zoom) === v, text: l }));
   zoomSel.addEventListener('change', () => { App.zoom = zoomSel.value; applyZoom(); renderStatus(); });
+  const pal = currentPalette();
   r.append(
-    rgroup('Datos',
-      rbtn('upload', 'Importar Excel', () => openFile(), { title: 'Importar un archivo .xlsx, .xlsm o .csv' }),
-      rbtn('sparkles', 'Datos de ejemplo', loadSample),
-      rbtn('table', 'Ver / editar datos', () => openDataEditor(), { disabled: !hasData })),
-    rgroup('Insertar',
-      rbtn('plus', 'Nuevo visual', e => openMenu(e.currentTarget, Object.keys(VIZ).map(t => ({ label: VIZ[t].label, icon: VIZ[t].icon, onClick: () => insertWidget(t) })))),
-      h('div', { class: 'rstack' },
-        rsm('text', 'Cuadro de texto', () => insertWidget('text')),
-        rsm('image', 'Imagen', () => insertWidget('image')),
-        rsm('slicer', 'Segmentación', () => insertWidget('slicer'), { disabled: !hasData })),
-      rbtn('page', 'Nueva página', addPage)),
-    rgroup('Diseño',
-      rbtn('wand', 'Generar automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Genera un dashboard automático para esta página a partir de un origen de datos' }),
-      rbtn('palette', 'Paleta de colores', openPaletteDialog, { title: 'Cambiar la paleta de colores de la herramienta y del dashboard' })),
-    rgroup('Organizar',
-      h('div', { class: 'rstack' },
-        rsm('copy', 'Duplicar', duplicateSelected, { disabled: !w }),
-        rsm('front', 'Traer al frente', () => reorder(1), { disabled: !w }),
-        rsm('back', 'Enviar atrás', () => reorder(-1), { disabled: !w })),
-      h('div', { class: 'rstack' },
-        rsm('trash', 'Eliminar', deleteSelected, { disabled: !w }),
-        rsm('grid', 'Ajustar a cuadrícula', () => { App.p.snap = !App.p.snap; scheduleSave(); renderRibbon(); renderCanvas(); }, { pressed: App.p.snap }),
-        rsm('fit', 'Alinear a cuadrícula', alignAllToGrid, { disabled: !page().widgets.length }))),
-    rgroup('Vista',
-      h('div', { class: 'rstack' },
-        rsm('panelL', 'Panel izquierdo', () => togglePane('left'), { pressed: !App.prefs.leftCollapsed }),
-        rsm('panelR', 'Panel derecho', () => togglePane('right'), { pressed: !App.prefs.rightCollapsed }),
-        zoomSel)),
-    rgroup('Edición',
-      rbtn('undo', 'Deshacer', undo, { disabled: !App.hist.length, title: 'Deshacer (Ctrl+Z)' }),
-      rbtn('redo', 'Rehacer', redo, { disabled: !App.fut.length, title: 'Rehacer (Ctrl+Y)' })),
-    rgroup('Archivo',
-      h('div', { class: 'rstack' },
-        rsm('file', 'Nuevo', newProjectFlow),
-        rsm('open', 'Abrir proyecto', () => { $('#projectInput').value = ''; $('#projectInput').click(); }),
-        rsm('save', 'Guardar proyecto', saveProjectFile)),
-      rbtn('print', 'Imprimir / PDF', printDashboard, { title: 'Imprimir o guardar como PDF todas las páginas' }))
+    tgroup('Archivo', [
+      tmenu('file', 'Archivo', () => [
+        { label: 'Nuevo dashboard', icon: 'file', onClick: newProjectFlow },
+        { label: 'Abrir proyecto… (Ctrl+O)', icon: 'open', onClick: openProjectPicker },
+        { label: 'Guardar proyecto (Ctrl+S)', icon: 'save', onClick: saveProjectFile },
+        '-',
+        { label: 'Exportar imagen o PDF… (Ctrl+E)', icon: 'export', onClick: () => openExportDialog() },
+        { label: 'Imprimir… (Ctrl+P)', icon: 'print', onClick: printDashboard }
+      ], { cls: 'keep', title: 'Nuevo, abrir, guardar, exportar e imprimir' })]),
+    tgroup('Datos', [
+      tbtn('upload', 'Importar', () => openFile(), { title: 'Importar un archivo .xlsx, .xlsm o .csv' }),
+      tbtn('sparkles', 'Ejemplo', loadSample, { title: 'Cargar datos de ejemplo', cls: 'opt' }),
+      tbtn('table', 'Datos', () => openDataEditor(), { disabled: !hasData, title: 'Ver y editar los datos', cls: 'opt' })]),
+    tgroup('Insertar', [
+      tmenu('plus', 'Visual', () => Object.keys(VIZ).filter(t => !NO_DATA_VIZ.includes(t)).map(t => ({ label: VIZ[t].label, icon: VIZ[t].icon, onClick: () => insertWidget(t) })), { title: 'Insertar un visual' }),
+      tbtn('text', 'Texto', () => insertWidget('text'), { title: 'Insertar un cuadro de texto', cls: 'opt' }),
+      tbtn('image', 'Imagen', () => insertWidget('image'), { title: 'Insertar una imagen', cls: 'opt' }),
+      tmenu('shape', 'Forma', () => Object.keys(SHAPES).map(k => ({ label: SHAPES[k], icon: 'shape', onClick: () => insertShape(k) })), { title: 'Insertar una forma', cls: 'opt' }),
+      tbtn('page', 'Página', addPage, { title: 'Nueva página', cls: 'opt' })]),
+    tgroup('Diseño', [
+      tbtn('wand', 'Automático', () => autoLayoutCurrent(), { disabled: !hasData, title: 'Generar un dashboard automático para esta página', cls: 'opt' }),
+      tbtn('palette', 'Paleta', openPaletteDialog, { title: 'Paleta de colores de la herramienta y del dashboard', cls: 'opt' }),
+      tmenu('brush', 'Estilos', () => quickStyles(pal).map(q => ({ label: q.name, icon: 'brush', onClick: () => applyQuickStyle(q) })),
+        { title: w ? 'Estilo rápido para el visual seleccionado' : 'Estilo rápido para todos los visuales de la página', disabled: !page().widgets.length })]),
+    tgroup('Organizar', [
+      tbtn('copy', 'Duplicar', duplicateSelected, { disabled: !w, title: 'Duplicar (Ctrl+D)', cls: 'opt' }),
+      tmenu('layers', 'Orden', () => [
+        { label: 'Traer al frente', icon: 'front', onClick: () => reorder(1) },
+        { label: 'Enviar atrás', icon: 'back', onClick: () => reorder(-1) }], { disabled: !w, cls: 'opt' }),
+      tmenu('alignL', 'Alinear', alignMenuItems, { disabled: !page().widgets.length, title: 'Alinear respecto a la página o a la cuadrícula', cls: 'opt' }),
+      tbtn('grid', 'Cuadrícula', toggleSnap, { pressed: App.p.snap, title: 'Ajustar a la cuadrícula al mover (Alt lo desactiva)', cls: 'opt' }),
+      tbtn('trash', 'Eliminar', deleteSelected, { disabled: !w, title: 'Eliminar (Supr)', cls: 'opt' })]),
+    tgroup('Edición', [
+      tbtn('undo', 'Deshacer', undo, { disabled: !App.hist.length, title: 'Deshacer (Ctrl+Z)', cls: 'opt' }),
+      tbtn('redo', 'Rehacer', redo, { disabled: !App.fut.length, title: 'Rehacer (Ctrl+Y)', cls: 'opt' })]),
+    tgroup('Vista', [
+      tbtn('panelL', 'Panel izquierdo', () => togglePane('left'), { pressed: !isCollapsed('left'), cls: 'opt' }),
+      tbtn('panelR', 'Panel derecho', () => togglePane('right'), { pressed: !isCollapsed('right'), cls: 'opt' }),
+      h('div', { class: 'zoom-box' }, zoomSel)], 'push'),
+    tgroup('Exportar', [
+      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG) o PDF tal y como se ve en el Presentador (Ctrl+E)' })], 'sticky-end')
   );
+}
+function insertShape(kind, at) {
+  const pal = currentPalette();
+  const extra = { shape: kind, fill1: pal.primary, fill2: mixHex(pal.primary, '#ffffff', 0.45) };
+  if (kind === 'line') Object.assign(extra, { h: 32, w: 320, borderW: 3, borderColor: pal.primary });
+  if (kind === 'ellipse') Object.assign(extra, { w: 200, h: 200 });
+  insertWidget('shape', at || null, extra);
+}
+/** Alinear el visual seleccionado respecto a la página (margen de 16 px). */
+function alignMenuItems() {
+  const w = selW();
+  const items = [
+    ['l', 'Alinear a la izquierda', 'alignL'], ['c', 'Centrar horizontalmente', 'alignC'], ['r', 'Alinear a la derecha', 'alignR'],
+    ['t', 'Alinear arriba', 'alignT'], ['m', 'Centrar verticalmente', 'alignM'], ['b', 'Alinear abajo', 'alignB']
+  ].map(([k, label, ic]) => ({ label, icon: ic, disabled: !w, onClick: () => alignSelected(k) }));
+  return items.concat(['-', { label: 'Ajustar todo a la cuadrícula', icon: 'fit', onClick: alignAllToGrid }]);
+}
+function alignSelected(mode) {
+  const w = selW();
+  if (!w) return;
+  const pg = page(), M = 16;
+  mutate(() => {
+    if (mode === 'l') w.x = M;
+    if (mode === 'c') w.x = Math.round((pg.w - w.w) / 2);
+    if (mode === 'r') w.x = Math.max(0, pg.w - w.w - M);
+    if (mode === 't') w.y = M;
+    if (mode === 'm') w.y = Math.round((pg.h - w.h) / 2);
+    if (mode === 'b') w.y = Math.max(0, pg.h - w.h - M);
+  }, { only: 'widget', w });
+}
+
+/* ---------- Estilos rápidos ---------- */
+const STYLE_KEYS = ['bg', 'fillType', 'fill1', 'fill2', 'fillAngle', 'fillAlpha', 'borderW', 'borderColor', 'borderStyle', 'radius', 'shadow',
+  'titleSize', 'titleColor', 'titleAlign', 'titleBold', 'titleItalic', 'textColor', 'fontFamily'];
+function quickStyles(pal) {
+  const dark = document.documentElement.dataset.theme === 'dark';
+  const P = pal.primary, base = dark ? '#1a1f29' : '#ffffff';
+  const reset = { bg: true, fillType: 'theme', fillAlpha: 100, borderW: 0, borderColor: null, borderStyle: 'solid', radius: 6, shadow: 'soft', textColor: null, titleColor: null };
+  return [
+    { name: 'Tarjeta', patch: {} },
+    { name: 'Plana con borde', patch: { shadow: 'none', borderW: 1 } },
+    { name: 'Elevada', patch: { shadow: 'strong', radius: 12 } },
+    { name: 'Contorno de acento', patch: { shadow: 'none', borderW: 2, borderColor: P, radius: 10 } },
+    { name: 'Degradado suave', patch: { fillType: 'linear', fill1: base, fill2: mixHex(base, P, dark ? 0.28 : 0.14), fillAngle: 160, radius: 10 } },
+    { name: 'Degradado intenso', patch: { fillType: 'linear', fill1: P, fill2: mixHex(P, '#000000', 0.38), fillAngle: 135, textColor: '#ffffff', titleColor: '#ffffff', radius: 12, shadow: 'medium' } },
+    { name: 'Cristal', patch: { fillType: 'solid', fill1: base, fillAlpha: 62, borderW: 1, borderColor: dark ? '#3a4150' : '#ffffff', radius: 14, shadow: 'float' } },
+    { name: 'Resplandor', patch: { shadow: 'glow', radius: 12, borderW: 1, borderColor: mixHex(P, base, 0.4) } },
+    { name: 'Discontinuo', patch: { shadow: 'none', borderW: 2, borderStyle: 'dashed', borderColor: mixHex(P, base, 0.3), radius: 8 } },
+    { name: 'Sin fondo', patch: { bg: false, shadow: 'none' } }
+  ].map(q => ({ name: q.name, patch: Object.assign({}, reset, q.patch) }));
+}
+function applyQuickStyle(q) {
+  const w = selW();
+  if (w) return upd(w, q.patch);
+  mutate(() => { for (const x of page().widgets) if (x.type !== 'shape') Object.assign(x, q.patch); });
+  toast(`Estilo «${q.name}» aplicado a toda la página · Ctrl+Z para deshacer`, 'ok');
+}
+function copyStyleToPage(w) {
+  const patch = {};
+  for (const k of STYLE_KEYS) patch[k] = w[k];
+  mutate(() => { for (const x of page().widgets) if (x !== w && x.type !== 'shape' && w.type !== 'shape') Object.assign(x, deepClone(patch)); });
+  toast('Estilo copiado a todos los visuales de la página', 'ok');
+}
+/** Vista previa en miniatura de un estilo rápido (para la galería del panel). */
+function quickStylePreview(q) {
+  const p = q.patch;
+  const sw = h('span');
+  const a = (p.fillAlpha ?? 100) / 100;
+  sw.style.background = !p.bg ? 'transparent' : p.fillType === 'theme' ? 'var(--widget-bg)'
+    : p.fillType === 'solid' ? hexA(p.fill1, a) : `linear-gradient(${p.fillAngle}deg, ${hexA(p.fill1, a)}, ${hexA(p.fill2, a)})`;
+  sw.style.borderRadius = Math.min(10, p.radius) + 'px';
+  if (p.borderW) sw.style.border = `${Math.min(2, p.borderW)}px ${p.borderStyle} ${p.borderColor || 'var(--border-strong)'}`;
+  sw.style.boxShadow = { soft: 'var(--shadow-1)', medium: 'var(--shadow-2)', strong: 'var(--shadow-3)', float: '0 8px 10px -6px rgba(16,24,40,.45)', glow: '0 0 8px color-mix(in srgb, var(--primary) 55%, transparent)' }[p.shadow] || 'none';
+  return sw;
 }
 
 /* ---------- Render: panel izquierdo ---------- */
+const narrowMq = matchMedia('(max-width: 980px)');
+App.float = { left: false, right: false };
+function isCollapsed(which) {
+  if (narrowMq.matches) return !App.float[which];
+  return which === 'left' ? App.prefs.leftCollapsed : App.prefs.rightCollapsed;
+}
+narrowMq.addEventListener('change', () => {
+  App.float = { left: false, right: false };
+  if (!App.p) return;
+  renderLeft(); renderRight(); renderToolbar();
+  requestAnimationFrame(applyZoom);
+});
 function togglePane(which) {
-  if (which === 'left') App.prefs.leftCollapsed = !App.prefs.leftCollapsed; else App.prefs.rightCollapsed = !App.prefs.rightCollapsed;
-  savePrefs();
-  renderLeft(); renderRight(); renderRibbon();
+  if (narrowMq.matches) {
+    // Ventana estrecha (o mucho zoom): los paneles flotan sobre el lienzo, de uno en uno
+    const open = !App.float[which];
+    App.float = { left: false, right: false };
+    App.float[which] = open;
+  } else {
+    if (which === 'left') App.prefs.leftCollapsed = !App.prefs.leftCollapsed; else App.prefs.rightCollapsed = !App.prefs.rightCollapsed;
+    savePrefs();
+  }
+  renderLeft(); renderRight(); renderToolbar();
   requestAnimationFrame(applyZoom);
 }
 function paneHead(title, which) {
-  const collapsed = which === 'left' ? App.prefs.leftCollapsed : App.prefs.rightCollapsed;
+  const collapsed = isCollapsed(which);
   const b = h('button', { class: 'icon-btn', type: 'button', title: collapsed ? 'Expandir panel' : 'Contraer panel', 'aria-label': collapsed ? 'Expandir panel' : 'Contraer panel', 'aria-expanded': String(!collapsed) },
     icon(which === 'left' ? (collapsed ? 'chevR' : 'chevL') : (collapsed ? 'chevL' : 'chevR'), 16));
   b.addEventListener('click', () => togglePane(which));
@@ -3461,7 +3822,7 @@ function paneHead(title, which) {
 let fieldsDsId = null;
 function renderLeft() {
   const pane = clear($('#leftPane'));
-  pane.classList.toggle('collapsed', App.prefs.leftCollapsed);
+  pane.classList.toggle('collapsed', isCollapsed('left'));
   pane.appendChild(paneHead('Visualizaciones', 'left'));
   const body = h('div', { class: 'pane-body' });
   pane.appendChild(body);
@@ -3471,7 +3832,8 @@ function renderLeft() {
     const b = h('button', { class: 'viz-btn', type: 'button', title: VIZ[t].label, 'aria-label': VIZ[t].label, draggable: 'true', 'aria-pressed': w && w.type === t ? 'true' : 'false' }, icon(VIZ[t].icon, 20));
     b.addEventListener('click', () => {
       const cur = selW();
-      if (cur && !['text', 'image'].includes(cur.type) && !['text', 'image'].includes(t)) changeType(cur, t);
+      if (cur && !NO_DATA_VIZ.includes(cur.type) && !NO_DATA_VIZ.includes(t)) changeType(cur, t);
+      else if (t === 'shape') insertShape('round');
       else insertWidget(t);
     });
     b.addEventListener('dragstart', e => { e.dataTransfer.setData('application/x-4dash-viz', t); e.dataTransfer.effectAllowed = 'copy'; });
@@ -3559,20 +3921,179 @@ function makeDropTarget(el, onField) {
 }
 function renderRight() {
   const pane = clear($('#rightPane'));
-  pane.classList.toggle('collapsed', App.prefs.rightCollapsed);
+  pane.classList.toggle('collapsed', isCollapsed('right'));
   const w = selW();
   pane.appendChild(paneHead(w ? 'Propiedades del visual' : 'Página y filtros', 'right'));
   const body = h('div', { class: 'pane-body' });
   pane.appendChild(body);
   if (!w) return renderPageProps(body);
   const tabs = h('div', { class: 'tabs', role: 'tablist' });
-  for (const [id, label] of [['data', 'Datos'], ['format', 'Formato']]) {
+  for (const [id, label] of [['data', 'Datos'], ['format', 'Formato'], ['style', 'Estilo']]) {
     const t = h('button', { class: 'tab', type: 'button', role: 'tab', 'aria-selected': App.propsTab === id ? 'true' : 'false', text: label });
     t.addEventListener('click', () => { App.propsTab = id; renderRight(); });
     tabs.appendChild(t);
   }
   body.appendChild(tabs);
-  if (App.propsTab === 'data') renderDataProps(body, w); else renderFormatProps(body, w);
+  if (App.propsTab === 'data') renderDataProps(body, w);
+  else if (App.propsTab === 'style') renderStyleProps(body, w);
+  else renderFormatProps(body, w);
+}
+/** Selector de color HTML (cualquier color) con código hexadecimal y restablecer. */
+function colorEl(value, onChange, opts = {}) {
+  const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': opts.label || 'Color', title: 'Elegir cualquier color' });
+  inp.value = value || opts.fallback || '#000000';
+  const hex = h('span', { class: 'hex', text: value ? value.toUpperCase() : (opts.autoText || 'Automático') });
+  inp.addEventListener('input', () => { hex.textContent = inp.value.toUpperCase(); onChange(inp.value); });
+  inp.addEventListener('change', () => renderRight());
+  const row = h('div', { class: 'color-row' }, inp, hex);
+  if (opts.reset && value) {
+    const r = h('button', { class: 'icon-btn', type: 'button', title: 'Volver al color automático', 'aria-label': 'Restablecer color' }, icon('close', 13));
+    r.addEventListener('click', () => { onChange(null); renderRight(); });
+    row.appendChild(r);
+  }
+  return row;
+}
+function rangeEl(value, min, max, step, onInput, opts = {}) {
+  const inp = h('input', { type: 'range', min, max, step, 'aria-label': opts.label || null });
+  inp.value = String(value);
+  const fmt = opts.fmt || (v => String(v));
+  const out = h('output', { text: fmt(+value) });
+  inp.addEventListener('input', () => { out.textContent = fmt(+inp.value); onInput(+inp.value); });
+  return h('div', { class: 'range-row' }, inp, out);
+}
+function segEl(options, value, onChange, label) {
+  const row = h('div', { class: 'seg-row', role: 'group', 'aria-label': label });
+  for (const [v, l, ic] of options) {
+    const b = h('button', { class: 'btn', type: 'button', 'aria-pressed': String(value === v), title: l, 'aria-label': l }, ic ? icon(ic, 15) : l);
+    b.addEventListener('click', () => onChange(v));
+    row.appendChild(b);
+  }
+  return row;
+}
+/** Color efectivo de una serie (personalizado del visual o de la paleta). */
+function seriesColor(w, k) {
+  return (w.colors && w.colors[k]) || getComputedStyle(document.documentElement).getPropertyValue('--series-' + (k + 1)).trim() || '#2a78d6';
+}
+function renderStyleProps(body, w) {
+  const S = patch => upd(w, patch, { typing: true });
+  const isShape = w.type === 'shape', isLine = isShape && w.shape === 'line';
+  const sec = t => body.appendChild(h('div', { class: 'section-title', text: t }));
+  if (isShape) {
+    sec('Forma');
+    const grid = h('div', { class: 'shape-grid', role: 'radiogroup', 'aria-label': 'Tipo de forma' });
+    for (const k of Object.keys(SHAPES)) {
+      const prev = s('svg', { viewBox: '0 0 40 24', width: 34, height: 20, 'aria-hidden': 'true' });
+      if (k === 'rect' || k === 'round') s('rect', { x: 2, y: 3, width: 36, height: 18, rx: k === 'round' ? 6 : 0, fill: 'currentColor' }, prev);
+      else s('path', { d: shapePath(k, 40, 24, 2), fill: k === 'line' ? 'none' : 'currentColor', stroke: 'currentColor', 'stroke-width': 2 }, prev);
+      const b = h('button', { class: 'viz-btn', type: 'button', role: 'radio', title: SHAPES[k], 'aria-label': SHAPES[k], 'aria-pressed': String(w.shape === k), 'aria-checked': String(w.shape === k) }, prev);
+      b.addEventListener('click', () => upd(w, { shape: k }));
+      grid.appendChild(b);
+    }
+    body.appendChild(grid);
+  } else {
+    sec('Estilos rápidos');
+    const grid = h('div', { class: 'qs-grid' });
+    for (const q of quickStyles(currentPalette())) {
+      const b = h('button', { class: 'qs', type: 'button', title: q.name, 'aria-label': 'Estilo ' + q.name }, quickStylePreview(q));
+      b.addEventListener('click', () => upd(w, q.patch));
+      grid.appendChild(b);
+    }
+    body.appendChild(grid);
+    const cp = h('button', { class: 'btn block', type: 'button' }, icon('brush', 15), 'Copiar este estilo a toda la página');
+    cp.addEventListener('click', () => copyStyleToPage(w));
+    body.appendChild(h('div', { class: 'form-row' }), cp);
+  }
+
+  if (!isLine) {
+    sec('Relleno');
+    body.appendChild(formRow('Tipo', selectEl([['none', 'Sin relleno'], ['theme', 'Automático (tema)'], ['solid', 'Color sólido'], ['linear', 'Degradado lineal'], ['radial', 'Degradado radial']],
+      w.bg ? w.fillType : 'none', v => upd(w, v === 'none' ? { bg: false } : { bg: true, fillType: v }))));
+    if (w.bg && w.fillType !== 'theme') {
+      const grad = w.fillType === 'linear' || w.fillType === 'radial';
+      body.appendChild(h('div', { class: 'form-inline' },
+        formRow(grad ? 'Color inicial' : 'Color', colorEl(w.fill1, v => S({ fill1: v || '#ffffff' }), { label: 'Color de relleno' })),
+        grad ? formRow('Color final', colorEl(w.fill2, v => S({ fill2: v || '#ffffff' }), { label: 'Color final del degradado' })) : null));
+      if (w.fillType === 'linear') body.appendChild(formRow('Ángulo', rangeEl(w.fillAngle, 0, 360, 5, v => S({ fillAngle: v }), { label: 'Ángulo del degradado', fmt: v => v + '°' })));
+    }
+    if (w.bg) body.appendChild(formRow('Transparencia', rangeEl(100 - w.fillAlpha, 0, 100, 5, v => S({ fillAlpha: 100 - v }), { label: 'Transparencia del relleno', fmt: v => v + ' %' })));
+  }
+
+  sec(isLine ? 'Línea' : 'Borde');
+  body.appendChild(formRow('Grosor', rangeEl(w.borderW, isLine ? 1 : 0, 12, 1, v => S({ borderW: v }), { label: 'Grosor', fmt: v => v + ' px' })));
+  if (w.borderW > 0 || isLine) {
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow('Color', colorEl(w.borderColor, v => S({ borderColor: v }), { label: 'Color del borde', reset: true, fallback: isLine ? w.fill1 : '#c3c9d4' })),
+      formRow('Trazo', selectEl([['solid', 'Continuo'], ['dashed', 'Guiones'], ['dotted', 'Puntos']].concat(isShape ? [] : [['double', 'Doble']]), w.borderStyle, v => upd(w, { borderStyle: v })))));
+  }
+  if (!isShape || w.shape === 'round') body.appendChild(formRow('Esquinas redondeadas', rangeEl(w.radius, 0, 40, 1, v => S({ radius: v }), { label: 'Radio de las esquinas', fmt: v => v + ' px' })));
+  body.appendChild(formRow('Sombra', selectEl(Object.entries(SHADOWS), w.shadow, v => upd(w, { shadow: v })), {}));
+
+  if (w.showTitle && !isShape) {
+    sec('Título');
+    body.appendChild(formRow('Tamaño', rangeEl(w.titleSize, 9, 40, 1, v => S({ titleSize: v }), { label: 'Tamaño del título', fmt: v => v + ' px' })));
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow('Color', colorEl(w.titleColor, v => S({ titleColor: v }), { label: 'Color del título', reset: true, fallback: '#10141c' })),
+      formRow('Alineación', segEl([['left', 'Izquierda', 'alignL'], ['center', 'Centro', 'alignC'], ['right', 'Derecha', 'alignR']], w.titleAlign, v => upd(w, { titleAlign: v }), 'Alineación del título'))));
+    body.appendChild(h('div', { class: 'form-inline' }, checkEl('Negrita', w.titleBold, v => upd(w, { titleBold: v })), checkEl('Cursiva', w.titleItalic, v => upd(w, { titleItalic: v }))));
+  }
+
+  if (!isLine) {
+    sec('Texto y tipografía');
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow('Fuente', selectEl(Object.keys(FONTS).map(k => [k, FONTS[k].label]), w.fontFamily, v => upd(w, { fontFamily: v }))),
+      formRow('Color del texto', colorEl(w.textColor, v => S({ textColor: v }), { label: 'Color del texto', reset: true, fallback: '#10141c' }))));
+    if (w.type === 'text' || isShape) body.appendChild(h('div', { class: 'form-inline' }, checkEl('Negrita', w.bold, v => upd(w, { bold: v })), checkEl('Cursiva', w.italic, v => upd(w, { italic: v }))));
+  }
+
+  const lineish = ['line', 'area'].includes(w.type), barish = ['column', 'stacked', 'bar'].includes(w.type);
+  if (lineish || barish || w.type === 'donut') {
+    sec('Gráfico');
+    if (lineish) {
+      body.appendChild(formRow('Grosor de línea', rangeEl(w.lineW, 0.5, 8, 0.5, v => S({ lineW: v }), { label: 'Grosor de línea', fmt: v => String(v).replace('.', ',') + ' px' })));
+      body.appendChild(checkEl('Línea suavizada', w.smooth, v => upd(w, { smooth: v })));
+      body.appendChild(checkEl('Marcadores en cada punto', w.markers, v => upd(w, { markers: v })));
+      if (w.type === 'area') body.appendChild(formRow('Opacidad del área', rangeEl(w.areaAlpha, 0, 80, 2, v => S({ areaAlpha: v }), { label: 'Opacidad del área', fmt: v => v + ' %' })));
+    }
+    if (barish) {
+      body.appendChild(formRow('Redondeo de barras', rangeEl(w.barRadius, 0, 20, 1, v => S({ barRadius: v }), { label: 'Redondeo de barras', fmt: v => v + ' px' })));
+      body.appendChild(checkEl('Ancho de barra automático', w.barGap == null, v => upd(w, { barGap: v ? null : 30 })));
+      if (w.barGap != null) body.appendChild(formRow('Separación entre barras', rangeEl(w.barGap, 0, 90, 5, v => S({ barGap: v }), { label: 'Separación entre barras', fmt: v => v + ' %' })));
+    }
+    if (w.type === 'donut') body.appendChild(formRow('Tamaño del agujero', rangeEl(w.holeSize, 20, 90, 2, v => S({ holeSize: v }), { label: 'Tamaño del agujero', fmt: v => v + ' %' })));
+  }
+
+  if (!NO_DATA_VIZ.includes(w.type) && w.type !== 'slicer') {
+    const multiSeries = (w.vals.length > 1 || w.split) && ['column', 'stacked', 'bar', 'line', 'area'].includes(w.type);
+    const byCat = ['pie', 'donut', 'treemap'].includes(w.type);
+    sec('Colores');
+    if (!multiSeries && !byCat) {
+      const sw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Color' });
+      for (let k = 0; k < 8; k++) {
+        const b = h('button', { class: 'swatch ' + slotCls('bg', k), type: 'button', role: 'radio', 'aria-label': 'Color ' + (k + 1), 'aria-pressed': w.slot === k ? 'true' : 'false', 'aria-checked': w.slot === k ? 'true' : 'false' });
+        if (w.colors[k]) b.style.background = w.colors[k];
+        b.addEventListener('click', () => upd(w, { slot: k }));
+        sw.appendChild(b);
+      }
+      body.appendChild(sw);
+      body.appendChild(formRow('Color personalizado', colorEl(w.colors[w.slot], v => S(x => { const c = x.colors.slice(); c[x.slot] = v; return { colors: c }; }),
+        { label: 'Color personalizado', reset: true, fallback: seriesColor(w, w.slot), autoText: 'De la paleta' })));
+    } else {
+      body.appendChild(h('p', { class: 'hint', text: byCat ? 'Cada categoría conserva su color aunque cambien los filtros. Cambia cualquiera con el selector:' : 'Colores de las series, en orden. Cambia cualquiera con el selector:' }));
+      const grid = h('div', { class: 'series-colors' });
+      for (let k = 0; k < 8; k++) {
+        const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': 'Color de la serie ' + (k + 1), title: w.colors[k] ? 'Color personalizado' : 'Color de la paleta' });
+        inp.value = seriesColor(w, k);
+        inp.addEventListener('input', () => S(x => { const c = x.colors.slice(); c[k] = inp.value; return { colors: c }; }));
+        grid.appendChild(h('label', { class: 'sc' }, inp, h('span', { text: (k + 1) + (w.colors[k] ? ' ✎' : '') })));
+      }
+      body.appendChild(grid);
+    }
+    if (w.colors.some(Boolean)) {
+      const r = h('button', { class: 'btn block', type: 'button', text: 'Volver a los colores de la paleta' });
+      r.addEventListener('click', () => upd(w, { colors: Array(8).fill(null) }));
+      body.appendChild(h('div', { class: 'form-row' }), r);
+    }
+  }
 }
 function upd(w, patch, opts = {}) {
   const f = () => Object.assign(w, typeof patch === 'function' ? patch(w) : patch);
@@ -3582,7 +4103,7 @@ function upd(w, patch, opts = {}) {
 function renderDataProps(body, w) {
   const def = VIZ[w.type];
   body.appendChild(formRow('Tipo de visual', selectEl(Object.keys(VIZ).map(t => [t, VIZ[t].label]), w.type, v => changeType(w, v))));
-  if (w.type === 'text' || w.type === 'image') {
+  if (NO_DATA_VIZ.includes(w.type)) {
     body.appendChild(h('p', { class: 'hint', text: 'Este visual no usa datos. Configúralo en la pestaña Formato.' }));
     return;
   }
@@ -3652,15 +4173,14 @@ function renderFormatProps(body, w) {
   const chartish = ['column', 'stacked', 'bar', 'line', 'area', 'pie', 'donut', 'treemap', 'scatter'].includes(w.type);
   body.appendChild(formRow('Título', inputEl(w.title, v => upd(w, { title: v.slice(0, 200) }, { typing: true }), { placeholder: autoTitle(Object.assign({}, w, { title: '' })), max: 200 })));
   body.appendChild(checkEl('Mostrar título', w.showTitle, v => upd(w, { showTitle: v }, { keepProps: true })));
-  body.appendChild(checkEl('Fondo de tarjeta', w.bg, v => upd(w, { bg: v }, { keepProps: true })));
-  if (w.type === 'text') {
+  if (w.type === 'text' || w.type === 'shape') {
     body.appendChild(h('div', { class: 'section-title', text: 'Texto' }));
     body.appendChild(formRow('Contenido', inputEl(w.text, v => upd(w, { text: v.slice(0, 20000) }, { typing: true }), { multiline: true, placeholder: '# Título\nTexto del párrafo\n- Elemento de lista' })));
-    body.appendChild(h('p', { class: 'hint', text: 'Usa «# » para encabezados y «- » para listas.' }));
+    body.appendChild(h('p', { class: 'hint', text: 'Usa «# » para encabezados y «- » para listas. Colores, fuente y relleno en la pestaña Estilo.' }));
     body.appendChild(h('div', { class: 'form-inline' },
       formRow('Tamaño', inputEl(w.fontSize, v => upd(w, { fontSize: clamp(+v || 14, 8, 72) }, { typing: true }), { type: 'number', min: 8 })),
       formRow('Alineación', selectEl([['left', 'Izquierda'], ['center', 'Centro'], ['right', 'Derecha']], w.align, v => upd(w, { align: v }, { keepProps: true })))));
-    body.appendChild(checkEl('Centrar verticalmente', w.vcenter, v => upd(w, { vcenter: v }, { keepProps: true })));
+    if (w.type === 'text') body.appendChild(checkEl('Centrar verticalmente', w.vcenter, v => upd(w, { vcenter: v }, { keepProps: true })));
   }
   if (w.type === 'image') {
     const b = h('button', { class: 'btn block', type: 'button' }, icon('upload', 16), w.img ? 'Reemplazar imagen' : 'Subir imagen');
@@ -3672,7 +4192,7 @@ function renderFormatProps(body, w) {
       body.appendChild(h('div', { class: 'form-row' }), rm);
     }
   }
-  if (!['text', 'image', 'slicer'].includes(w.type)) {
+  if (!NO_DATA_VIZ.includes(w.type) && w.type !== 'slicer') {
     body.appendChild(h('div', { class: 'section-title', text: 'Números' }));
     body.appendChild(formRow('Formato', selectEl([['auto', 'Automático'], ['int', 'Entero'], ['compact', 'Compacto (1,2 mil)'], ['currency', 'Moneda'], ['currencyCompact', 'Moneda compacta'], ['percent', 'Porcentaje (0,25 → 25 %)'], ['percentRaw', 'Porcentaje (25 → 25 %)']], w.fmt, v => upd(w, { fmt: v }))));
     body.appendChild(h('div', { class: 'form-inline' },
@@ -3694,19 +4214,7 @@ function renderFormatProps(body, w) {
     body.appendChild(formRow('Estilo', selectEl([['list', 'Lista (selección múltiple)'], ['single', 'Lista (selección única)'], ['tiles', 'Mosaicos']], w.slicerStyle, v => upd(w, { slicerStyle: v }))));
   }
   if (w.type === 'kpi') body.appendChild(formRow('Alineación', selectEl([['left', 'Izquierda'], ['center', 'Centro']], w.align, v => upd(w, { align: v }))));
-  const multiSeries = (w.vals.length > 1 || w.split) && ['column', 'stacked', 'bar', 'line', 'area'].includes(w.type);
-  if (!['text', 'image', 'slicer', 'pie', 'donut', 'treemap'].includes(w.type) && !multiSeries) {
-    body.appendChild(h('div', { class: 'section-title', text: 'Color' }));
-    const sw = h('div', { class: 'swatches', role: 'radiogroup', 'aria-label': 'Color' });
-    for (let k = 0; k < 8; k++) {
-      const b = h('button', { class: 'swatch ' + slotCls('bg', k), type: 'button', role: 'radio', 'aria-label': 'Color ' + (k + 1), 'aria-pressed': w.slot === k ? 'true' : 'false', 'aria-checked': w.slot === k ? 'true' : 'false' });
-      b.addEventListener('click', () => upd(w, { slot: k }));
-      sw.appendChild(b);
-    }
-    body.appendChild(sw);
-  } else if (multiSeries || ['pie', 'donut', 'treemap'].includes(w.type)) {
-    body.appendChild(h('p', { class: 'hint', text: 'Los colores siguen un orden fijo y accesible: cada categoría conserva su color aunque cambien los filtros.' }));
-  }
+  if (!NO_DATA_VIZ.includes(w.type) && w.type !== 'slicer') body.appendChild(h('p', { class: 'hint', text: 'Colores, relleno, bordes, sombras y grosor de líneas: pestaña Estilo.' }));
   body.appendChild(h('div', { class: 'section-title', text: 'Posición y tamaño' }));
   const geo = (k, label) => formRow(label, inputEl(Math.round(w[k]), v => {
     const n = parseInt(v, 10);
@@ -3726,7 +4234,7 @@ function renderFormatProps(body, w) {
 function renderPageProps(body) {
   const pg = page();
   body.appendChild(h('div', { class: 'section-title', text: 'Filtros activos' }));
-  if (!App.p.filters.length) body.appendChild(h('p', { class: 'hint', text: 'Sin filtros. Usa segmentaciones o haz clic en los gráficos para filtrar.' }));
+  if (!App.p.filters.length) body.appendChild(h('p', { class: 'hint', text: 'Sin filtros. Usa selectores de filtro o haz clic en los gráficos para filtrar.' }));
   for (const f of App.p.filters) {
     const ds = dsById(f.ds);
     const c = ds ? colOf(ds, f.field) : null;
@@ -3755,6 +4263,19 @@ function renderPageProps(body) {
   const fit = h('button', { class: 'btn block', type: 'button', text: 'Ajustar alto al contenido' });
   fit.addEventListener('click', () => mutate(() => { const hh = Math.max(240, Math.ceil((Math.max(0, ...pg.widgets.map(w => w.y + w.h)) + 16) / 8) * 8); pg.size = 'custom'; pg.h = hh; }));
   body.appendChild(fit);
+
+  body.appendChild(h('div', { class: 'section-title', text: 'Fondo de la página' }));
+  const bg = pg.bg;
+  const setBg = (patch, typing) => (typing ? mutateTyping : mutate)(() => { pg.bg = patch && Object.assign({ type: 'solid', c1: '#ffffff', c2: '#e4e8ee', angle: 180 }, pg.bg || {}, patch); }, { keepProps: !!typing });
+  body.appendChild(formRow('Tipo', selectEl([['theme', 'Automático (tema)'], ['solid', 'Color sólido'], ['linear', 'Degradado lineal'], ['radial', 'Degradado radial']], bg ? bg.type : 'theme',
+    v => (v === 'theme' ? setBg(null) : setBg({ type: v })))));
+  if (bg) {
+    const grad = bg.type !== 'solid';
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow(grad ? 'Color inicial' : 'Color', colorEl(bg.c1, v => setBg({ c1: v || '#ffffff' }, true), { label: 'Color de fondo' })),
+      grad ? formRow('Color final', colorEl(bg.c2, v => setBg({ c2: v || '#ffffff' }, true), { label: 'Color final del fondo' })) : null));
+    if (bg.type === 'linear') body.appendChild(formRow('Ángulo', rangeEl(bg.angle, 0, 360, 5, v => setBg({ angle: v }, true), { label: 'Ángulo del degradado', fmt: v => v + '°' })));
+  }
 
   body.appendChild(h('div', { class: 'section-title', text: 'Orígenes de datos' }));
   if (!App.p.datasets.length) body.appendChild(h('p', { class: 'hint', text: 'Ninguno. Importa un Excel para empezar.' }));
@@ -3790,6 +4311,7 @@ function renderCanvas() {
   el.classList.toggle('snap', !!App.p.snap);
   el.style.width = pg.w + 'px';
   el.style.height = pg.h + 'px';
+  applyPageBg(pg, el);
   pg.widgets.forEach((w, i) => el.appendChild(widgetEl(w, i, { editable: App.view === 'editor' })));
   const empty = $('#emptyState');
   const show = !pg.widgets.length && App.view === 'editor';
@@ -3817,11 +4339,19 @@ function renderEmpty(root) {
     h('p', { text: App.p.datasets.length ? 'Inserta visuales desde el panel izquierdo, arrastra campos al lienzo o genera un diseño automático.' : 'Arrastra aquí un archivo .xlsx o .csv. 4Dash detecta los títulos de filas y columnas y genera un dashboard automáticamente. Todo se procesa en tu navegador.' }),
     h('div', { class: 'empty-actions' }, actions)));
 }
+function applyPageBg(pg, el) {
+  const b = pg.bg;
+  el.style.background = !b ? '' : b.type === 'solid' ? b.c1
+    : b.type === 'radial' ? `radial-gradient(circle at 30% 20%, ${b.c1}, ${b.c2})` : `linear-gradient(${b.angle}deg, ${b.c1}, ${b.c2})`;
+}
+/** Contenido de la cabecera del Presentador (también se usa al exportar). */
+function presHeaderNodes(pg) {
+  const sub = [pg.name, new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })].join(' · ');
+  return [App.p.logo ? h('div', { class: 'pres-logo-bg' }, h('img', { src: App.p.logo, alt: 'Logo' })) : null,
+    h('div', null, h('h1', { text: App.p.title }), h('div', { class: 'ph-sub', text: sub }))];
+}
 function renderPresHeader() {
-  const hd = clear($('#presHeader'));
-  if (App.p.logo) hd.appendChild(h('div', { class: 'pres-logo-bg' }, h('img', { src: App.p.logo, alt: 'Logo' })));
-  const sub = [page().name, new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })].join(' · ');
-  hd.appendChild(h('div', null, h('h1', { text: App.p.title }), h('div', { class: 'ph-sub', text: sub })));
+  clear($('#presHeader')).append(...presHeaderNodes(page()).filter(Boolean));
 }
 function widgetCtx(w, W, H) {
   return {
@@ -3839,7 +4369,36 @@ function widgetCtx(w, W, H) {
     rerender: () => rerenderWidget(w)
   };
 }
-function bodySize(w) { return { W: w.w - 20, H: w.h - (w.showTitle ? 32 : 8) - 8 }; }
+const headH = w => Math.max(32, Math.round((w.titleSize || 14) * 1.55 + 10));
+function bodySize(w) {
+  const b = w.type === 'shape' ? 0 : 2 * (+w.borderW || 0);
+  return { W: w.w - 20 - b, H: w.h - (w.showTitle ? headH(w) : 8) - 8 - b };
+}
+/** Aplica el formato visual del widget mediante CSSOM (compatible con la CSP). */
+function applyWidgetStyle(w, el) {
+  const st = el.style;
+  if (w.type === 'shape') el.classList.add('is-shape');
+  else {
+    const a = clamp(+w.fillAlpha, 0, 100) / 100;
+    if (w.bg && w.fillType !== 'theme') {
+      const c1 = hexA(w.fill1, a), c2 = hexA(w.fill2, a);
+      st.background = w.fillType === 'solid' ? c1 : w.fillType === 'radial' ? `radial-gradient(circle at 30% 25%, ${c1}, ${c2})` : `linear-gradient(${+w.fillAngle || 0}deg, ${c1}, ${c2})`;
+    } else if (w.bg && a < 1) st.background = `color-mix(in srgb, var(--widget-bg) ${Math.round(a * 100)}%, transparent)`;
+    if (w.borderW > 0) st.border = `${w.borderW}px ${w.borderStyle} ${w.borderColor || 'var(--border-strong)'}`;
+    st.borderRadius = clamp(+w.radius, 0, 60) + 'px';
+    el.classList.add('sh-' + (w.shadow || 'soft'));
+  }
+  if (w.textColor) { st.setProperty('--ink-1', w.textColor); st.setProperty('--ink-2', w.textColor); st.setProperty('--ink-muted', hexA(w.textColor, 0.72)); }
+  if (w.titleColor) st.setProperty('--wt-color', w.titleColor);
+  if (w.titleSize !== 14) st.setProperty('--wt-size', w.titleSize + 'px');
+  if (!w.titleBold) st.setProperty('--wt-weight', '400');
+  if (w.titleItalic) st.setProperty('--wt-style', 'italic');
+  if (w.titleAlign !== 'left') st.setProperty('--wt-align', w.titleAlign);
+  if (w.fontFamily && w.fontFamily !== 'sans' && FONTS[w.fontFamily]) st.setProperty('--font', FONTS[w.fontFamily].css);
+  if (w.lineW !== 2) st.setProperty('--line-w', String(w.lineW));
+  if (w.areaAlpha !== 12) st.setProperty('--area-a', String(w.areaAlpha / 100));
+  (w.colors || []).forEach((c, i) => { if (c) st.setProperty('--series-' + (i + 1), c); });
+}
 function widgetEl(w, index, opts) {
   const editable = !!opts.editable;
   const title = autoTitle(w);
@@ -3848,16 +4407,19 @@ function widgetEl(w, index, opts) {
     dataset: { id: w.id }, role: 'figure', 'aria-label': title, tabindex: editable ? 0 : null
   });
   Object.assign(el.style, { left: w.x + 'px', top: w.y + 'px', width: w.w + 'px', height: w.h + 'px', zIndex: String(index + 1) });
+  applyWidgetStyle(w, el);
   const actions = h('div', { class: 'w-actions' });
   if (!opts.print) {
-    if (!['text', 'image'].includes(w.type)) {
+    if (!NO_DATA_VIZ.includes(w.type)) {
       actions.appendChild(actBtn('eye', 'Ver datos', () => showWidgetData(w)));
-      actions.appendChild(actBtn('focus', 'Modo foco', () => focusWidget(w)));
+      actions.appendChild(actBtn('focus', 'Ampliar', () => focusWidget(w)));
     }
     if (editable) actions.appendChild(actBtn('more', 'Más opciones', e => widgetMenu(e.currentTarget, w)));
-    else if (!['text', 'image'].includes(w.type)) actions.appendChild(actBtn('download', 'Exportar datos (CSV)', () => exportWidgetCsv(w)));
+    else if (!NO_DATA_VIZ.includes(w.type)) actions.appendChild(actBtn('download', 'Exportar datos (CSV)', () => exportWidgetCsv(w)));
   }
-  el.appendChild(h('div', { class: 'w-head' }, h('div', { class: 'w-title', text: title, title }), actions));
+  const head = h('div', { class: 'w-head' }, h('div', { class: 'w-title', text: title, title }), actions);
+  if (w.showTitle && w.titleSize !== 14) head.style.height = headH(w) + 'px';
+  el.appendChild(head);
   const body = h('div', { class: 'w-body' });
   el.appendChild(body);
   if (editable) {
@@ -3895,7 +4457,7 @@ function widgetMenu(anchor, w) {
     { label: 'Duplicar', icon: 'copy', onClick: () => { select(w.id); duplicateSelected(); } },
     { label: 'Traer al frente', icon: 'front', onClick: () => { select(w.id); reorder(1); } },
     { label: 'Enviar atrás', icon: 'back', onClick: () => { select(w.id); reorder(-1); } },
-    { label: 'Exportar datos (CSV)', icon: 'download', onClick: () => exportWidgetCsv(w), hidden: ['text', 'image'].includes(w.type) },
+    { label: 'Exportar datos (CSV)', icon: 'download', onClick: () => exportWidgetCsv(w), hidden: NO_DATA_VIZ.includes(w.type) },
     { label: 'Editar datos de origen', icon: 'table', onClick: () => openDataEditor(w.ds), hidden: !dsById(w.ds) },
     '-',
     { label: 'Eliminar', icon: 'trash', danger: true, onClick: () => { select(w.id); deleteSelected(); } }
@@ -3905,7 +4467,7 @@ function select(id) {
   App.sel = id;
   document.querySelectorAll('#page .widget.selected').forEach(x => x.classList.remove('selected'));
   if (id) { const el = $(`#page .widget[data-id="${CSS.escape(id)}"]`); if (el) el.classList.add('selected'); }
-  renderRight(); renderRibbon(); renderLeft();
+  renderRight(); renderToolbar(); renderLeft();
 }
 
 /* ---------- Zoom ---------- */
@@ -4027,7 +4589,7 @@ function findFreeSpot(pg, ww, hh) {
 function insertWidget(type, at, extra) {
   const pg = page();
   const ds = dsById(fieldsDsId) || App.p.datasets[0] || null;
-  const w = newWidget(type, ['text', 'image'].includes(type) ? null : ds, extra);
+  const w = newWidget(type, NO_DATA_VIZ.includes(type) ? null : ds, extra);
   if (ds && !extra) defaultFields(w, ds);
   if (type === 'text' && !w.text) w.text = '# Título\nEscribe aquí tu texto.';
   w.w = Math.min(w.w, pg.w - 32);
@@ -4074,7 +4636,7 @@ function dropFieldOnWidget(w, dsId, col) {
   const ds = dsById(dsId);
   const c = ds && colOf(ds, col);
   if (!c) return;
-  if (w.type === 'text' || w.type === 'image') return toast('Este visual no usa datos', 'info');
+  if (NO_DATA_VIZ.includes(w.type)) return toast('Este visual no usa datos', 'info');
   if (w.ds !== dsId) {
     mutate(() => { w.ds = dsId; w.cat = null; w.split = null; w.vals = []; });
   }
@@ -4258,7 +4820,7 @@ function gotoPage(i) {
   App.p.active = pg.id;
   App.sel = null;
   scheduleSave();
-  renderCanvas(); renderPages(); renderRight(); renderRibbon(); renderStatus();
+  renderCanvas(); renderPages(); renderRight(); renderToolbar(); renderStatus();
   $('#scroller').scrollTop = 0;
 }
 
@@ -4286,7 +4848,13 @@ function renderStatus() {
   if (App.p.datasets.length) st.appendChild(h('span', { text: `${App.p.datasets.length} origen(es) · ${fmtNum(n)} filas` }));
   if (App.p.filters.length) st.appendChild(h('span', { text: `${App.p.filters.length} filtro(s)` }));
   st.appendChild(h('span', { text: `${pg.widgets.length} visual(es)` }));
-  st.appendChild(h('span', { text: `Zoom ${Math.round(App.scale * 100)} %` }));
+  const zm = h('button', { class: 'icon-btn', type: 'button', title: 'Reducir zoom', 'aria-label': 'Reducir zoom' }, icon('minus', 13));
+  const zp = h('button', { class: 'icon-btn', type: 'button', title: 'Aumentar zoom', 'aria-label': 'Aumentar zoom' }, icon('plus', 13));
+  const zf = h('button', { class: 'linklike', type: 'button', title: 'Ajustar a la ventana', text: `${Math.round(App.scale * 100)} %` });
+  zm.addEventListener('click', () => zoomBy(-1));
+  zp.addEventListener('click', () => zoomBy(1));
+  zf.addEventListener('click', () => setZoom('fit'));
+  st.appendChild(h('span', { class: 'zoom-status' }, zm, zf, zp));
   st.appendChild(h('span', { title: 'Sin conexiones de red' }, icon('lock', 13)));
 }
 
@@ -4299,7 +4867,7 @@ function setView(v) {
   document.body.classList.toggle('mode-presenter', v === 'presenter');
   if (v === 'editor' && document.fullscreenElement) document.exitFullscreen().catch(() => {});
   Tip.hide(); closeMenu();
-  renderTopbar(); renderRibbon(); renderLeft(); renderRight(); renderPages();
+  renderTopbar(); renderToolbar(); renderLeft(); renderRight(); renderPages();
   requestAnimationFrame(() => renderCanvas());
 }
 function toggleFullscreen() {
@@ -4348,7 +4916,7 @@ async function handleImport(file) {
     App.p.active = newPages[0] ? newPages[0].id : App.p.pages[0].id;
     App.sel = null;
   });
-  if (mode === 'replace') { App.hist = []; renderRibbon(); }
+  if (mode === 'replace') { App.hist = []; renderToolbar(); }
   const t0 = use[0];
   const notes = [];
   notes.push(t0.info.hasHeader ? 'títulos de columna detectados' : 'sin títulos de columna (se han nombrado automáticamente)');
@@ -4395,7 +4963,7 @@ function loadSample() {
     App.sel = null;
   });
   const hasContent = App.p.datasets.length || App.p.pages.some(p => p.widgets.length);
-  if (!hasContent) { run(); App.hist = []; renderRibbon(); return; }
+  if (!hasContent) { run(); App.hist = []; renderToolbar(); return; }
   confirmDialog('Cargar datos de ejemplo', 'Se reemplazará el dashboard actual por uno de ejemplo. Podrás deshacerlo con Ctrl+Z.', 'Cargar ejemplo').then(ok => { if (ok) run(); });
 }
 async function autoLayoutCurrent(dsId) {
@@ -4459,6 +5027,7 @@ function printDashboard() {
     frame.style.height = Math.round(pg.h * scale) + 'px';
     const pe = h('div', { class: 'page' });
     Object.assign(pe.style, { width: pg.w + 'px', height: pg.h + 'px', transform: `scale(${scale})` });
+    applyPageBg(pg, pe);
     pg.widgets.forEach((w, i) => pe.appendChild(widgetEl(w, i, { editable: false, print: true })));
     frame.appendChild(pe);
     wrap.append(head, frame);
@@ -4473,6 +5042,224 @@ window.addEventListener('afterprint', () => clear($('#printRoot')));
 function reportError(err) {
   if (err instanceof UserError) toast(err.message, 'error', 7000);
   else { console.error(err); toast('Se produjo un error inesperado. Revisa el archivo e inténtalo de nuevo.', 'error', 7000); }
+}
+
+/* ---- 06b-export.js ---- */
+/* ==========================================================================
+   Exportación del dashboard tal y como se ve en el Presentador:
+   PNG (imagen), SVG (vectorial) y PDF (una página por página del dashboard).
+   Sin librerías: el DOM se serializa dentro de un SVG (foreignObject), el
+   navegador lo dibuja en un canvas y el PDF se escribe a mano con las
+   imágenes JPEG incrustadas (DCTDecode).
+   ========================================================================== */
+
+const EXPORT_PAD = 24;
+
+/** Valores actuales de todas las variables CSS (tema + paleta). */
+function exportVars() {
+  const css = $('style').textContent;
+  const names = new Set(css.match(/--[a-z0-9-]+(?=\s*:)/gi) || []);
+  for (let i = 1; i <= 8; i++) names.add('--series-' + i);
+  for (const n of ['--brand-top', '--seg-on-bg', '--seg-on-fg']) names.add(n);
+  const cs = getComputedStyle(document.documentElement);
+  const out = [];
+  for (const n of names) { const v = cs.getPropertyValue(n).trim(); if (v) out.push([n, v]); }
+  return out;
+}
+
+/** Construye (fuera de pantalla) la página tal y como se ve en el Presentador. */
+function buildExportNode(pg, header) {
+  const root = h('div', { class: 'export-root' });
+  for (const [n, v] of exportVars()) root.style.setProperty(n, v);
+  Object.assign(root.style, {
+    position: 'fixed', left: '-100000px', top: '0', width: (pg.w + EXPORT_PAD * 2) + 'px', padding: EXPORT_PAD + 'px',
+    background: 'var(--canvas-bg)', fontFamily: 'var(--font)', fontSize: '13px', color: 'var(--text)', boxSizing: 'border-box'
+  });
+  if (header) {
+    const hd = h('div', { class: 'pres-header' }, presHeaderNodes(pg));
+    Object.assign(hd.style, { padding: '0 0 16px', background: 'transparent' });
+    root.appendChild(hd);
+  }
+  const frame = h('div');
+  Object.assign(frame.style, { position: 'relative', width: pg.w + 'px', height: pg.h + 'px' });
+  const pe = h('div', { class: 'page' });
+  Object.assign(pe.style, { width: pg.w + 'px', height: pg.h + 'px' });
+  applyPageBg(pg, pe);
+  pg.widgets.forEach((w, i) => pe.appendChild(widgetEl(w, i, { editable: false, print: true })));
+  frame.appendChild(pe);
+  root.appendChild(frame);
+  return root;
+}
+
+/** Serializa la página a un documento SVG autónomo (estilos incluidos). */
+function pageToSvg(pg, header, scale) {
+  const node = buildExportNode(pg, header);
+  document.body.appendChild(node);
+  const W = pg.w + EXPORT_PAD * 2;
+  const H = Math.ceil(node.getBoundingClientRect().height);
+  // El estado de casillas y campos es una propiedad: se copia a atributos para que se serialice
+  node.querySelectorAll('input').forEach(i => { if (i.checked) i.setAttribute('checked', ''); if (i.value) i.setAttribute('value', i.value); });
+  node.remove();
+  Object.assign(node.style, { position: 'static', left: '', top: '' });
+  node.insertBefore(h('style', { text: $('style').textContent }), node.firstChild);
+  const xml = new XMLSerializer().serializeToString(node);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.round(W * scale)}" height="${Math.round(H * scale)}" viewBox="0 0 ${W} ${H}">`
+    + `<foreignObject x="0" y="0" width="${W}" height="${H}">${xml}</foreignObject></svg>`;
+  return { svg, W, H };
+}
+
+/** Escala máxima segura para el canvas (límite de píxeles del navegador). */
+function safeScale(W, H, want) {
+  return Math.max(0.1, Math.min(want, 16000 / W, 16000 / H, Math.sqrt(40e6 / (W * H))));
+}
+
+async function rasterize(svg, wPx, hPx, bg) {
+  // URL data: (no blob:): en file:// un SVG blob con foreignObject «contamina» el canvas
+  const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  {
+    const img = new Image();
+    await new Promise((res, rej) => {
+      img.addEventListener('load', res, { once: true });
+      img.addEventListener('error', () => rej(new UserError('El navegador no pudo dibujar el dashboard como imagen. Prueba a exportar en SVG.')), { once: true });
+      img.src = url;
+    });
+    await new Promise(r => setTimeout(r, 40));
+    const cv = document.createElement('canvas');
+    cv.width = wPx; cv.height = hPx;
+    const cx = cv.getContext('2d');
+    cx.fillStyle = bg;
+    cx.fillRect(0, 0, wPx, hPx);
+    cx.drawImage(img, 0, 0, wPx, hPx);
+    return cv;
+  }
+}
+function canvasBlob(cv, type, q) {
+  return new Promise((res, rej) => {
+    try { cv.toBlob(b => (b ? res(b) : rej(new UserError('No se pudo generar la imagen.'))), type, q); }
+    catch { rej(new UserError('El navegador bloqueó la conversión a imagen. Exporta en SVG o usa Imprimir → Guardar como PDF.')); }
+  });
+}
+
+/* ---------- PDF mínimo (PDF 1.4, una imagen JPEG por página) ---------- */
+function pdfText(t) {
+  let hex = 'FEFF';
+  for (const ch of String(t)) {
+    const c = ch.codePointAt(0);
+    if (c > 0xffff) { const v = c - 0x10000; hex += (0xd800 + (v >> 10)).toString(16).padStart(4, '0') + (0xdc00 + (v & 0x3ff)).toString(16).padStart(4, '0'); }
+    else hex += c.toString(16).padStart(4, '0');
+  }
+  return '<' + hex.toUpperCase() + '>';
+}
+function buildPdf(pages, title) {
+  const enc = new TextEncoder();
+  const chunks = [], offs = [];
+  let len = 0;
+  const push = x => { const b = typeof x === 'string' ? enc.encode(x) : x; chunks.push(b); len += b.length; };
+  const obj = (n, body) => { offs[n] = len; push(`${n} 0 obj\n`); body(); push('\nendobj\n'); };
+  const d = new Date(), p2 = v => String(v).padStart(2, '0');
+  const stamp = `${d.getFullYear()}${p2(d.getMonth() + 1)}${p2(d.getDate())}${p2(d.getHours())}${p2(d.getMinutes())}${p2(d.getSeconds())}`;
+  push('%PDF-1.4\n');
+  push(new Uint8Array([0x25, 0xe2, 0xe3, 0xcf, 0xd3, 0x0a]));
+  const n = pages.length;
+  obj(1, () => push('<< /Type /Catalog /Pages 2 0 R >>'));
+  obj(2, () => push(`<< /Type /Pages /Count ${n} /Kids [${pages.map((_, i) => `${4 + 3 * i} 0 R`).join(' ')}] >>`));
+  obj(3, () => push(`<< /Title ${pdfText(title)} /Creator (4Dash) /Producer (4Dash) /CreationDate (D:${stamp}) >>`));
+  pages.forEach((p, i) => {
+    const P = 4 + 3 * i;
+    obj(P, () => push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${p.pw} ${p.ph}] /Resources << /XObject << /Im${i} ${P + 1} 0 R >> >> /Contents ${P + 2} 0 R >>`));
+    obj(P + 1, () => {
+      push(`<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.jpeg.length} >>\nstream\n`);
+      push(p.jpeg);
+      push('\nendstream');
+    });
+    const c = `q ${p.pw} 0 0 ${p.ph} 0 0 cm /Im${i} Do Q`;
+    obj(P + 2, () => push(`<< /Length ${c.length} >>\nstream\n${c}\nendstream`));
+  });
+  const size = 4 + 3 * n;
+  const xref = len;
+  push(`xref\n0 ${size}\n0000000000 65535 f \n`);
+  for (let k = 1; k < size; k++) push(String(offs[k]).padStart(10, '0') + ' 00000 n \n');
+  push(`trailer\n<< /Size ${size} /Root 1 0 R /Info 3 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  return new Blob(chunks, { type: 'application/pdf' });
+}
+
+/* ---------- Proceso de exportación ---------- */
+async function exportDashboard(opts) {
+  const pages = opts.pages === 'all' ? App.p.pages : [page()];
+  const prevTheme = document.documentElement.dataset.theme;
+  const theme = opts.theme === 'current' ? prevTheme : opts.theme;
+  const base = safeFileName(App.p.title || 'dashboard');
+  const busy = toast('Exportando…', 'info', 120000);
+  const pdfPages = [];
+  try {
+    if (theme !== prevTheme) { document.documentElement.dataset.theme = theme; applyPalette(); }
+    const docs = pages.map(pg => ({ pg, ...pageToSvg(pg, opts.header, 1) }));
+    if (theme !== prevTheme) { document.documentElement.dataset.theme = prevTheme; applyPalette(); }
+    const bg = theme === 'dark' ? '#0e1117' : '#ffffff';
+    for (const d of docs) {
+      const name = pages.length > 1 ? `${base} - ${d.pg.name}` : base;
+      if (opts.fmt === 'svg') { downloadFile(name + '.svg', 'image/svg+xml', d.svg); continue; }
+      const sc = safeScale(d.W, d.H, opts.scale);
+      const wPx = Math.round(d.W * sc), hPx = Math.round(d.H * sc);
+      const svg = d.svg.replace(/^<svg([^>]*?) width="\d+" height="\d+"/, `<svg$1 width="${wPx}" height="${hPx}"`);
+      const cv = await rasterize(svg, wPx, hPx, bg);
+      if (opts.fmt === 'png') { downloadFile(name + '.png', 'image/png', await canvasBlob(cv, 'image/png')); await new Promise(r => setTimeout(r, 250)); }
+      else {
+        const jpeg = new Uint8Array(await (await canvasBlob(cv, 'image/jpeg', 0.92)).arrayBuffer());
+        pdfPages.push({ jpeg, w: wPx, h: hPx, pw: +(d.W * 0.75).toFixed(2), ph: +(d.H * 0.75).toFixed(2) });
+      }
+    }
+    if (opts.fmt === 'pdf') downloadFile(base + '.pdf', 'application/pdf', buildPdf(pdfPages, App.p.title || 'Dashboard'));
+    busy.remove();
+    toast(`Exportado: ${pages.length} página(s) en ${opts.fmt.toUpperCase()}`, 'ok');
+  } catch (err) {
+    if (document.documentElement.dataset.theme !== prevTheme) { document.documentElement.dataset.theme = prevTheme; applyPalette(); }
+    busy.remove();
+    reportError(err);
+  }
+}
+
+const exportPrefs = { fmt: 'png', pages: 'current', scale: 2, header: true, theme: 'current' };
+function openExportDialog() {
+  const o = exportPrefs;
+  const body = h('div', { class: 'modal-body export-opts' });
+  const go = h('button', { class: 'btn primary', type: 'button' }, icon('export', 16), 'Exportar');
+  const cancel = h('button', { class: 'btn', type: 'button', text: 'Cancelar' });
+  const m = openModal({ title: 'Exportar dashboard', labelledIcon: 'export', body, foot: h('div', { class: 'modal-foot' }, h('span', { class: 'grow hint', text: 'Se exporta tal y como se ve en la vista Presentador, con los filtros activos.' }), cancel, go) });
+  cancel.addEventListener('click', () => m.close());
+  go.addEventListener('click', () => { m.close(); exportDashboard(Object.assign({}, o)); });
+  let previewUrl = null;
+  const draw = () => {
+    clear(body);
+    body.appendChild(formRow('Formato', segEl([['png', 'PNG · imagen'], ['pdf', 'PDF'], ['svg', 'SVG · vectorial']], o.fmt, v => { o.fmt = v; draw(); }, 'Formato')));
+    body.appendChild(h('div', { class: 'form-inline' },
+      formRow('Páginas', selectEl([['current', 'Página actual'], ['all', `Todas (${App.p.pages.length})`]], o.pages, v => { o.pages = v; })),
+      formRow('Resolución', selectEl([['1', 'Normal (1×)'], ['2', 'Alta (2×)'], ['3', 'Muy alta (3×)']], String(o.scale), v => { o.scale = +v || 2; })),
+      formRow('Tema', selectEl([['current', 'El actual'], ['light', 'Claro'], ['dark', 'Oscuro']], o.theme, v => { o.theme = v; draw(); }))));
+    body.appendChild(checkEl('Incluir cabecera (logo, título, página y fecha)', o.header, v => { o.header = v; draw(); }));
+    if (o.fmt === 'svg') body.appendChild(h('p', { class: 'hint', text: 'El SVG conserva textos y gráficos nítidos a cualquier tamaño; se abre en cualquier navegador.' }));
+    if (o.fmt === 'pdf') body.appendChild(h('p', { class: 'hint', text: 'Un PDF con una hoja por página del dashboard, del mismo tamaño y proporción que el lienzo.' }));
+    const img = h('img', { class: 'export-preview', alt: 'Vista previa de la página actual' });
+    body.appendChild(h('div', { class: 'section-title', text: 'Vista previa' }), img);
+    // Miniatura de la página actual (también comprueba que el navegador admite la exportación)
+    requestAnimationFrame(async () => {
+      try {
+        const prevTheme = document.documentElement.dataset.theme;
+        const theme = o.theme === 'current' ? prevTheme : o.theme;
+        if (theme !== prevTheme) { document.documentElement.dataset.theme = theme; applyPalette(); }
+        const d = pageToSvg(page(), o.header, 1);
+        if (theme !== prevTheme) { document.documentElement.dataset.theme = prevTheme; applyPalette(); }
+        const sc = Math.min(1, 640 / d.W);
+        const cv = await rasterize(d.svg.replace(/^<svg([^>]*?) width="\d+" height="\d+"/, `<svg$1 width="${Math.round(d.W * sc)}" height="${Math.round(d.H * sc)}"`), Math.round(d.W * sc), Math.round(d.H * sc), theme === 'dark' ? '#0e1117' : '#ffffff');
+        const blob = await canvasBlob(cv, 'image/png');
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        previewUrl = URL.createObjectURL(blob);
+        img.src = previewUrl;
+      } catch { img.replaceWith(h('p', { class: 'hint', text: 'No se pudo generar la vista previa en este navegador; la exportación SVG sigue disponible.' })); }
+    });
+  };
+  draw();
+  return m;
 }
 
 /* ---- 07-dataeditor.js ---- */
@@ -4667,7 +5454,7 @@ function openDataEditor(dsId) {
     const tr = transposeDataset(ds);
     App.p.datasets.push(tr);
     scheduleSave();
-    renderLeft(); renderRight(); renderRibbon(); renderStatus();
+    renderLeft(); renderRight(); renderToolbar(); renderStatus();
     cur = tr; load(tr); drawAll();
     toast(`Nuevo origen creado: «${tr.name}». Úsalo con «Generar automático» o en cualquier visual.`, 'ok', 6000);
   }
@@ -4702,7 +5489,7 @@ function seriesFrom(lead, order) {
   return { light: [lead[0], ...order.map(i => HUES_L[i])], dark: [lead[1], ...order.map(i => HUES_D[i])] };
 }
 const PALETTES = {
-  default: { name: '4Dash (predeterminada)', topbar: '#252423', primary: '#0078d4', brand: '#f2c811', ...seriesFrom(['#2a78d6', '#3987e5'], [1, 2, 3, 4, 5, 6, 7]) },
+  default: { name: '4Dash (predeterminada)', topbar: '#1b2130', primary: '#3a5ccc', brand: '#ff8a5b', ...seriesFrom(['#2a78d6', '#3987e5'], [1, 2, 3, 4, 5, 6, 7]) },
   emerald: { name: 'Verde esmeralda', topbar: '#047857', primary: '#047857', brand: '#ffffff', ...seriesFrom(['#059669', '#10a37a'], [1, 0, 3, 4, 6, 7, 5]) },
   electric: { name: 'Azul eléctrico', topbar: '#0047ff', primary: '#0050e6', brand: '#ffffff', ...seriesFrom(['#0062ff', '#3b82ff'], [1, 2, 3, 4, 5, 6, 7]) },
   navy: { name: 'Corporativo marino', topbar: '#1f2a44', primary: '#2f5597', brand: '#d4a72c', ...seriesFrom(['#2f5597', '#4a74c9'], [1, 2, 3, 4, 6, 5, 7]) },
@@ -4790,7 +5577,7 @@ function applyPalette() {
   set('--brand', pal.brand);
   const top = dark ? mixHex(pal.topbar, '#000000', 0.35) : pal.topbar;
   set('--brand-top', contrast(pal.brand, top) >= 1.8 ? pal.brand : topFg);
-  const pane = dark ? '#252423' : '#ffffff';
+  const pane = dark ? '#1f2430' : '#ffffff';
   const primary = dark ? mixHex(pal.primary, '#ffffff', luminance(pal.primary) < 0.2 ? 0.3 : 0.1) : pal.primary;
   set('--primary', primary);
   set('--primary-hover', mixHex(primary, dark ? '#ffffff' : '#000000', 0.12));
@@ -4876,7 +5663,14 @@ function openPaletteDialog() {
     body.appendChild(grid);
 
     if (sel.id !== 'custom') {
-      body.appendChild(h('p', { class: 'hint', text: 'Las paletas incluidas están validadas para daltonismo y contraste en modo claro y oscuro. Elige «Personalizada» para usar los colores de tu marca (parte de la paleta seleccionada).' }));
+      const p = PALETTES[sel.id] || PALETTES.default;
+      const edit = h('button', { class: 'btn', type: 'button' }, icon('palette', 15), `Personalizar los colores de «${p.name}»`);
+      edit.addEventListener('click', () => {
+        draft = { topbar: p.topbar, primary: p.primary, brand: p.brand, series: p.light.slice() };
+        preview({ id: 'custom', custom: deepClone(draft) });
+      });
+      body.appendChild(h('div', { class: 'form-row' }, edit));
+      body.appendChild(h('p', { class: 'hint', text: 'Las paletas incluidas están validadas para daltonismo y contraste en modo claro y oscuro. Personalízala para elegir cualquier color con el selector (barra superior, color principal, acento y los 8 colores de los gráficos). Cada visual puede además tener sus propios colores en la pestaña Estilo.' }));
       return;
     }
     // Editor personalizado
@@ -4884,11 +5678,16 @@ function openPaletteDialog() {
     draft = deepClone(c);
     const update = () => preview({ id: 'custom', custom: deepClone(draft) });
     const colorField = (label, get, setv) => {
-      const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': label });
+      const inp = h('input', { type: 'color', class: 'color-inp', 'aria-label': label, title: 'Elegir cualquier color' });
       inp.value = get();
       const hex = h('input', { class: 'inp hex-inp', maxlength: 7, 'aria-label': label + ' (hex)', spellcheck: 'false' });
       hex.value = get();
-      inp.addEventListener('input', () => { hex.value = inp.value; setv(inp.value); });
+      // Vista previa en vivo mientras se arrastra en el selector (limitada a un fotograma)
+      let raf = 0;
+      inp.addEventListener('input', () => {
+        hex.value = inp.value; setv(inp.value);
+        if (!raf) raf = requestAnimationFrame(() => { raf = 0; App.p.palette = { id: 'custom', custom: deepClone(draft) }; applyPalette(); });
+      });
       inp.addEventListener('change', update);
       hex.addEventListener('change', () => {
         const v = hex.value.trim().startsWith('#') ? hex.value.trim() : '#' + hex.value.trim();
@@ -4930,7 +5729,7 @@ function openPaletteDialog() {
    ========================================================================== */
 
 function renderAll() {
-  renderTopbar(); renderRibbon(); renderLeft(); renderRight(); renderPages(); renderFilterBar(); renderCanvas(); renderStatus(); renderSaveState();
+  renderTopbar(); renderToolbar(); renderLeft(); renderRight(); renderPages(); renderFilterBar(); renderCanvas(); renderStatus(); renderSaveState();
 }
 const isTyping = t => t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
 
@@ -4978,6 +5777,7 @@ function bindEvents() {
     const inside = at.x >= 0 && at.y >= 0 && at.x <= page().w && at.y <= page().h;
     if (hasFiles(e)) { const f = e.dataTransfer.files[0]; if (f) handleImport(f); return; }
     const viz = e.dataTransfer.getData('application/x-4dash-viz');
+    if (viz === 'shape') return insertShape('round', inside ? at : null);
     if (viz && VIZ[viz]) return insertWidget(viz, inside ? at : null);
     const field = e.dataTransfer.getData('application/x-4dash-field');
     if (field) { try { const f = safeJsonParse(field); createFromField(f.ds, String(f.col), inside ? at : null); } catch { /* ignorar */ } }
@@ -4990,6 +5790,20 @@ function bindEvents() {
   $('#scroller').addEventListener('pointerdown', e => {
     if (App.view === 'editor' && (e.target.id === 'page' || e.target.id === 'scroller' || e.target.id === 'pageFrame') && App.sel) select(null);
   });
+
+  // Ctrl + rueda sobre el lienzo: zoom del lienzo (no el del navegador)
+  $('#scroller').addEventListener('wheel', e => {
+    if (!(e.ctrlKey || e.metaKey)) return;
+    e.preventDefault();
+    zoomBy(e.deltaY < 0 ? 1 : -1);
+  }, { passive: false });
+  // Rueda vertical sobre la barra de herramientas: desplazamiento horizontal
+  $('#toolbar').addEventListener('wheel', e => {
+    const tb = e.currentTarget;
+    if (tb.scrollWidth <= tb.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    tb.scrollLeft += e.deltaY;
+  }, { passive: false });
 
   let zoomRaf = 0;
   new ResizeObserver(() => { cancelAnimationFrame(zoomRaf); zoomRaf = requestAnimationFrame(applyZoom); }).observe($('#scroller'));
@@ -5016,8 +5830,9 @@ function onKey(e) {
   if (k === 'F1') { e.preventDefault(); openTutorial(); return; }
   if (k === 'F5') { e.preventDefault(); setView(App.view === 'editor' ? 'presenter' : 'editor'); return; }
   if (ctrl && k.toLowerCase() === 's') { e.preventDefault(); saveProjectFile(); return; }
-  if (ctrl && k.toLowerCase() === 'o') { e.preventDefault(); $('#projectInput').value = ''; $('#projectInput').click(); return; }
+  if (ctrl && k.toLowerCase() === 'o') { e.preventDefault(); openProjectPicker(); return; }
   if (ctrl && k.toLowerCase() === 'p') { e.preventDefault(); printDashboard(); return; }
+  if (ctrl && k.toLowerCase() === 'e') { e.preventDefault(); openExportDialog(); return; }
   if (isTyping(e.target)) return;
   if (App.view === 'presenter') {
     const idx = App.p.pages.findIndex(p => p.id === App.p.active);

@@ -1,0 +1,74 @@
+Licencia 4Dash, versión 1.0 (uso libre con atribución obligatoria para uso comercial)
+
+Copyright (c) 2026 Vex62 (https://github.com/Vex62)
+
+El presente documento regula el uso de 4Dash (el «Software»): el código fuente,
+el archivo compilado dist/4dash.html, la documentación y los archivos de ejemplo
+de este repositorio.
+
+1. USO NO COMERCIAL
+   Se concede, de forma gratuita, permiso para usar, copiar, modificar, fusionar,
+   publicar y distribuir el Software con fines personales, educativos, de
+   investigación o sin ánimo de lucro, siempre que se conserve este aviso de
+   copyright y de licencia en todas las copias o partes sustanciales.
+
+2. USO COMERCIAL: SOLO CON ATRIBUCIÓN CLARA AL AUTOR
+   Se permite el uso comercial del Software (uso dentro de una empresa, en
+   servicios prestados a clientes, en productos o servicios de pago, o para
+   generar dashboards, informes o materiales entregados a cambio de una
+   contraprestación) ÚNICAMENTE si se cumplen todas estas condiciones:
+
+   a) Se cita de forma clara, visible y legible al autor con un texto
+      equivalente a:
+         «Creado con 4Dash — © Vex62 (github.com/Vex62/4dash)»
+      en un lugar razonablemente visible para los destinatarios: en el propio
+      producto o servicio (pantalla de «Acerca de», pie, créditos), en su
+      documentación, o en los dashboards, informes o archivos exportados que se
+      entreguen a terceros (por ejemplo en la portada, el pie o una nota adjunta).
+   b) No se eliminan, ocultan ni alteran los avisos de autoría y licencia
+      incluidos en el Software (cabecera del código, ayuda de la herramienta,
+      este archivo y THIRD_PARTY_NOTICES.md).
+   c) No se presenta el Software, ni una versión modificada, como obra propia
+      o de otra persona, ni se sugiere que el autor respalda el producto o
+      servicio del licenciatario sin su consentimiento por escrito.
+
+3. OBRAS DERIVADAS
+   Las versiones modificadas deben: conservar esta licencia y los avisos de
+   autoría, indicar de forma visible que han sido modificadas, y quedan sujetas
+   a las mismas condiciones de las cláusulas 1 y 2.
+
+4. COMPONENTES DE TERCEROS
+   Algunas partes del Software (parte de los trazos de los iconos) proceden de
+   proyectos de terceros con licencias permisivas propias (MIT, ISC). Esas
+   partes siguen rigiéndose por sus licencias, que se reproducen en
+   THIRD_PARTY_NOTICES.md y deben conservarse.
+
+5. RESOLUCIÓN
+   El incumplimiento de cualquiera de estas condiciones extingue automáticamente
+   los permisos concedidos. Los permisos se restablecen si el incumplimiento se
+   corrige en un plazo de 30 días desde que se tenga conocimiento de él.
+
+6. OTRAS LICENCIAS
+   Para usos comerciales sin atribución, o en condiciones distintas, contacte con
+   el autor a través de https://github.com/Vex62 para obtener una licencia
+   específica.
+
+7. SIN GARANTÍA
+   EL SOFTWARE SE PROPORCIONA «TAL CUAL», SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
+   IMPLÍCITA, INCLUIDAS, ENTRE OTRAS, LAS DE COMERCIABILIDAD, IDONEIDAD PARA UN
+   FIN DETERMINADO Y NO INFRACCIÓN. EN NINGÚN CASO EL AUTOR SERÁ RESPONSABLE DE
+   RECLAMACIONES, DAÑOS U OTRAS RESPONSABILIDADES DERIVADAS DEL SOFTWARE O DE SU
+   USO.
+
+-------------------------------------------------------------------------------
+English summary (the Spanish text above prevails)
+
+4Dash License 1.0 — Copyright (c) 2026 Vex62. Non-commercial use, copying,
+modification and distribution are free as long as this notice is kept.
+Commercial use is permitted ONLY with clear, visible attribution to the author
+("Made with 4Dash — © Vex62 (github.com/Vex62/4dash)") in the product, its
+documentation or the deliverables given to third parties, without removing the
+author and license notices and without passing the software off as one's own.
+Derivative works must keep this license and state that they were modified.
+Third-party parts keep their own licenses (see THIRD_PARTY_NOTICES.md).
+Provided "as is", without warranty of any kind.
