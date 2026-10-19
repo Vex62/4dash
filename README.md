@@ -27,6 +27,42 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 | **Zoom y pantallas pequeñas** | La barra de herramientas es una sola fila que oculta textos de forma progresiva (queda el icono con su descripción); los grupos que no caben pasan, con su texto, al panel **«Más»**, de modo que ningún control se pierde (verificado de 100 % a 500 % de zoom). La barra superior conserva todos sus iconos. Con mucho zoom del navegador los paneles laterales se pliegan y se abren flotando sobre el lienzo, y la barra superior se compacta. |
 | **Accesibilidad** | Paleta categórica validada para daltonismo en claro y oscuro, colores estables por entidad, leyenda siempre con ≥ 2 series, iconos + texto en deltas, navegación por teclado, `prefers-reduced-motion`. |
 
+## Novedades de la v1.3: columnas condicionales
+
+Crea columnas nuevas interpretando los datos cargados, sin fórmulas: por ejemplo, clasificar cada fila según si su fecha
+supera un valor o cae entre dos fechas.
+
+1. Abre **Ver / editar datos** y pulsa **Columna condicional**.
+2. Escribe el nombre de la columna y elige el tipo de resultado (texto, número o fecha).
+3. Define las reglas. Cada una tiene una o varias condiciones, unidas con **Y** (todas) u **O** (alguna), y un resultado.
+   Las reglas se comprueban en orden: cada fila toma el resultado de la **primera** que cumple y, si no cumple ninguna,
+   el de **«En otro caso»**.
+4. Revisa la **vista previa** (filas que cumple cada regla y una muestra) y pulsa **Crear columna** y después
+   **Aplicar cambios**. La columna aparece en el panel de campos y se usa como cualquier otra en visuales y filtros.
+
+| Tipo de columna | Operadores |
+|---|---|
+| Fecha | es el día, no es el día, posterior a, igual o posterior a, anterior a, igual o anterior a, entre (incluidas), no entre, del año, del mes, en los últimos N días, anterior a hoy, posterior a hoy |
+| Número | =, ≠, >, ≥, <, ≤, entre (incluidos), no entre |
+| Texto | es igual a, no es igual a, contiene, no contiene, empieza por, termina en, es uno de (`Norte; Sur`); sin distinguir mayúsculas ni acentos |
+| Todas | está vacío, no está vacío |
+
+Cada valor de comparación puede ser fijo u **otra columna**, y el resultado puede ser un valor fijo, el valor de otra
+columna o vacío. Ejemplos:
+
+| Nueva columna | Regla | Resultado | En otro caso |
+|---|---|---|---|
+| Temporada | `Fecha` está entre 01/03/2025 y 31/05/2025 **Y** `Ventas (€)` es mayor que 3.000 | `Primavera` | `Resto` |
+| Estado de entrega | `Fecha entrega` es posterior a la columna `Fecha prevista` | `Con retraso` | `A tiempo` |
+| Reciente | `Fecha` está en los últimos 30 días | `Sí` | `No` |
+| Zona | `Región` es uno de `Norte; Sur` | columna `Canal` | (vacío) |
+
+Las celdas calculadas son de solo lectura y se recalculan al editar los datos y al abrir el proyecto, así que
+«últimos N días» y «hoy» usan siempre la fecha actual. Al renombrar una columna, las reglas que la usan se actualizan
+solas, y no se puede eliminar una columna mientras alguna regla la use. Una columna condicional puede usar otra creada
+antes que ella. Las reglas se interpretan, nunca se ejecutan como código: ver la sección «Revisión de la versión 1.3»
+de [SECURITY.md](SECURITY.md).
+
 ## Estructura del proyecto
 
 ```
@@ -98,6 +134,7 @@ navegador bloqueará el script. Edita `src/` y vuelve a compilar.
 
 30 MB por archivo, 100.000 filas y 300 columnas por hoja, 30 hojas, 3 millones de celdas. Los `.xls` antiguos (binarios)
 no están soportados: guárdalos como `.xlsx` o CSV. Las fórmulas se leen por su último valor calculado.
+Columnas condicionales: hasta 40 por origen de datos, 30 reglas por columna y 10 condiciones por regla.
 
 ## Licencia
 
