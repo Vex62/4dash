@@ -159,7 +159,8 @@ function sanitizeDataset(d) {
   const columns = d.columns.slice(0, LIMITS.cols).map((c, j) => ({
     name: str(c && c.name, 80, `Columna ${j + 1}`) || `Columna ${j + 1}`,
     type: oneOf(c && c.type, ['text', 'number', 'date'], 'text'),
-    role: oneOf(c && c.role, ['id', 'year', null], null)
+    role: oneOf(c && c.role, ['id', 'year', null], null),
+    ...(c && ID_RE.test(c.calc) ? { calc: c.calc } : null)
   }));
   const names = new Set();
   columns.forEach((c, j) => { while (names.has(c.name)) c.name = `${c.name} (${j + 1})`; names.add(c.name); });
@@ -175,11 +176,16 @@ function sanitizeDataset(d) {
     }));
   }
   const info = d.info && typeof d.info === 'object' ? d.info : {};
-  return {
+  const ds = {
     id: ID_RE.test(d.id) ? d.id : uid(), name: str(d.name, 80, 'Datos') || 'Datos', columns, rows,
     info: { hasHeader: bool(info.hasHeader, true), rowTitles: bool(info.rowTitles, false), periodHeaders: bool(info.periodHeaders, false), title: info.title ? str(info.title, 200) : null },
+    calc: sanitizeCalc(d.calc),
     v: 1
   };
+  // Las columnas condicionales se recalculan siempre a partir de sus reglas (y de la fecha de hoy)
+  ds.calc = ds.calc.filter(def => !columns.some(c => c.name === def.name && c.calc !== def.id));
+  applyCalcColumns(ds);
+  return ds;
 }
 function sanitizeWidget(w) {
   if (!w || typeof w !== 'object' || !VIZ[w.type]) return null;
@@ -276,7 +282,7 @@ const TUTORIAL = [
   { icon: 'edit', title: '3. Configura cada visual', text: ['Selecciona un visual y usa el panel «Propiedades» de la derecha:'],
     list: ['Datos: origen, eje, leyenda, valores, agregación (suma, promedio…), agrupación de fechas, orden y Top N.', 'Formato: título, formato numérico y moneda, etiquetas, leyenda, color, objetivo del KPI…',
       'Estilo: relleno sólido o degradado, borde (grosor, color, trazo), esquinas, sombras, tipografía, grosor de líneas y colores libres con el selector de color.',
-      'Paleta de colores (icono de paleta): elige una paleta incluida o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
+      'Paleta de colores (icono de paleta): elige una paleta incluida o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas, cambiar tipos y crear columnas condicionales («Si la fecha es posterior a…, entonces…»).'] },
   { icon: 'filter', title: '4. Filtra e interactúa', text: ['Los visuales están conectados entre sí (filtrado cruzado):'],
     list: ['Haz clic en una barra, sector o fila para filtrar el resto de la página. Ctrl+clic suma selecciones.', 'En el Editor, el primer clic selecciona el visual y el segundo filtra.', 'Los selectores de filtro filtran todos los visuales del mismo origen.', 'Los filtros activos aparecen sobre el lienzo; pulsa × para quitarlos.'] },
   { icon: 'monitor', title: '5. Presenta', text: ['Cambia a «Presentador» en la barra superior.'],

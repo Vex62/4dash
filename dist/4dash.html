@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ppeVFiuOhpEQjankg9nGr1HUN0GfkH05vEgns4ucbrQ='; style-src 'sha256-ewAD2WeSmKhpD2tAOv2aSMjfKcLdbgw+tSKrTl5yIdA='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-bS6iD+jH2LaBv65ae00/kpEZCrlQRkUHfkIYkDHpyQU='; style-src 'sha256-mzVdhehyzRDavVy83PTaPHxijkV0QJ/CVJ7gvhtoGy0='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
-<meta name="generator" content="4Dash 1.2.1">
+<meta name="generator" content="4Dash 1.3.0">
 <meta name="author" content="Vex62">
 <title>4Dash</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b2130'/%3E%3Crect x='5' y='5' width='13' height='13' rx='3.5' fill='%23ff8a5b'/%3E%3Crect x='20' y='5' width='7' height='13' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='5' y='20' width='7' height='7' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='14' y='20' width='13' height='7' rx='2.5' fill='%23ff8a5b' opacity='.8'/%3E%3C/svg%3E">
@@ -732,6 +732,39 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 .dv-del { border: 0; background: transparent; color: var(--text-3); padding: 0 4px; }
 .dv-del:hover { color: var(--danger); }
 .pager { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); }
+.dv input.cell.calc { background: var(--primary-soft); color: var(--text); cursor: default; width: 100%; min-width: 140px; }
+.dv .colhead .btn.dv-calc { min-height: 0; padding: 2px 6px; font-size: 12px; gap: 4px; flex: 1; justify-content: center; color: var(--primary); }
+
+/* Columnas condicionales */
+.calc-modal { max-width: 920px; }
+.calc-head > .form-row:first-child { flex: 2; }
+.calc-rule { border: 1px solid var(--border); border-left: 3px solid var(--primary); border-radius: 4px; padding: 8px 10px 10px; margin: 0 0 10px; background: var(--pane-head); }
+.calc-rule-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.calc-rule-head .sel { width: auto; }
+.calc-rule-head .grow { flex: 1; }
+.calc-badge { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--primary); background: var(--primary-soft); border-radius: 3px; padding: 2px 6px; white-space: nowrap; }
+.calc-badge.then { color: var(--good-text); background: rgba(12, 163, 12, .12); }
+.calc-conds { display: flex; flex-direction: column; gap: 6px; }
+.calc-cond { display: flex; align-items: center; gap: 6px; }
+.calc-join { flex: none; width: 18px; font-size: 11px; font-weight: 700; color: var(--text-3); text-align: center; }
+.calc-cond-fields { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.calc-cond-fields > .sel, .calc-cond-fields > .inp, .calc-then > .sel, .calc-then > .inp { width: auto; flex: 1 1 120px; min-width: 0; }
+.calc-cond-fields > .sel:nth-child(2) { flex-basis: 170px; }
+.calc-cond-fields > .lbl { flex: none; }
+.calc-cond-fields > .sel.calc-src, .calc-then > .sel.calc-src { flex: 0 1 112px; }
+.calc-then > .sel.calc-src { flex-basis: 160px; }
+.btn.subtle { border-color: transparent; background: transparent; color: var(--primary); margin: 6px 0 0 24px; padding: 3px 8px; min-height: 26px; }
+.btn.subtle:hover { background: var(--primary-soft); }
+.calc-then { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+.calc-other { border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; margin: 10px 0; }
+.calc-counts { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--text-2); }
+.calc-sample-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 3px; }
+.calc-sample { border-collapse: collapse; font-size: 12px; width: 100%; font-variant-numeric: tabular-nums; }
+.calc-sample th, .calc-sample td { padding: 4px 8px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
+.calc-sample th { background: var(--pane-head); font-weight: 600; }
+.calc-sample .res { background: var(--primary-soft); font-weight: 600; }
+.sel.invalid, .inp.invalid { border-color: var(--danger); background: var(--danger-soft); }
+@media (max-width: 700px) { .calc-head { flex-direction: column; gap: 0; } }
 
 /* Impresión */
 #printRoot { display: none; }
@@ -881,7 +914,7 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 <input type="file" id="fileInput" class="hidden" accept=".xlsx,.xlsm,.csv,.tsv,.txt">
 <input type="file" id="projectInput" class="hidden" accept=".json,.4dash">
 <input type="file" id="imageInput" class="hidden" accept="image/png,image/jpeg,image/webp,image/gif">
-<script>/*! 4Dash v1.2.1 — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */
+<script>/*! 4Dash v1.3.0 — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */
 (() => {
 'use strict';
 /* ---- 01-util.js ---- */
@@ -982,6 +1015,8 @@ const ICONS = {
   chevL: 'M15 18l-6-6 6-6',
   chevR: 'M9 18l6-6-6-6',
   chevD: 'M6 9l6 6 6-6',
+  chevU: 'M18 15l-6-6-6 6',
+  branch: 'M6 3v12|M18 9a3 3 0 1 0 0-6a3 3 0 1 0 0 6z|M6 21a3 3 0 1 0 0-6a3 3 0 1 0 0 6z|M18 9a9 9 0 0 1-9 9',
   close: 'M18 6L6 18|M6 6l12 12',
   eye: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z|M12 15a3 3 0 1 0 0-6a3 3 0 1 0 0 6z',
   edit: 'M12 20h9|M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z',
@@ -3287,7 +3322,8 @@ function sanitizeDataset(d) {
   const columns = d.columns.slice(0, LIMITS.cols).map((c, j) => ({
     name: str(c && c.name, 80, `Columna ${j + 1}`) || `Columna ${j + 1}`,
     type: oneOf(c && c.type, ['text', 'number', 'date'], 'text'),
-    role: oneOf(c && c.role, ['id', 'year', null], null)
+    role: oneOf(c && c.role, ['id', 'year', null], null),
+    ...(c && ID_RE.test(c.calc) ? { calc: c.calc } : null)
   }));
   const names = new Set();
   columns.forEach((c, j) => { while (names.has(c.name)) c.name = `${c.name} (${j + 1})`; names.add(c.name); });
@@ -3303,11 +3339,16 @@ function sanitizeDataset(d) {
     }));
   }
   const info = d.info && typeof d.info === 'object' ? d.info : {};
-  return {
+  const ds = {
     id: ID_RE.test(d.id) ? d.id : uid(), name: str(d.name, 80, 'Datos') || 'Datos', columns, rows,
     info: { hasHeader: bool(info.hasHeader, true), rowTitles: bool(info.rowTitles, false), periodHeaders: bool(info.periodHeaders, false), title: info.title ? str(info.title, 200) : null },
+    calc: sanitizeCalc(d.calc),
     v: 1
   };
+  // Las columnas condicionales se recalculan siempre a partir de sus reglas (y de la fecha de hoy)
+  ds.calc = ds.calc.filter(def => !columns.some(c => c.name === def.name && c.calc !== def.id));
+  applyCalcColumns(ds);
+  return ds;
 }
 function sanitizeWidget(w) {
   if (!w || typeof w !== 'object' || !VIZ[w.type]) return null;
@@ -3404,7 +3445,7 @@ const TUTORIAL = [
   { icon: 'edit', title: '3. Configura cada visual', text: ['Selecciona un visual y usa el panel «Propiedades» de la derecha:'],
     list: ['Datos: origen, eje, leyenda, valores, agregación (suma, promedio…), agrupación de fechas, orden y Top N.', 'Formato: título, formato numérico y moneda, etiquetas, leyenda, color, objetivo del KPI…',
       'Estilo: relleno sólido o degradado, borde (grosor, color, trazo), esquinas, sombras, tipografía, grosor de líneas y colores libres con el selector de color.',
-      'Paleta de colores (icono de paleta): elige una paleta incluida o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas y cambiar tipos.'] },
+      'Paleta de colores (icono de paleta): elige una paleta incluida o crea la tuya con el selector de color.', 'Con un visual seleccionado, haz clic en otro tipo de la galería para cambiarlo.', '«Ver datos» (menú ⋯ del editor) permite editar celdas, renombrar columnas, cambiar tipos y crear columnas condicionales («Si la fecha es posterior a…, entonces…»).'] },
   { icon: 'filter', title: '4. Filtra e interactúa', text: ['Los visuales están conectados entre sí (filtrado cruzado):'],
     list: ['Haz clic en una barra, sector o fila para filtrar el resto de la página. Ctrl+clic suma selecciones.', 'En el Editor, el primer clic selecciona el visual y el segundo filtra.', 'Los selectores de filtro filtran todos los visuales del mismo origen.', 'Los filtros activos aparecen sobre el lienzo; pulsa × para quitarlos.'] },
   { icon: 'monitor', title: '5. Presenta', text: ['Cambia a «Presentador» en la barra superior.'],
@@ -3961,8 +4002,8 @@ function renderLeft() {
   const used = new Set(w && w.ds === ds.id ? [w.cat, w.split, ...w.vals] : []);
   const list = h('ul', { class: 'field-list', 'aria-label': 'Campos de ' + ds.name });
   for (const c of ds.columns) {
-    const li = h('li', { class: 'field' + (used.has(c.name) ? ' used' : ''), draggable: 'true', tabindex: 0, title: `${c.name} (${typeLabel(c)}) — arrastra a un visual o al lienzo` },
-      icon(c.type === 'number' ? 'hash' : c.type === 'date' ? 'calendar' : 'abc', 15),
+    const li = h('li', { class: 'field' + (used.has(c.name) ? ' used' : ''), draggable: 'true', tabindex: 0, title: `${c.name} (${typeLabel(c)}${c.calc ? ', columna condicional' : ''}) — arrastra a un visual o al lienzo` },
+      icon(c.calc ? 'branch' : c.type === 'number' ? 'hash' : c.type === 'date' ? 'calendar' : 'abc', 15),
       h('span', { class: 'fname', text: c.name }), h('span', { class: 'ftype', text: typeLabel(c) }));
     li.addEventListener('dragstart', e => { e.dataTransfer.setData('application/x-4dash-field', JSON.stringify({ ds: ds.id, col: c.name })); e.dataTransfer.effectAllowed = 'copy'; });
     const act = () => { const cur = selW(); if (cur) dropFieldOnWidget(cur, ds.id, c.name); else createFromField(ds.id, c.name, null); };
@@ -5397,7 +5438,7 @@ function openDataEditor(dsId) {
   let work = null, pageNo = 0, query = '', dirty = false;
   const PER = 100;
   const load = ds => {
-    work = { id: ds.id, name: ds.name, info: ds.info, columns: ds.columns.map(c => ({ name: c.name, type: c.type, role: c.role, orig: c.name })), rows: ds.rows.map(r => r.slice()) };
+    work = { id: ds.id, name: ds.name, info: ds.info, columns: ds.columns.map(c => ({ name: c.name, type: c.type, role: c.role, orig: c.name, calc: c.calc })), rows: ds.rows.map(r => r.slice()), calc: deepClone(ds.calc || []) };
     pageNo = 0; query = ''; dirty = false;
   };
   load(cur);
@@ -5434,7 +5475,7 @@ function openDataEditor(dsId) {
     search.style.width = '220px';
     const btn = (ic, label, fn, cls = '') => { const b = h('button', { class: 'btn ' + cls, type: 'button' }, icon(ic, 15), label); b.addEventListener('click', fn); return b; };
     toolbar.append(name,
-      btn('plus', 'Fila', () => { work.rows.push(work.columns.map(() => null)); pageNo = Math.floor((work.rows.length - 1) / PER); markDirty(); drawGrid(); }),
+      btn('plus', 'Fila', () => { const r = work.columns.map(() => null); work.rows.push(r); applyCalcColumns(work, [r]); pageNo = Math.floor((work.rows.length - 1) / PER); markDirty(); drawGrid(); }),
       btn('plus', 'Columna', () => {
         let n = 'Nueva columna', k = 1;
         while (work.columns.some(c => c.name === n)) n = `Nueva columna ${++k}`;
@@ -5442,6 +5483,7 @@ function openDataEditor(dsId) {
         work.rows.forEach(r => r.push(null));
         markDirty(); drawGrid();
       }),
+      btn('branch', 'Columna condicional', () => editCalc(null)),
       btn('swap', 'Transponer', transpose),
       btn('download', 'CSV', () => downloadFile(`${work.name}.csv`, 'text/csv;charset=utf-8', toCsv(work.columns.map(c => c.name), work.rows))),
       btn('trash', 'Eliminar origen', deleteDs, 'danger'),
@@ -5468,16 +5510,30 @@ function openDataEditor(dsId) {
         if (!t) return;
         if (work.columns.some((o, k) => k !== j && o.name === t)) { nm.classList.add('invalid'); return; }
         nm.classList.remove('invalid');
+        renameCalcRefs(work.calc, c.name, t);
+        const def = c.calc && work.calc.find(d => d.id === c.calc);
+        if (def) def.name = t;
         c.name = t; markDirty();
       }, { label: 'Nombre de columna', max: 80, change: true });
-      const tp = selectEl([['text', 'Texto'], ['number', 'Número'], ['date', 'Fecha']], c.type, v => {
-        c.type = v; c.role = null;
-        for (const r of work.rows) r[j] = convertValue(r[j], v);
-        markDirty(); drawGrid();
-      }, { label: 'Tipo de columna' });
+      let tp;
+      if (c.calc) {
+        // Columna condicional: su tipo y sus valores los deciden las reglas
+        tp = h('button', { class: 'btn dv-calc', type: 'button', title: 'Editar las reglas de esta columna condicional' }, icon('branch', 13), 'Reglas');
+        tp.addEventListener('click', () => editCalc(c.calc));
+      } else {
+        tp = selectEl([['text', 'Texto'], ['number', 'Número'], ['date', 'Fecha']], c.type, v => {
+          c.type = v; c.role = null;
+          for (const r of work.rows) r[j] = convertValue(r[j], v);
+          applyCalcColumns(work);
+          markDirty(); drawGrid();
+        }, { label: 'Tipo de columna' });
+      }
       const del = h('button', { class: 'dv-del', type: 'button', title: 'Eliminar columna', 'aria-label': 'Eliminar columna ' + c.name }, icon('trash', 13));
       del.addEventListener('click', () => {
         if (work.columns.length <= 1) return toast('El origen debe tener al menos una columna');
+        const users = calcUsersOf(work.calc, c.name, c.calc);
+        if (users.length) return toast(`No se puede eliminar «${c.name}»: la usa la columna condicional «${users.join('», «')}». Edita o elimina antes sus reglas.`, 'error', 6000);
+        if (c.calc) work.calc = work.calc.filter(d => d.id !== c.calc);
         work.columns.splice(j, 1);
         work.rows.forEach(r => r.splice(j, 1));
         markDirty(); drawGrid();
@@ -5491,14 +5547,18 @@ function openDataEditor(dsId) {
       const del = h('button', { class: 'dv-del', type: 'button', title: 'Eliminar fila', 'aria-label': 'Eliminar fila ' + (i + 1) }, icon('close', 12));
       del.addEventListener('click', () => { work.rows.splice(i, 1); markDirty(); drawGrid(); });
       const tr = h('tr', null, h('td', { class: 'rownum' }, h('span', { text: String(i + 1) }), del));
+      const calcCells = [];
       work.columns.forEach((c, j) => {
-        const inp = h('input', { class: 'cell' + (c.type === 'number' ? ' num' : ''), 'aria-label': `${c.name}, fila ${i + 1}` });
+        const inp = h('input', { class: 'cell' + (c.type === 'number' ? ' num' : '') + (c.calc ? ' calc' : ''), 'aria-label': `${c.name}, fila ${i + 1}` + (c.calc ? ' (calculada)' : ''), readonly: c.calc ? true : null });
         inp.value = cellDisplay(r[j], c.type);
+        if (c.calc) { calcCells.push([inp, j, c.type]); tr.appendChild(h('td', null, inp)); return; }
         inp.addEventListener('change', () => {
           const raw = inp.value.trim();
           const v = raw === '' ? null : convertValue(raw, c.type);
           inp.classList.toggle('invalid', raw !== '' && v == null);
           r[j] = v;
+          // Recalcula las columnas condicionales de esta fila sin redibujar la tabla
+          if (calcCells.length) { applyCalcColumns(work, [r]); for (const [ci, cj, ct] of calcCells) ci.value = cellDisplay(r[cj], ct); }
           markDirty();
         });
         tr.appendChild(h('td', null, inp));
@@ -5535,8 +5595,9 @@ function openDataEditor(dsId) {
     const map = n => (n != null && rename.has(n) ? rename.get(n) : n);
     const snap = snapshot();
     ds.name = work.name || ds.name;
-    ds.columns = work.columns.map(c => ({ name: c.name, type: c.type, role: c.role }));
+    ds.columns = work.columns.map(c => ({ name: c.name, type: c.type, role: c.role, ...(c.calc ? { calc: c.calc } : null) }));
     ds.rows = work.rows;
+    ds.calc = work.calc;
     markColumnRoles(ds.columns, ds.rows);
     delete ds._grainCache; delete ds._colorCache;
     for (const pg of App.p.pages) for (const w of pg.widgets) {
@@ -5549,6 +5610,26 @@ function openDataEditor(dsId) {
     load(ds);
     drawAll();
     toast('Datos actualizados', 'ok');
+  }
+  /** Crea (id null) o edita una columna condicional sobre la copia de trabajo. */
+  function editCalc(id) {
+    openCalcBuilder(work, id, def => {
+      const k = work.calc.findIndex(d => d.id === def.id);
+      if (k < 0) {
+        if (work.columns.length >= LIMITS.cols) return toast(`Se ha alcanzado el máximo de ${LIMITS.cols} columnas`, 'error');
+        if (work.calc.length >= CALC_MAX.defs) return toast(`Máximo ${CALC_MAX.defs} columnas condicionales por origen`, 'error');
+        work.calc.push(def);
+        work.columns.push({ name: def.name, type: def.type, role: null, orig: null, calc: def.id });
+        work.rows.forEach(r => r.push(null));
+      } else {
+        const col = work.columns.find(c => c.calc === def.id);
+        if (col && col.name !== def.name) renameCalcRefs(work.calc, col.name, def.name);
+        work.calc[k] = def;
+      }
+      applyCalcColumns(work);
+      markDirty(); drawGrid();
+      toast(k < 0 ? `Columna «${def.name}» creada. Pulsa «Aplicar cambios» para usarla en los visuales.` : 'Reglas actualizadas', 'ok', 5000);
+    });
   }
   function transpose() {
     const ds = dsById(work.id);
@@ -5900,6 +5981,429 @@ function openAbout() {
     clear(list);
     for (const it of r.items) list.appendChild(h('li', { class: 'a11y ' + it.level }, icon(it.level === 'ok' ? 'check' : 'info', 14), h('span', { text: it.text })));
   });
+  return m;
+}
+
+/* ---- 07d-calc.js ---- */
+/* ==========================================================================
+   Columnas condicionales: reglas «Si … entonces …» que crean una columna
+   nueva a partir de los datos cargados (similar a SI.CONJUNTO / CASE WHEN).
+   Las definiciones se guardan en ds.calc y los valores se materializan en
+   ds.rows, de modo que filtros, agregaciones y visuales los usan sin cambios.
+   Sin eval ni new Function: las reglas se interpretan, nunca se ejecutan.
+   ========================================================================== */
+
+/* Definición:
+   { id, name, type: 'text'|'number'|'date',
+     rules: [{ all: true|false, conds: [{ col, op, a, b }], res }],
+     other }
+   Operando (a, b, res, other): { k: 'v', v: literal } | { k: 'c', v: nombreColumna } | { k: 'n' } (vacío) */
+const CALC_MAX = { defs: 40, rules: 30, conds: 10 };
+const CALC_OPS = {
+  number: [
+    ['eq', 'es igual a'], ['ne', 'no es igual a'], ['gt', 'es mayor que'], ['ge', 'es mayor o igual que'],
+    ['lt', 'es menor que'], ['le', 'es menor o igual que'], ['between', 'está entre (incluidos)'], ['notBetween', 'no está entre'],
+    ['empty', 'está vacío'], ['notEmpty', 'no está vacío']
+  ],
+  date: [
+    ['eq', 'es el día'], ['ne', 'no es el día'], ['gt', 'es posterior a'], ['ge', 'es igual o posterior a'],
+    ['lt', 'es anterior a'], ['le', 'es igual o anterior a'], ['between', 'está entre (incluidas)'], ['notBetween', 'no está entre'],
+    ['year', 'es del año'], ['month', 'es del mes (1-12)'], ['lastDays', 'está en los últimos N días'],
+    ['beforeToday', 'es anterior a hoy'], ['afterToday', 'es posterior a hoy'],
+    ['empty', 'está vacío'], ['notEmpty', 'no está vacío']
+  ],
+  text: [
+    ['eq', 'es igual a'], ['ne', 'no es igual a'], ['contains', 'contiene'], ['notContains', 'no contiene'],
+    ['starts', 'empieza por'], ['ends', 'termina en'], ['in', 'es uno de (separados por ;)'],
+    ['empty', 'está vacío'], ['notEmpty', 'no está vacío']
+  ]
+};
+const CALC_ALL_OPS = new Set(Object.values(CALC_OPS).flat().map(o => o[0]));
+/** Número de operandos de cada operador (por defecto, 1). */
+const opArity = op => (['empty', 'notEmpty', 'beforeToday', 'afterToday'].includes(op) ? 0 : ['between', 'notBetween'].includes(op) ? 2 : 1);
+/** Operadores cuyo operando es un número entero aunque la columna sea fecha, o una lista: solo admiten valor fijo. */
+const opLiteralOnly = op => ['year', 'month', 'lastDays', 'in'].includes(op);
+const opOperandType = (op, type) => (['year', 'month', 'lastDays'].includes(op) ? 'number' : type);
+const NEGATED = { ne: 'eq', notBetween: 'between', notContains: 'contains' };
+
+/** Normaliza texto para comparar: sin mayúsculas, acentos ni espacios sobrantes. */
+function normText(v) {
+  return String(v).normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase(LOCALE).replace(/\s+/g, ' ').trim();
+}
+function todayIso() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function addDaysIso(iso, n) {
+  const d = new Date(Date.parse(iso + 'T00:00:00Z') + n * 86400000);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Índice de columna usable por la definición k (no puede leer columnas condicionales posteriores ni a sí misma). */
+function calcRefIdx(tbl, k, name) {
+  const j = tbl.columns.findIndex(c => c.name === name);
+  if (j < 0) return -1;
+  const ref = tbl.columns[j].calc;
+  if (ref) { const pos = tbl.calc.findIndex(d => d.id === ref); if (pos < 0 || pos >= k) return -1; }
+  return j;
+}
+
+/** Devuelve una función (fila) -> valor. Las referencias inválidas hacen que la condición no se cumpla. */
+function compileCalc(tbl, k) {
+  const def = tbl.calc[k];
+  const today = todayIso();
+  const operand = (o, type) => {
+    if (!o || o.k === 'n') return () => null;
+    if (o.k === 'c') {
+      const j = calcRefIdx(tbl, k, o.v);
+      if (j < 0) return null;
+      const src = tbl.columns[j].type;
+      return src === type ? r => r[j] : r => convertValue(r[j], type);
+    }
+    const v = convertValue(o.v, type);
+    return () => v;
+  };
+  const condFn = c => {
+    const i = calcRefIdx(tbl, k, c.col);
+    if (i < 0 || !CALC_ALL_OPS.has(c.op)) return () => false;
+    const type = tbl.columns[i].type;
+    const op = c.op;
+    if (op === 'empty') return r => r[i] == null || r[i] === '';
+    if (op === 'notEmpty') return r => !(r[i] == null || r[i] === '');
+    if (NEGATED[op]) { const pos = condFn(Object.assign({}, c, { op: NEGATED[op] })); return r => !pos(r); }
+    const ot = opOperandType(op, type);
+    const fa = operand(c.a, ot), fb = opArity(op) === 2 ? operand(c.b, ot) : () => null;
+    if (!fa || !fb) return () => false;
+    if (type === 'number') {
+      const cmp = { eq: (x, a) => x === a, gt: (x, a) => x > a, ge: (x, a) => x >= a, lt: (x, a) => x < a, le: (x, a) => x <= a }[op];
+      if (op === 'between') return r => { const x = r[i], a = fa(r), b = fb(r); return x != null && a != null && b != null && x >= Math.min(a, b) && x <= Math.max(a, b); };
+      if (!cmp) return () => false;
+      return r => { const x = r[i], a = fa(r); return x != null && a != null && cmp(x, a); };
+    }
+    if (type === 'date') {
+      const day = v => (typeof v === 'string' ? v.slice(0, 10) : null);
+      if (op === 'beforeToday') return r => { const x = day(r[i]); return x != null && x < today; };
+      if (op === 'afterToday') return r => { const x = day(r[i]); return x != null && x > today; };
+      if (op === 'year') return r => { const x = day(r[i]), a = fa(r); return x != null && a != null && +x.slice(0, 4) === a; };
+      if (op === 'month') return r => { const x = day(r[i]), a = fa(r); return x != null && a != null && +x.slice(5, 7) === a; };
+      if (op === 'lastDays') return r => { const x = day(r[i]), a = fa(r); return x != null && a != null && x <= today && x >= addDaysIso(today, -Math.abs(Math.round(a))); };
+      const cmp = { eq: (x, a) => x === a, gt: (x, a) => x > a, ge: (x, a) => x >= a, lt: (x, a) => x < a, le: (x, a) => x <= a }[op];
+      if (op === 'between') return r => { const x = day(r[i]), a = day(fa(r)), b = day(fb(r)); return x != null && a != null && b != null && x >= (a < b ? a : b) && x <= (a < b ? b : a); };
+      if (!cmp) return () => false;
+      return r => { const x = day(r[i]), a = day(fa(r)); return x != null && a != null && cmp(x, a); };
+    }
+    // Texto: sin distinguir mayúsculas ni acentos
+    if (op === 'in') {
+      const set = new Set(String(c.a && c.a.v != null ? c.a.v : '').split(';').map(normText).filter(Boolean));
+      return r => r[i] != null && set.has(normText(r[i]));
+    }
+    const test = { eq: (x, a) => x === a, contains: (x, a) => x.includes(a), starts: (x, a) => x.startsWith(a), ends: (x, a) => x.endsWith(a) }[op];
+    if (!test) return () => false;
+    return r => { const a = fa(r); return r[i] != null && a != null && test(normText(r[i]), normText(a)); };
+  };
+  const rules = def.rules.map(rule => {
+    const conds = rule.conds.map(condFn);
+    const res = operand(rule.res, def.type) || (() => null);
+    const when = !conds.length ? () => false : rule.all ? r => conds.every(f => f(r)) : r => conds.some(f => f(r));
+    return { when, res };
+  });
+  const other = operand(def.other, def.type) || (() => null);
+  const fn = r => { for (const rl of rules) if (rl.when(r)) return rl.res(r); return other(r); };
+  /** Variante que también indica qué regla se aplicó (-1 = «en otro caso»), para la vista previa. */
+  fn.which = r => { for (let n = 0; n < rules.length; n++) if (rules[n].when(r)) return n; return -1; };
+  return fn;
+}
+
+/**
+ * Recalcula todas las columnas condicionales de una tabla ({columns, rows, calc}).
+ * Crea las que falten y convierte en normales las columnas cuya definición ya no existe.
+ */
+function applyCalcColumns(tbl, onlyRows) {
+  if (!Array.isArray(tbl.calc)) tbl.calc = [];
+  const ids = new Set(tbl.calc.map(d => d.id));
+  for (const c of tbl.columns) if (c.calc && !ids.has(c.calc)) delete c.calc;
+  tbl.calc.forEach((def, k) => {
+    let j = tbl.columns.findIndex(c => c.calc === def.id);
+    if (j < 0) {
+      if (tbl.columns.length >= LIMITS.cols) return;
+      j = tbl.columns.length;
+      tbl.columns.push({ name: def.name, type: def.type, role: null, calc: def.id });
+      for (const r of tbl.rows) r.push(null);
+    }
+    Object.assign(tbl.columns[j], { name: def.name, type: def.type });
+    const fn = compileCalc(tbl, k);
+    for (const r of onlyRows || tbl.rows) r[j] = fn(r);
+  });
+}
+/** Actualiza las referencias a una columna renombrada dentro de las definiciones. */
+function renameCalcRefs(calc, from, to) {
+  const fix = o => { if (o && o.k === 'c' && o.v === from) o.v = to; };
+  for (const d of calc || []) {
+    for (const rl of d.rules) { fix(rl.res); for (const c of rl.conds) { if (c.col === from) c.col = to; fix(c.a); fix(c.b); } }
+    fix(d.other);
+  }
+}
+/** Nombres de las definiciones que usan una columna. */
+function calcUsersOf(calc, name, exceptId) {
+  const uses = o => o && o.k === 'c' && o.v === name;
+  return (calc || []).filter(d => d.id !== exceptId && (uses(d.other) || d.rules.some(rl => uses(rl.res) || rl.conds.some(c => c.col === name || uses(c.a) || uses(c.b))))).map(d => d.name);
+}
+
+/* ---------- Saneado (proyectos abiertos desde archivo o autoguardado) ---------- */
+function sanitizeCalc(list) {
+  if (!Array.isArray(list)) return [];
+  const field = v => (typeof v === 'string' && v.length <= 80 ? v : null);
+  const operandOf = o => {
+    if (!o || typeof o !== 'object') return { k: 'n' };
+    if (o.k === 'c') return field(o.v) ? { k: 'c', v: o.v } : { k: 'n' };
+    if (o.k === 'v') return typeof o.v === 'number' && isFinite(o.v) ? { k: 'v', v: o.v } : typeof o.v === 'string' ? { k: 'v', v: o.v.slice(0, 2000) } : { k: 'n' };
+    return { k: 'n' };
+  };
+  const ids = new Set();
+  return list.slice(0, CALC_MAX.defs).map(d => {
+    if (!d || typeof d !== 'object' || !field(d.name) || !Array.isArray(d.rules)) return null;
+    const id = ID_RE.test(d.id) && !ids.has(d.id) ? d.id : uid();
+    ids.add(id);
+    return {
+      id, name: d.name.trim().slice(0, 80) || 'Columna condicional', type: oneOf(d.type, ['text', 'number', 'date'], 'text'),
+      rules: d.rules.slice(0, CALC_MAX.rules).filter(rl => rl && Array.isArray(rl.conds)).map(rl => ({
+        all: bool(rl.all, true),
+        conds: rl.conds.slice(0, CALC_MAX.conds).filter(c => c && field(c.col) && CALC_ALL_OPS.has(c.op)).map(c => ({ col: c.col, op: c.op, a: operandOf(c.a), b: operandOf(c.b) })),
+        res: operandOf(rl.res)
+      })),
+      other: operandOf(d.other)
+    };
+  }).filter(Boolean);
+}
+
+/* ---------- Constructor visual de reglas ---------- */
+const CALC_TYPES = [['text', 'Texto'], ['number', 'Número'], ['date', 'Fecha']];
+function blankCond(col) { return { col: col ? col.name : null, op: col ? CALC_OPS[col.type][0][0] : 'eq', a: { k: 'v', v: null }, b: { k: 'v', v: null } }; }
+
+/**
+ * Abre el editor de una columna condicional sobre una tabla de trabajo ({columns, rows, calc}).
+ * onSave(def) recibe la definición validada; no modifica la tabla.
+ */
+function openCalcBuilder(tbl, calcId, onSave) {
+  const k0 = calcId ? tbl.calc.findIndex(d => d.id === calcId) : tbl.calc.length;
+  const def = calcId ? deepClone(tbl.calc[k0]) : null;
+  // Columnas que la regla puede leer: las normales y las condicionales definidas antes que esta
+  const usable = tbl.columns.filter(c => !c.calc || tbl.calc.findIndex(d => d.id === c.calc) < k0);
+  const colByName = n => usable.find(c => c.name === n) || null;
+  if (!usable.length) { toast('El origen no tiene columnas que se puedan usar en una condición', 'error'); return null; }
+  let draft = def || {
+    id: uid(), name: '', type: 'text',
+    rules: [{ all: true, conds: [blankCond(usable.find(c => c.type === 'date') || usable[0])], res: { k: 'v', v: null } }],
+    other: { k: 'n' }
+  };
+  if (!draft.name) { let n = 'Condicional', i = 1; while (tbl.columns.some(c => c.name === n)) n = `Condicional ${++i}`; draft.name = n; }
+
+  const body = h('div', { class: 'modal-body calc-body' });
+  const preview = h('div', { class: 'calc-preview' });
+  const cancel = h('button', { class: 'btn', type: 'button', text: 'Cancelar' });
+  const save = h('button', { class: 'btn primary', type: 'button', text: calcId ? 'Guardar cambios' : 'Crear columna' });
+  const m = openModal({ title: calcId ? 'Editar columna condicional' : 'Nueva columna condicional', cls: 'calc-modal', labelledIcon: 'branch', body, foot: h('div', { class: 'modal-foot' }, cancel, save) });
+  cancel.addEventListener('click', () => m.close());
+  save.addEventListener('click', () => {
+    const err = validate();
+    if (err) { toast(err, 'error'); draw(); return; }
+    m.close();
+    onSave(clean(draft));
+  });
+
+  const refreshPreview = debounce(drawPreview, 150);
+  /** Redibuja conservando el foco (los controles llevan una clave estable en data-k). */
+  function draw() {
+    const fk = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.k : null;
+    clear(body);
+    body.append(...drawHead(), ...drawRules(), drawOther(), preview);
+    drawPreview();
+    if (fk) { const el = body.querySelector(`[data-k="${fk}"]`); if (el) el.focus(); }
+  }
+  const keyed = (el, key) => { el.dataset.k = key; return el; };
+  const btn = (ic, label, fn, key, cls = 'icon-btn') => {
+    const b = keyed(h('button', { class: cls, type: 'button', title: label, 'aria-label': label }, icon(ic, 15), cls === 'icon-btn' ? null : label), key);
+    b.addEventListener('click', fn);
+    return b;
+  };
+
+  function drawHead() {
+    const name = keyed(inputEl(draft.name, v => { draft.name = v.replace(/\s+/g, ' ').slice(0, 80); }, { label: 'Nombre de la columna', max: 80 }), 'name');
+    const type = keyed(selectEl(CALC_TYPES, draft.type, v => {
+      draft.type = v;
+      // Los valores fijos de resultado se reinterpretan con el nuevo tipo
+      for (const o of [...draft.rules.map(r => r.res), draft.other]) if (o.k === 'v') o.v = o.v == null ? null : convertValue(o.v, v);
+      draw();
+    }, { label: 'Tipo de resultado' }), 'type');
+    return [
+      h('div', { class: 'form-inline calc-head' }, formRow('Nombre de la nueva columna', name), formRow('Tipo de resultado', type)),
+      h('p', { class: 'hint', text: 'Las reglas se comprueban en orden, de arriba abajo: cada fila toma el resultado de la primera regla que cumple. Si no cumple ninguna, se usa «En otro caso». Los textos se comparan sin distinguir mayúsculas ni acentos; las fechas, por día.' })
+    ];
+  }
+
+  function drawRules() {
+    const out = [];
+    draft.rules.forEach((rule, ri) => {
+      const head = h('div', { class: 'calc-rule-head' },
+        h('span', { class: 'calc-badge', text: ri === 0 ? 'SI' : 'SI NO, SI' }),
+        h('span', { class: 'lbl', text: 'se cumplen' }),
+        keyed(selectEl([['all', 'todas las condiciones (Y)'], ['any', 'alguna condición (O)']], rule.all ? 'all' : 'any', v => { rule.all = v === 'all'; refreshPreview(); }, { label: `Regla ${ri + 1}: tipo de combinación` }), `r${ri}all`),
+        h('span', { class: 'grow' }),
+        btn('chevU', 'Subir regla', () => { draft.rules.splice(ri - 1, 0, draft.rules.splice(ri, 1)[0]); draw(); }, `r${ri}up`),
+        btn('chevD', 'Bajar regla', () => { draft.rules.splice(ri + 1, 0, draft.rules.splice(ri, 1)[0]); draw(); }, `r${ri}down`),
+        btn('trash', 'Eliminar regla', () => { draft.rules.splice(ri, 1); draw(); }, `r${ri}del`));
+      head.querySelector(`[data-k="r${ri}up"]`).disabled = ri === 0;
+      head.querySelector(`[data-k="r${ri}down"]`).disabled = ri === draft.rules.length - 1;
+      const conds = h('div', { class: 'calc-conds' });
+      rule.conds.forEach((c, ci) => conds.appendChild(drawCond(rule, c, ri, ci)));
+      const addCond = btn('plus', 'Añadir condición', () => { rule.conds.push(blankCond(colByName(rule.conds.length ? rule.conds[rule.conds.length - 1].col : null) || usable[0])); draw(); }, `r${ri}addc`, 'btn subtle');
+      addCond.disabled = rule.conds.length >= CALC_MAX.conds;
+      const then = h('div', { class: 'calc-then' }, h('span', { class: 'calc-badge then', text: 'ENTONCES' }), ...operandEditor(rule.res, draft.type, `r${ri}res`, { label: `Resultado de la regla ${ri + 1}`, empty: true }));
+      out.push(h('section', { class: 'calc-rule', 'aria-label': `Regla ${ri + 1}` }, head, conds, addCond, then));
+    });
+    const add = btn('plus', 'Añadir regla', () => { draft.rules.push({ all: true, conds: [blankCond(usable[0])], res: { k: 'v', v: null } }); draw(); }, 'addrule', 'btn');
+    add.disabled = draft.rules.length >= CALC_MAX.rules;
+    out.push(add);
+    return out;
+  }
+
+  function drawCond(rule, c, ri, ci) {
+    const key = `r${ri}c${ci}`;
+    const col = colByName(c.col);
+    const colSel = keyed(selectEl([[null, 'Elige una columna…'], ...usable.map(u => [u.name, `${u.name} (${typeLabel(u)})`])], c.col, v => {
+      const nc = colByName(v);
+      const prevType = col ? col.type : null;
+      c.col = v;
+      if (nc && nc.type !== prevType) Object.assign(c, blankCond(nc));
+      draw();
+    }, { label: 'Columna' }), key + 'col');
+    if (c.col && !col) colSel.classList.add('invalid');
+    const parts = [colSel];
+    if (col) {
+      const ops = CALC_OPS[col.type];
+      if (!ops.some(o => o[0] === c.op)) c.op = ops[0][0];
+      parts.push(keyed(selectEl(ops, c.op, v => { const ot = opOperandType(c.op, col.type); c.op = v; if (opOperandType(v, col.type) !== ot || opLiteralOnly(v)) { c.a = { k: 'v', v: null }; c.b = { k: 'v', v: null }; } draw(); }, { label: 'Operador' }), key + 'op'));
+      const ar = opArity(c.op), ot = opOperandType(c.op, col.type);
+      const lit = opLiteralOnly(c.op);
+      if (ar >= 1) parts.push(...operandEditor(c.a, ot, key + 'a', { label: ar === 2 ? 'Desde' : 'Valor', literalOnly: lit, placeholder: c.op === 'in' ? 'Norte; Sur; Este' : null, int: ['year', 'month', 'lastDays'].includes(c.op) }));
+      if (ar === 2) parts.push(h('span', { class: 'lbl', text: 'y' }), ...operandEditor(c.b, ot, key + 'b', { label: 'Hasta' }));
+    }
+    const del = btn('close', 'Quitar condición', () => { rule.conds.splice(ci, 1); draw(); }, key + 'del');
+    return h('div', { class: 'calc-cond' }, h('span', { class: 'calc-join', text: ci === 0 ? '' : rule.all ? 'Y' : 'O' }), h('div', { class: 'calc-cond-fields' }, ...parts), del);
+  }
+
+  /** Editor de un operando: [Valor fijo | Columna X | (vacío)] + control del valor. */
+  function operandEditor(o, type, key, opts = {}) {
+    const choices = [['v', opts.empty ? 'Valor fijo' : 'Valor']];
+    if (opts.empty) choices.push(['n', '(Vacío)']);
+    if (!opts.literalOnly) for (const u of usable) choices.push(['c:' + u.name, 'Columna: ' + u.name]);
+    const cur = o.k === 'c' ? 'c:' + o.v : o.k;
+    const src = keyed(selectEl(choices, cur, v => {
+      if (v === 'v') Object.assign(o, { k: 'v', v: null });
+      else if (v === 'n') { o.k = 'n'; delete o.v; }
+      else Object.assign(o, { k: 'c', v: v.slice(2) });
+      draw();
+    }, { label: (opts.label || 'Valor') + ': origen' }), key + 'src');
+    src.classList.add('calc-src');
+    if (o.k === 'c' && !colByName(o.v)) src.classList.add('invalid');
+    if (o.k !== 'v') return [src];
+    return [src, literalInput(o, type, key, opts)];
+  }
+  function literalInput(o, type, key, opts) {
+    const label = opts.label || 'Valor';
+    if (type === 'date') {
+      const inp = keyed(h('input', { class: 'inp', type: 'date', 'aria-label': label }), key + 'v');
+      inp.value = typeof o.v === 'string' ? o.v.slice(0, 10) : '';
+      inp.addEventListener('input', () => { o.v = ISO_RE.test(inp.value) ? inp.value : null; refreshPreview(); });
+      return inp;
+    }
+    if (type === 'number') {
+      const inp = keyed(inputEl(o.v == null ? '' : String(o.v).replace('.', ','), v => {
+        const n = v.trim() === '' ? null : opts.int ? (/^-?\d+$/.test(v.trim()) ? +v.trim() : null) : parseNumberStr(v, true);
+        inp.classList.toggle('invalid', v.trim() !== '' && n == null);
+        o.v = n; refreshPreview();
+      }, { label, placeholder: opts.int ? 'p. ej. 2025' : '0', max: 40 }), key + 'v');
+      inp.setAttribute('inputmode', opts.int ? 'numeric' : 'decimal');
+      return inp;
+    }
+    return keyed(inputEl(o.v == null ? '' : String(o.v), v => { o.v = v === '' ? null : v.slice(0, 2000); refreshPreview(); }, { label, placeholder: opts.placeholder || 'Texto', max: 2000 }), key + 'v');
+  }
+
+  function drawOther() {
+    return h('div', { class: 'calc-then calc-other' }, h('span', { class: 'calc-badge then', text: 'EN OTRO CASO' }),
+      ...operandEditor(draft.other, draft.type, 'other', { label: 'Resultado en otro caso', empty: true }));
+  }
+
+  /** Vista previa: recuento por regla y primeras filas con las columnas implicadas. */
+  function drawPreview() {
+    clear(preview);
+    if (validate(true)) { preview.appendChild(h('p', { class: 'hint', text: 'Completa las condiciones para ver la vista previa.' })); return; }
+    const d = clean(draft);
+    const tmp = { columns: tbl.columns, rows: tbl.rows, calc: tbl.calc.slice(0, k0).concat([d]) };
+    const fn = compileCalc(tmp, k0);
+    const counts = new Array(d.rules.length).fill(0);
+    let other = 0;
+    // Muestra: hasta 5 filas que cumplen alguna regla y el resto, hasta 8, que no
+    const hit = [], miss = [];
+    for (const r of tbl.rows) {
+      const n = fn.which(r);
+      if (n < 0) { other++; if (miss.length < 8) miss.push(r); } else { counts[n]++; if (hit.length < 8) hit.push(r); }
+    }
+    const sample = hit.slice(0, Math.max(5, 8 - miss.length)).concat(miss).slice(0, 8);
+    preview.appendChild(h('div', { class: 'section-title', text: 'Vista previa' }));
+    const total = tbl.rows.length || 1;
+    preview.appendChild(h('ul', { class: 'calc-counts' },
+      ...counts.map((c, n) => h('li', null, h('b', { text: `Regla ${n + 1}: ` }), `${fmtNum(c)} filas (${fmtNum(c / total, 'percent')})`)),
+      h('li', null, h('b', { text: 'En otro caso: ' }), `${fmtNum(other)} filas (${fmtNum(other / total, 'percent')})`)));
+    const refs = [];
+    for (const rl of d.rules) for (const c of rl.conds) { refs.push(c.col); for (const o of [c.a, c.b]) if (o && o.k === 'c') refs.push(o.v); }
+    const cols = Array.from(new Set(refs)).map(n => tbl.columns.findIndex(c => c.name === n)).filter(j => j >= 0).slice(0, 5);
+    const table = h('table', { class: 'calc-sample' });
+    table.appendChild(h('thead', null, h('tr', null, ...cols.map(j => h('th', { text: tbl.columns[j].name })), h('th', { class: 'res', text: d.name || 'Resultado' }))));
+    const tb = h('tbody');
+    const show = (v, t) => (v == null ? '' : t === 'number' ? fmtNum(v) : t === 'date' ? fmtDateKey(v) : String(v));
+    for (const r of sample) tb.appendChild(h('tr', null, ...cols.map(j => h('td', { text: show(r[j], tbl.columns[j].type) })), h('td', { class: 'res', text: show(fn(r), d.type) })));
+    table.appendChild(tb);
+    preview.appendChild(h('div', { class: 'calc-sample-wrap' }, table));
+  }
+
+  /** Copia limpia de la definición (sin valores de operandos que el operador no usa). */
+  function clean(d) {
+    const o = deepClone(d);
+    o.name = o.name.trim();
+    for (const rl of o.rules) for (const c of rl.conds) {
+      const ar = opArity(c.op);
+      if (ar < 1) c.a = { k: 'n' };
+      if (ar < 2) c.b = { k: 'n' };
+    }
+    return o;
+  }
+  function validate(quiet) {
+    const name = draft.name.trim();
+    if (!name) return 'Escribe un nombre para la columna.';
+    if (tbl.columns.some(c => c.name === name && c.calc !== draft.id)) return `Ya existe una columna llamada «${name}».`;
+    if (!draft.rules.length) return 'Añade al menos una regla.';
+    for (let ri = 0; ri < draft.rules.length; ri++) {
+      const rl = draft.rules[ri];
+      if (!rl.conds.length) return `La regla ${ri + 1} no tiene condiciones.`;
+      for (const c of rl.conds) {
+        const col = colByName(c.col);
+        if (!col) return `Elige una columna en todas las condiciones de la regla ${ri + 1}.`;
+        const ar = opArity(c.op);
+        for (const o of [c.a, c.b].slice(0, ar)) {
+          if (o.k === 'c' && !colByName(o.v)) return `La regla ${ri + 1} usa una columna que no existe.`;
+          if (o.k !== 'c' && (o.v == null || o.v === '')) return `Falta un valor en la regla ${ri + 1} (${c.col}).`;
+        }
+        if (c.op === 'month' && !(c.a.v >= 1 && c.a.v <= 12)) return `El mes de la regla ${ri + 1} debe estar entre 1 y 12.`;
+      }
+      if (rl.res.k === 'c' && !colByName(rl.res.v)) return `El resultado de la regla ${ri + 1} usa una columna que no existe.`;
+      if (rl.res.k === 'v' && (rl.res.v == null || rl.res.v === '') && !quiet) return `Indica el resultado de la regla ${ri + 1} (o elige «(Vacío)»).`;
+    }
+    if (draft.other.k === 'c' && !colByName(draft.other.v)) return 'El resultado «En otro caso» usa una columna que no existe.';
+    if (draft.other.k === 'v' && (draft.other.v == null || draft.other.v === '') && !quiet) return 'Indica el resultado «En otro caso» (o elige «(Vacío)»).';
+    return null;
+  }
+  draw();
   return m;
 }
 

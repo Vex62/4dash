@@ -502,8 +502,8 @@ function renderLeft() {
   const used = new Set(w && w.ds === ds.id ? [w.cat, w.split, ...w.vals] : []);
   const list = h('ul', { class: 'field-list', 'aria-label': 'Campos de ' + ds.name });
   for (const c of ds.columns) {
-    const li = h('li', { class: 'field' + (used.has(c.name) ? ' used' : ''), draggable: 'true', tabindex: 0, title: `${c.name} (${typeLabel(c)}) — arrastra a un visual o al lienzo` },
-      icon(c.type === 'number' ? 'hash' : c.type === 'date' ? 'calendar' : 'abc', 15),
+    const li = h('li', { class: 'field' + (used.has(c.name) ? ' used' : ''), draggable: 'true', tabindex: 0, title: `${c.name} (${typeLabel(c)}${c.calc ? ', columna condicional' : ''}) — arrastra a un visual o al lienzo` },
+      icon(c.calc ? 'branch' : c.type === 'number' ? 'hash' : c.type === 'date' ? 'calendar' : 'abc', 15),
       h('span', { class: 'fname', text: c.name }), h('span', { class: 'ftype', text: typeLabel(c) }));
     li.addEventListener('dragstart', e => { e.dataTransfer.setData('application/x-4dash-field', JSON.stringify({ ds: ds.id, col: c.name })); e.dataTransfer.effectAllowed = 'copy'; });
     const act = () => { const cur = selW(); if (cur) dropFieldOnWidget(cur, ds.id, c.name); else createFromField(ds.id, c.name, null); };
