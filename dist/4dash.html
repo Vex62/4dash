@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-5N8QCWqrxv8SaegdP1o83qyoI0waG795O3uOL4Vy240='; style-src 'sha256-8Gfq0MY25a1v++52K5rKhfhVgaC+PLMvYp4LoFvnVco='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9Ubc7cp66v/PkG6212ksm1GwSxnJvdAwjSpk+7cNIys='; style-src 'sha256-kVoFr4BH7p0H9ze9SQ+RW6RIRm9kSkQXgLHqcAr7HTE='; img-src data: blob:; font-src 'none'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script'; trusted-types fourdash-xml">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
-<meta name="generator" content="4Dash 1.1.0">
+<meta name="generator" content="4Dash 1.2.0">
 <meta name="author" content="Vex62">
 <title>4Dash</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b2130'/%3E%3Crect x='5' y='5' width='13' height='13' rx='3.5' fill='%23ff8a5b'/%3E%3Crect x='20' y='5' width='7' height='13' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='5' y='20' width='7' height='7' rx='2.5' fill='%23ff8a5b' opacity='.55'/%3E%3Crect x='14' y='20' width='13' height='7' rx='2.5' fill='%23ff8a5b' opacity='.8'/%3E%3C/svg%3E">
@@ -39,7 +39,7 @@
   --border-strong: #c3c9d4;
   --text: #1f2633;
   --text-2: #4f5868;
-  --text-3: #7b8494;
+  --text-3: #646d7c;
   --hover: #eef1f5;
   --pressed: #e3e7ee;
   --focus: #3a5ccc;
@@ -55,7 +55,7 @@
   --widget-bg: #ffffff;
   --ink-1: #10141c;
   --ink-2: #4a5160;
-  --ink-muted: #858b97;
+  --ink-muted: #6b717d;
   --gridline: #e3e6ec;
   --axis: #c2c7d0;
   --series-1: #2a78d6;
@@ -117,7 +117,7 @@
   --series-other: #5d636e;
   --good: #0ca30c;
   --good-text: #0ca30c;
-  --critical: #d03b3b;
+  --critical: #f0605f;
 }
 
 * { box-sizing: border-box; }
@@ -203,14 +203,24 @@ body.mode-presenter .logo-remove { display: none !important; }
 
 /* ---------- Barra de herramientas ---------- */
 .toolbar {
-  display: flex; align-items: center; gap: 2px; overflow-x: auto; overflow-y: hidden;
+  display: flex; align-items: center; gap: 2px; overflow: hidden;
   background: var(--pane-bg); border-bottom: 1px solid var(--border);
-  padding: 4px 8px; min-height: 46px; scrollbar-width: thin; scroll-behavior: smooth;
+  padding: 4px 8px; min-height: 46px; min-width: 0;
 }
 .tgroup { display: flex; align-items: center; gap: 2px; padding: 0 6px; flex: none; position: relative; }
 .tgroup + .tgroup::before { content: ""; position: absolute; left: -1px; top: 6px; bottom: 6px; width: 1px; background: var(--border); }
 .tgroup.push { margin-left: auto; }
-.tgroup.sticky-end { position: sticky; right: -8px; background: var(--pane-bg); padding-right: 8px; margin-right: -8px; z-index: 1; }
+/* Panel «Más»: grupos que no caben en la barra, con su texto visible */
+.tb-overflow {
+  position: fixed; z-index: 100001; display: flex; flex-direction: column; gap: 6px;
+  max-width: min(420px, calc(100vw - 16px)); max-height: calc(100vh - 120px); overflow: auto;
+  background: var(--pane-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-2); padding: 6px;
+}
+.tb-overflow .tgroup { flex-wrap: wrap; margin-left: 0; padding: 4px 2px 0; }
+.tb-overflow .tgroup::after { content: attr(aria-label); order: -1; flex-basis: 100%; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .4px; padding: 0 6px 2px; }
+.tb-overflow .tgroup + .tgroup::before { left: 4px; right: 4px; top: -3px; bottom: auto; width: auto; height: 1px; }
+.tb-overflow .tbtn .tb-lbl { display: inline !important; }
+.tb-overflow .tbtn { padding: 0 9px !important; }
 .tbtn {
   display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 9px;
   border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--text);
@@ -439,6 +449,7 @@ body.mode-editor .widget:hover { outline: 1px solid var(--border-strong); }
 }
 .widget:hover .w-actions, .widget.selected .w-actions, .w-actions:focus-within { opacity: 1; }
 .w-actions .icon-btn { width: 24px; height: 24px; cursor: pointer; }
+.tut-about { margin-right: auto; }
 .widget.notitle .w-head { position: absolute; right: 0; top: 0; height: 28px; z-index: 2; }
 .widget.notitle .w-title { display: none; }
 .w-body { flex: 1; min-height: 0; position: relative; padding: 0 10px 8px; display: flex; flex-direction: column; }
@@ -578,7 +589,7 @@ table.tbl { width: 100%; border-collapse: collapse; font-size: 12px; font-varian
 .ptab[aria-selected="true"] { color: var(--text); font-weight: 600; border-top-color: var(--tab-accent); background: var(--app-bg); }
 .ptab-input { width: 140px; border: 1px solid var(--primary); padding: 2px 6px; font-size: 12.5px; background: var(--pane-bg); }
 .zoom-status { display: inline-flex; align-items: center; gap: 2px; }
-.zoom-status .icon-btn { width: 22px; height: 22px; }
+.zoom-status .icon-btn { width: 24px; height: 24px; }
 .zoom-status .linklike { min-width: 44px; font-size: 12px; }
 .status { display: flex; align-items: center; gap: 14px; color: var(--text-2); font-size: 12px; white-space: nowrap; padding-left: 8px; }
 
@@ -792,9 +803,28 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 @media (max-width: 640px) {
   .brand .brand-name { display: none; }
   .brand { padding: 0 10px; }
+  .topbar { gap: 4px; padding-right: 6px; }
+  .top-btn { width: 30px; }
+  .segmented button { padding: 5px 8px; }
+  .pres-nav .save-state { display: none; }
   .pane:not(.collapsed) { width: min(300px, calc(100vw - 40px)); }
   .status > span:not(:last-child):not(.zoom-status) { display: none; }
   .ptab { padding: 0 10px; }
+}
+@media (max-width: 440px) {
+  /* Muy estrecho (zoom ≥ 350 %): todo sigue visible; el título se acorta */
+  .brand { padding: 0 6px; border-right: 0; }
+  .topbar { gap: 2px; padding-right: 4px; }
+  .top-btn { width: 26px; height: 30px; }
+  .help-btn { width: 24px; height: 24px; font-size: 12px; }
+  .segmented button { padding: 4px 6px; }
+  .logo-slot { min-width: 30px; padding: 2px 4px; }
+  .logo-slot.has-logo img { max-width: 60px; }
+  .doc-title { min-width: 36px; font-size: 13px; padding: 4px; }
+  .toolbar { padding: 2px 4px; }
+  .tgroup { padding: 0 1px; }
+  .tbtn { padding: 0 5px; }
+  .pres-nav .top-btn { width: 24px; }
 }
 @media (max-height: 560px) {
   #app { grid-template-rows: 40px auto 1fr auto; }
@@ -851,7 +881,7 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 <input type="file" id="fileInput" class="hidden" accept=".xlsx,.xlsm,.csv,.tsv,.txt">
 <input type="file" id="projectInput" class="hidden" accept=".json,.4dash">
 <input type="file" id="imageInput" class="hidden" accept="image/png,image/jpeg,image/webp,image/gif">
-<script>/*! 4Dash v1.1.0 — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */
+<script>/*! 4Dash v1.2.0 — © 2026 Vex62 — Licencia 4Dash (uso comercial solo con atribución clara al autor; ver LICENSE). Iconos en parte basados en Feather Icons (MIT, © Cole Bemis) y Lucide (ISC). */
 (() => {
 'use strict';
 /* ---- 01-util.js ---- */
@@ -3393,7 +3423,9 @@ function openTutorial(start = 0) {
   const dots = h('div', { class: 'tut-dots grow' });
   const prev = h('button', { class: 'btn', type: 'button', text: 'Anterior' });
   const next = h('button', { class: 'btn primary', type: 'button', text: 'Siguiente' });
-  const m = openModal({ title: 'Cómo funciona 4Dash', body, foot: h('div', { class: 'modal-foot' }, dots, prev, next), labelledIcon: 'help' });
+  const about = h('button', { class: 'linklike tut-about', type: 'button', text: 'Acerca de e integridad' });
+  const m = openModal({ title: 'Cómo funciona 4Dash', body, foot: h('div', { class: 'modal-foot' }, about, dots, prev, next), labelledIcon: 'help' });
+  about.addEventListener('click', () => { m.close(); openAbout(); });
   const draw = () => {
     const st = TUTORIAL[i];
     clear(body);
@@ -3648,6 +3680,57 @@ function tmenu(ic, label, items, opts = {}) {
 function tgroup(label, items, cls = '') {
   return h('div', { class: 'tgroup' + (cls ? ' ' + cls : ''), role: 'group', 'aria-label': label }, items);
 }
+/* ---------- Desbordamiento de la barra de herramientas ----------
+   Cuando la barra no cabe (ventana estrecha o mucho zoom del navegador), los
+   grupos menos usados pasan, enteros y con su texto, a un panel «Más». Así
+   ningún control queda oculto ni fuera de la vista. */
+const TB_OVERFLOW_ORDER = ['Vista', 'Organizar', 'Edición', 'Diseño', 'Insertar', 'Datos'];
+let tbOverflowEl = null;
+function closeToolbarOverflow() {
+  if (!tbOverflowEl) return;
+  tbOverflowEl.remove();
+  tbOverflowEl = null;
+  const more = $('#toolbar .tb-more');
+  if (more) more.setAttribute('aria-expanded', 'false');
+}
+function fitToolbar(moreBtn, moreGroup) {
+  const r = $('#toolbar');
+  const moved = [];
+  const fits = () => r.scrollWidth <= r.clientWidth + 1;
+  moreGroup.classList.add('hidden');
+  if (!fits()) {
+    moreGroup.classList.remove('hidden');
+    for (const name of TB_OVERFLOW_ORDER) {
+      if (fits()) break;
+      const g = r.querySelector(`.tgroup[aria-label="${name}"]`);
+      if (!g) continue;
+      moved.unshift(g);
+      g.remove();
+    }
+  }
+  // El hueco flexible queda a la izquierda del primer grupo alineado a la derecha
+  moreGroup.classList.toggle('push', !r.querySelector('.tgroup.push:not(.tb-more-group)'));
+  moreBtn._groups = moved;
+  moreBtn.title = 'Más herramientas: ' + moved.map(g => g.getAttribute('aria-label')).join(', ');
+}
+function toggleToolbarOverflow(btn) {
+  if (tbOverflowEl) return closeToolbarOverflow();
+  closeMenu();
+  const pop = h('div', { class: 'tb-overflow', role: 'group', 'aria-label': 'Más herramientas' }, btn._groups || []);
+  document.body.appendChild(pop);
+  const b = btn.getBoundingClientRect(), p = pop.getBoundingClientRect();
+  pop.style.top = Math.round(b.bottom + 4) + 'px';
+  pop.style.left = Math.round(clamp(b.right - p.width, 8, Math.max(8, innerWidth - p.width - 8))) + 'px';
+  tbOverflowEl = pop;
+  btn.setAttribute('aria-expanded', 'true');
+  const f = pop.querySelector('button:not(:disabled), select');
+  if (f) f.focus();
+}
+document.addEventListener('pointerdown', e => {
+  if (tbOverflowEl && !tbOverflowEl.contains(e.target) && !e.target.closest('.tb-more, .menu')) closeToolbarOverflow();
+  // Una opción elegida en un menú abierto desde el panel «Más» lo cierra al terminar
+  if (tbOverflowEl && e.target.closest('.menu')) App.closingOverflow = true;
+}, true);
 const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3];
 function setZoom(z) { App.zoom = String(z); applyZoom(); renderToolbar(); }
 function zoomBy(dir) {
@@ -3658,6 +3741,8 @@ function zoomBy(dir) {
 function openProjectPicker() { $('#projectInput').value = ''; $('#projectInput').click(); }
 function toggleSnap() { App.p.snap = !App.p.snap; scheduleSave(); renderToolbar(); renderCanvas(); }
 function renderToolbar() {
+  const wasOpen = !!tbOverflowEl;
+  closeToolbarOverflow();
   const r = clear($('#toolbar'));
   const w = selW();
   const hasData = App.p.datasets.length > 0;
@@ -3708,8 +3793,17 @@ function renderToolbar() {
       tbtn('panelR', 'Panel derecho', () => togglePane('right'), { pressed: !isCollapsed('right'), cls: 'opt' }),
       h('div', { class: 'zoom-box' }, zoomSel)], 'push'),
     tgroup('Exportar', [
-      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG) o PDF tal y como se ve en el Presentador (Ctrl+E)' })], 'sticky-end')
+      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG) o PDF tal y como se ve en el Presentador (Ctrl+E)' })])
   );
+  const more = tbtn('more', 'Más', e => toggleToolbarOverflow(e.currentTarget), { cls: 'tb-more' });
+  more.setAttribute('aria-expanded', 'false');
+  more.setAttribute('aria-haspopup', 'true');
+  const moreGroup = tgroup('Más herramientas', [more], 'tb-more-group');
+  r.insertBefore(moreGroup, r.lastElementChild);
+  fitToolbar(more, moreGroup);
+  // Tras un cambio de estado (p. ej. activar la cuadrícula) el panel «Más» sigue abierto
+  if (wasOpen && more._groups.length && !App.closingOverflow) toggleToolbarOverflow(more);
+  App.closingOverflow = false;
 }
 function insertShape(kind, at) {
   const pal = currentPalette();
@@ -3811,6 +3905,10 @@ function togglePane(which) {
   }
   renderLeft(); renderRight(); renderToolbar();
   requestAnimationFrame(applyZoom);
+}
+function showPropsPane() {
+  if (!isCollapsed('right')) return;
+  togglePane('right');
 }
 function paneHead(title, which) {
   const collapsed = isCollapsed(which);
@@ -4454,6 +4552,7 @@ function rerenderWidget(w) {
 }
 function widgetMenu(anchor, w) {
   openMenu(anchor, [
+    { label: 'Propiedades', icon: 'edit', onClick: () => { select(w.id); showPropsPane(); } },
     { label: 'Duplicar', icon: 'copy', onClick: () => { select(w.id); duplicateSelected(); } },
     { label: 'Traer al frente', icon: 'front', onClick: () => { select(w.id); reorder(1); } },
     { label: 'Enviar atrás', icon: 'back', onClick: () => { select(w.id); reorder(-1); } },
@@ -5099,6 +5198,11 @@ function pageToSvg(pg, header, scale) {
   const H = Math.ceil(node.getBoundingClientRect().height);
   // El estado de casillas y campos es una propiedad: se copia a atributos para que se serialice
   node.querySelectorAll('input').forEach(i => { if (i.checked) i.setAttribute('checked', ''); if (i.value) i.setAttribute('value', i.value); });
+  // Caracteres de control que XML no admite (pueden venir de los datos importados)
+  const bad = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFE\uFFFF]/g;
+  const tw = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+  for (let n = tw.nextNode(); n; n = tw.nextNode()) if (bad.test(n.data)) { bad.lastIndex = 0; n.data = n.data.replace(bad, ''); }
+  node.querySelectorAll('[title],[aria-label],[value]').forEach(el => { for (const a of ['title', 'aria-label', 'value']) { const v = el.getAttribute(a); if (v && bad.test(v)) { bad.lastIndex = 0; el.setAttribute(a, v.replace(bad, '')); } } });
   node.remove();
   Object.assign(node.style, { position: 'static', left: '', top: '' });
   node.insertBefore(h('style', { text: $('style').textContent }), node.firstChild);
@@ -5723,6 +5827,82 @@ function openPaletteDialog() {
   return m;
 }
 
+/* ---- 07c-integrity.js ---- */
+/* ==========================================================================
+   Comprobación de integridad en ejecución.
+   La CSP del archivo solo permite ejecutar el script y aplicar los estilos
+   cuyo SHA-256 coincide con el publicado en la propia CSP: si alguien altera
+   el código sin actualizar los hashes, el navegador no lo ejecuta. Esta
+   comprobación añade un aviso visible si la CSP falta o se ha modificado, o si
+   el contenido no coincide con sus hashes (p. ej. un archivo dañado).
+   Para verificar el archivo completo, compara su SHA-256 con el publicado
+   (dist/4dash.html.sha256 en el repositorio).
+   ========================================================================== */
+
+const SELF_SCRIPT = document.currentScript;
+
+async function sha256b64(text) {
+  const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  let bin = '';
+  for (const b of new Uint8Array(d)) bin += String.fromCharCode(b);
+  return btoa(bin);
+}
+/** Devuelve { ok, items: [{ level: 'ok'|'warn'|'bad', text }] }. */
+async function checkIntegrity() {
+  const items = [];
+  const meta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+  const csp = meta ? meta.getAttribute('content') || '' : '';
+  const hashOf = dir => { const m = new RegExp(dir + " 'sha256-([A-Za-z0-9+/=]+)'").exec(csp); return m ? m[1] : null; };
+  const wantScript = hashOf('script-src'), wantStyle = hashOf('style-src');
+  if (!meta || !wantScript || !wantStyle || !/default-src 'none'/.test(csp)) {
+    items.push({ level: 'bad', text: 'La política de seguridad (CSP) original falta o ha sido modificada: el archivo no es el publicado.' });
+  } else {
+    items.push({ level: 'ok', text: 'Política de seguridad (CSP) presente y restrictiva.' });
+  }
+  if (!(window.crypto && crypto.subtle)) {
+    items.push({ level: 'warn', text: 'Este navegador no permite calcular SHA-256 aquí; no se pudo comprobar el código.' });
+    return { ok: false, items };
+  }
+  const ownStyle = document.head.querySelector('style');
+  try {
+    if (wantScript && SELF_SCRIPT) {
+      const got = await sha256b64(SELF_SCRIPT.textContent);
+      items.push(got === wantScript
+        ? { level: 'ok', text: 'El código coincide con su firma SHA-256.' }
+        : { level: 'bad', text: 'El código no coincide con su firma SHA-256: el archivo está dañado o modificado.' });
+    }
+    if (wantStyle && ownStyle) {
+      const got = await sha256b64(ownStyle.textContent);
+      items.push(got === wantStyle
+        ? { level: 'ok', text: 'Los estilos coinciden con su firma SHA-256.' }
+        : { level: 'bad', text: 'Los estilos no coinciden con su firma SHA-256.' });
+    }
+  } catch {
+    items.push({ level: 'warn', text: 'No se pudo calcular la firma del código en este navegador.' });
+  }
+  const extra = document.querySelectorAll('script').length - 1;
+  if (extra > 0) items.push({ level: 'warn', text: `Hay ${extra} script(s) adicional(es) en la página (posible extensión del navegador o archivo modificado). La CSP impide que se ejecuten.` });
+  return { ok: !items.some(i => i.level !== 'ok'), items };
+}
+
+function openAbout() {
+  const version = (document.querySelector('meta[name="generator"]') || {}).content || '4Dash';
+  const list = h('ul', { class: 'a11y-list' }, h('li', { class: 'a11y', text: 'Comprobando…' }));
+  const body = h('div', { class: 'modal-body' },
+    h('p', null, h('b', { text: version }), ' · © 2026 Vex62 · ', h('span', { text: 'Licencia 4Dash: uso libre; el uso comercial exige citar claramente al autor («Creado con 4Dash — © Vex62 (github.com/Vex62/4dash)»).' })),
+    h('p', { class: 'hint', text: 'Funciona sin conexión: ningún dato sale de tu equipo. Iconos en parte basados en Feather Icons (MIT) y Lucide (ISC).' }),
+    h('div', { class: 'section-title', text: 'Integridad del archivo' }), list,
+    h('p', { class: 'hint', text: 'Para comprobar el archivo completo, calcula su SHA-256 y compáralo con el publicado junto a la versión (dist/4dash.html.sha256). En Windows: certutil -hashfile 4dash.html SHA256 · en macOS/Linux: shasum -a 256 4dash.html' }));
+  const ok = h('button', { class: 'btn primary', type: 'button', text: 'Cerrar' });
+  const m = openModal({ title: 'Acerca de 4Dash', labelledIcon: 'shield', body, foot: h('div', { class: 'modal-foot' }, ok) });
+  ok.addEventListener('click', () => m.close());
+  checkIntegrity().then(r => {
+    clear(list);
+    for (const it of r.items) list.appendChild(h('li', { class: 'a11y ' + it.level }, icon(it.level === 'ok' ? 'check' : 'info', 14), h('span', { text: it.text })));
+  });
+  return m;
+}
+
 /* ---- 08-boot.js ---- */
 /* ==========================================================================
    Arranque y eventos globales.
@@ -5797,13 +5977,15 @@ function bindEvents() {
     e.preventDefault();
     zoomBy(e.deltaY < 0 ? 1 : -1);
   }, { passive: false });
-  // Rueda vertical sobre la barra de herramientas: desplazamiento horizontal
-  $('#toolbar').addEventListener('wheel', e => {
-    const tb = e.currentTarget;
-    if (tb.scrollWidth <= tb.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    e.preventDefault();
-    tb.scrollLeft += e.deltaY;
-  }, { passive: false });
+  // Al cambiar el ancho (ventana o zoom del navegador) se reparte de nuevo la barra de herramientas
+  let tbWidth = 0, tbRaf = 0;
+  new ResizeObserver(([en]) => {
+    const wNow = Math.round(en.contentRect.width);
+    if (wNow === tbWidth) return;
+    tbWidth = wNow;
+    cancelAnimationFrame(tbRaf);
+    tbRaf = requestAnimationFrame(() => { if (App.view === 'editor') renderToolbar(); });
+  }).observe($('#toolbar'));
 
   let zoomRaf = 0;
   new ResizeObserver(() => { cancelAnimationFrame(zoomRaf); zoomRaf = requestAnimationFrame(applyZoom); }).observe($('#scroller'));
@@ -5821,6 +6003,7 @@ function onKey(e) {
   const k = e.key;
   if (k === 'Escape') {
     if (openMenuEl) { closeMenu(); return; }
+    if (tbOverflowEl) { closeToolbarOverflow(); $('#toolbar .tb-more')?.focus(); return; }
     if (modalStack.length) { modalStack[modalStack.length - 1].close(); return; }
     if (App.view === 'presenter' && !document.fullscreenElement) { setView('editor'); return; }
     if (App.sel) { select(null); return; }
@@ -5876,6 +6059,11 @@ function boot() {
   bindEvents();
   applyPalette();
   renderAll();
+  checkIntegrity().then(r => {
+    App.integrity = r;
+    const bad = r.items.find(i => i.level === 'bad');
+    if (bad) toast('Comprobación de integridad: ' + bad.text, 'error', 12000);
+  }).catch(() => { /* sin API criptográfica: se informa en «Acerca de» */ });
   if (window.top !== window.self) {
     toast('Aviso: 4Dash se está mostrando dentro de otra página. Ábrelo directamente para mayor seguridad.', 'error', 9000);
   }

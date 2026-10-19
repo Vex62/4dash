@@ -52,6 +52,11 @@ function pageToSvg(pg, header, scale) {
   const H = Math.ceil(node.getBoundingClientRect().height);
   // El estado de casillas y campos es una propiedad: se copia a atributos para que se serialice
   node.querySelectorAll('input').forEach(i => { if (i.checked) i.setAttribute('checked', ''); if (i.value) i.setAttribute('value', i.value); });
+  // Caracteres de control que XML no admite (pueden venir de los datos importados)
+  const bad = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFE\uFFFF]/g;
+  const tw = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+  for (let n = tw.nextNode(); n; n = tw.nextNode()) if (bad.test(n.data)) { bad.lastIndex = 0; n.data = n.data.replace(bad, ''); }
+  node.querySelectorAll('[title],[aria-label],[value]').forEach(el => { for (const a of ['title', 'aria-label', 'value']) { const v = el.getAttribute(a); if (v && bad.test(v)) { bad.lastIndex = 0; el.setAttribute(a, v.replace(bad, '')); } } });
   node.remove();
   Object.assign(node.style, { position: 'static', left: '', top: '' });
   node.insertBefore(h('style', { text: $('style').textContent }), node.firstChild);

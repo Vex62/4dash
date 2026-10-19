@@ -221,6 +221,57 @@ function tmenu(ic, label, items, opts = {}) {
 function tgroup(label, items, cls = '') {
   return h('div', { class: 'tgroup' + (cls ? ' ' + cls : ''), role: 'group', 'aria-label': label }, items);
 }
+/* ---------- Desbordamiento de la barra de herramientas ----------
+   Cuando la barra no cabe (ventana estrecha o mucho zoom del navegador), los
+   grupos menos usados pasan, enteros y con su texto, a un panel «Más». Así
+   ningún control queda oculto ni fuera de la vista. */
+const TB_OVERFLOW_ORDER = ['Vista', 'Organizar', 'Edición', 'Diseño', 'Insertar', 'Datos'];
+let tbOverflowEl = null;
+function closeToolbarOverflow() {
+  if (!tbOverflowEl) return;
+  tbOverflowEl.remove();
+  tbOverflowEl = null;
+  const more = $('#toolbar .tb-more');
+  if (more) more.setAttribute('aria-expanded', 'false');
+}
+function fitToolbar(moreBtn, moreGroup) {
+  const r = $('#toolbar');
+  const moved = [];
+  const fits = () => r.scrollWidth <= r.clientWidth + 1;
+  moreGroup.classList.add('hidden');
+  if (!fits()) {
+    moreGroup.classList.remove('hidden');
+    for (const name of TB_OVERFLOW_ORDER) {
+      if (fits()) break;
+      const g = r.querySelector(`.tgroup[aria-label="${name}"]`);
+      if (!g) continue;
+      moved.unshift(g);
+      g.remove();
+    }
+  }
+  // El hueco flexible queda a la izquierda del primer grupo alineado a la derecha
+  moreGroup.classList.toggle('push', !r.querySelector('.tgroup.push:not(.tb-more-group)'));
+  moreBtn._groups = moved;
+  moreBtn.title = 'Más herramientas: ' + moved.map(g => g.getAttribute('aria-label')).join(', ');
+}
+function toggleToolbarOverflow(btn) {
+  if (tbOverflowEl) return closeToolbarOverflow();
+  closeMenu();
+  const pop = h('div', { class: 'tb-overflow', role: 'group', 'aria-label': 'Más herramientas' }, btn._groups || []);
+  document.body.appendChild(pop);
+  const b = btn.getBoundingClientRect(), p = pop.getBoundingClientRect();
+  pop.style.top = Math.round(b.bottom + 4) + 'px';
+  pop.style.left = Math.round(clamp(b.right - p.width, 8, Math.max(8, innerWidth - p.width - 8))) + 'px';
+  tbOverflowEl = pop;
+  btn.setAttribute('aria-expanded', 'true');
+  const f = pop.querySelector('button:not(:disabled), select');
+  if (f) f.focus();
+}
+document.addEventListener('pointerdown', e => {
+  if (tbOverflowEl && !tbOverflowEl.contains(e.target) && !e.target.closest('.tb-more, .menu')) closeToolbarOverflow();
+  // Una opción elegida en un menú abierto desde el panel «Más» lo cierra al terminar
+  if (tbOverflowEl && e.target.closest('.menu')) App.closingOverflow = true;
+}, true);
 const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3];
 function setZoom(z) { App.zoom = String(z); applyZoom(); renderToolbar(); }
 function zoomBy(dir) {
@@ -231,6 +282,8 @@ function zoomBy(dir) {
 function openProjectPicker() { $('#projectInput').value = ''; $('#projectInput').click(); }
 function toggleSnap() { App.p.snap = !App.p.snap; scheduleSave(); renderToolbar(); renderCanvas(); }
 function renderToolbar() {
+  const wasOpen = !!tbOverflowEl;
+  closeToolbarOverflow();
   const r = clear($('#toolbar'));
   const w = selW();
   const hasData = App.p.datasets.length > 0;
@@ -281,8 +334,17 @@ function renderToolbar() {
       tbtn('panelR', 'Panel derecho', () => togglePane('right'), { pressed: !isCollapsed('right'), cls: 'opt' }),
       h('div', { class: 'zoom-box' }, zoomSel)], 'push'),
     tgroup('Exportar', [
-      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG) o PDF tal y como se ve en el Presentador (Ctrl+E)' })], 'sticky-end')
+      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG) o PDF tal y como se ve en el Presentador (Ctrl+E)' })])
   );
+  const more = tbtn('more', 'Más', e => toggleToolbarOverflow(e.currentTarget), { cls: 'tb-more' });
+  more.setAttribute('aria-expanded', 'false');
+  more.setAttribute('aria-haspopup', 'true');
+  const moreGroup = tgroup('Más herramientas', [more], 'tb-more-group');
+  r.insertBefore(moreGroup, r.lastElementChild);
+  fitToolbar(more, moreGroup);
+  // Tras un cambio de estado (p. ej. activar la cuadrícula) el panel «Más» sigue abierto
+  if (wasOpen && more._groups.length && !App.closingOverflow) toggleToolbarOverflow(more);
+  App.closingOverflow = false;
 }
 function insertShape(kind, at) {
   const pal = currentPalette();
@@ -384,6 +446,10 @@ function togglePane(which) {
   }
   renderLeft(); renderRight(); renderToolbar();
   requestAnimationFrame(applyZoom);
+}
+function showPropsPane() {
+  if (!isCollapsed('right')) return;
+  togglePane('right');
 }
 function paneHead(title, which) {
   const collapsed = isCollapsed(which);
@@ -1027,6 +1093,7 @@ function rerenderWidget(w) {
 }
 function widgetMenu(anchor, w) {
   openMenu(anchor, [
+    { label: 'Propiedades', icon: 'edit', onClick: () => { select(w.id); showPropsPane(); } },
     { label: 'Duplicar', icon: 'copy', onClick: () => { select(w.id); duplicateSelected(); } },
     { label: 'Traer al frente', icon: 'front', onClick: () => { select(w.id); reorder(1); } },
     { label: 'Enviar atrás', icon: 'back', onClick: () => { select(w.id); reorder(-1); } },

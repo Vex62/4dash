@@ -23,7 +23,7 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 | **Barra superior** | Cambio de vista Editor/Presentador, **espacio para el logo** de la empresa o cliente, paleta de colores, tema claro/oscuro y **botón ?** con tutorial paso a paso y atajos de teclado. |
 | **Proyecto** | Autoguardado local (opcional), guardar/abrir proyecto `.4dash.json`, páginas múltiples (renombrar, duplicar, reordenar), tamaños de página, imprimir todas las páginas. |
 | **Exportar (Ctrl+E)** | El dashboard **tal y como se ve en el Presentador** (cabecera con logo, título, página y fecha opcional; filtros activos) a **PNG** (1×, 2× o 3×), **SVG** vectorial o **PDF** (una hoja por página, del tamaño del lienzo). Página actual o todas, tema actual / claro / oscuro y vista previa. Sin librerías ni red. |
-| **Zoom y pantallas pequeñas** | La barra de herramientas es una sola fila que oculta textos de forma progresiva (queda el icono con su descripción) y se desplaza con la rueda; el botón Exportar queda siempre visible. Con mucho zoom del navegador los paneles laterales se pliegan y se abren flotando sobre el lienzo, y la barra superior se compacta. |
+| **Zoom y pantallas pequeñas** | La barra de herramientas es una sola fila que oculta textos de forma progresiva (queda el icono con su descripción); los grupos que no caben pasan, con su texto, al panel **«Más»**, de modo que ningún control se pierde (verificado de 100 % a 500 % de zoom). La barra superior conserva todos sus iconos. Con mucho zoom del navegador los paneles laterales se pliegan y se abren flotando sobre el lienzo, y la barra superior se compacta. |
 | **Accesibilidad** | Paleta categórica validada para daltonismo en claro y oscuro, colores estables por entidad, leyenda siempre con ≥ 2 series, iconos + texto en deltas, navegación por teclado, `prefers-reduced-motion`. |
 
 ## Estructura del proyecto
@@ -31,6 +31,7 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 ```
 4dash/
 ├── dist/4dash.html          ← la herramienta (archivo único que se distribuye)
+├── dist/4dash.html.sha256   ← su hash SHA-256 publicado
 ├── src/
 │   ├── index.html           ← plantilla (CSP, estructura)
 │   ├── styles.css           ← tokens de diseño propios (claro/oscuro)
@@ -44,6 +45,7 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 │       ├── 06b-export.js    ← exportación PNG / SVG / PDF
 │       ├── 07-dataeditor.js ← editor de datos
 │       ├── 07b-palettes.js  ← paletas de color y editor personalizado
+│       ├── 07c-integrity.js ← comprobación de integridad y «Acerca de»
 │       └── 08-boot.js       ← arranque y atajos de teclado
 ├── samples/ejemplo_ventas.xlsx
 ├── tools/make_sample_xlsx.py  ← regenera el Excel de ejemplo (solo stdlib)
@@ -59,6 +61,16 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 ```bash
 node build.mjs        # o: npm run build
 ```
+
+Para comprobar que el archivo publicado no se ha alterado:
+
+```bash
+node build.mjs --check   # o: npm run check — dist/ coincide con src/, con sus hashes CSP y con dist/4dash.html.sha256
+```
+
+Quien reciba `4dash.html` puede comparar su SHA-256 con el de `dist/4dash.html.sha256`
+(`certutil -hashfile 4dash.html SHA256` en Windows, `shasum -a 256 4dash.html` en macOS/Linux). La aplicación también
+comprueba al arrancar que su código y estilos coinciden con las firmas SHA-256 de su CSP (*Ayuda → Acerca de e integridad*).
 
 El build concatena `src/js/*.js` en orden, incrusta CSS y JS en `src/index.html`, calcula los **hashes SHA-256** para la
 Content-Security-Policy y aborta si detecta APIs peligrosas (`innerHTML`, `eval`, `new Function`, `document.write`),

@@ -295,7 +295,9 @@ function openTutorial(start = 0) {
   const dots = h('div', { class: 'tut-dots grow' });
   const prev = h('button', { class: 'btn', type: 'button', text: 'Anterior' });
   const next = h('button', { class: 'btn primary', type: 'button', text: 'Siguiente' });
-  const m = openModal({ title: 'Cómo funciona 4Dash', body, foot: h('div', { class: 'modal-foot' }, dots, prev, next), labelledIcon: 'help' });
+  const about = h('button', { class: 'linklike tut-about', type: 'button', text: 'Acerca de e integridad' });
+  const m = openModal({ title: 'Cómo funciona 4Dash', body, foot: h('div', { class: 'modal-foot' }, about, dots, prev, next), labelledIcon: 'help' });
+  about.addEventListener('click', () => { m.close(); openAbout(); });
   const draw = () => {
     const st = TUTORIAL[i];
     clear(body);

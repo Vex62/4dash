@@ -1,13 +1,14 @@
 {
   "name": "4dash",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "4Dash: dashboards interactivos a partir de hojas de cálculo en un único HTML autocontenido, sin dependencias.",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "author": "Vex62 (https://github.com/Vex62)",
   "type": "module",
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "check": "node build.mjs --check"
   },
   "engines": {
     "node": ">=18"

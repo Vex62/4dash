@@ -71,13 +71,15 @@ function bindEvents() {
     e.preventDefault();
     zoomBy(e.deltaY < 0 ? 1 : -1);
   }, { passive: false });
-  // Rueda vertical sobre la barra de herramientas: desplazamiento horizontal
-  $('#toolbar').addEventListener('wheel', e => {
-    const tb = e.currentTarget;
-    if (tb.scrollWidth <= tb.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    e.preventDefault();
-    tb.scrollLeft += e.deltaY;
-  }, { passive: false });
+  // Al cambiar el ancho (ventana o zoom del navegador) se reparte de nuevo la barra de herramientas
+  let tbWidth = 0, tbRaf = 0;
+  new ResizeObserver(([en]) => {
+    const wNow = Math.round(en.contentRect.width);
+    if (wNow === tbWidth) return;
+    tbWidth = wNow;
+    cancelAnimationFrame(tbRaf);
+    tbRaf = requestAnimationFrame(() => { if (App.view === 'editor') renderToolbar(); });
+  }).observe($('#toolbar'));
 
   let zoomRaf = 0;
   new ResizeObserver(() => { cancelAnimationFrame(zoomRaf); zoomRaf = requestAnimationFrame(applyZoom); }).observe($('#scroller'));
@@ -95,6 +97,7 @@ function onKey(e) {
   const k = e.key;
   if (k === 'Escape') {
     if (openMenuEl) { closeMenu(); return; }
+    if (tbOverflowEl) { closeToolbarOverflow(); $('#toolbar .tb-more')?.focus(); return; }
     if (modalStack.length) { modalStack[modalStack.length - 1].close(); return; }
     if (App.view === 'presenter' && !document.fullscreenElement) { setView('editor'); return; }
     if (App.sel) { select(null); return; }
@@ -150,6 +153,11 @@ function boot() {
   bindEvents();
   applyPalette();
   renderAll();
+  checkIntegrity().then(r => {
+    App.integrity = r;
+    const bad = r.items.find(i => i.level === 'bad');
+    if (bad) toast('Comprobación de integridad: ' + bad.text, 'error', 12000);
+  }).catch(() => { /* sin API criptográfica: se informa en «Acerca de» */ });
   if (window.top !== window.self) {
     toast('Aviso: 4Dash se está mostrando dentro de otra página. Ábrelo directamente para mayor seguridad.', 'error', 9000);
   }

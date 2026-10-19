@@ -2,7 +2,8 @@
 // con una Content-Security-Policy estricta basada en hashes SHA-256.
 // Sin dependencias: solo Node.js >= 18.
 //   node build.mjs           -> genera dist/4dash.html
-//   node build.mjs --check   -> además verifica que el resultado es reproducible
+//   node build.mjs --check   -> no escribe nada: verifica que dist/ coincide con src/,
+//                               con sus hashes CSP y con dist/4dash.html.sha256
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
@@ -63,9 +64,32 @@ const html = template
   .split('{{STYLE}}').join(css)
   .split('{{SCRIPT}}').join(js);
 
-mkdirSync(join(root, 'dist'), { recursive: true });
 const out = join(root, 'dist', '4dash.html');
+const fileHash = createHash('sha256').update(html, 'utf8').digest('hex');
+
+if (process.argv.includes('--check')) {
+  // Verificación de integridad: el archivo publicado debe coincidir byte a byte con
+  // lo que genera el código fuente, y sus hashes CSP con el script y estilos incrustados.
+  let cur;
+  try { cur = readFileSync(out, 'utf8'); } catch { fail('No existe dist/4dash.html. Ejecuta: node build.mjs'); }
+  const m = /<script>([\s\S]*)<\/script>\s*<\/body>/.exec(cur), st = /<style>([\s\S]*?)<\/style>/.exec(cur);
+  if (!m || !st) fail('dist/4dash.html no tiene la estructura esperada.');
+  if (!cur.includes(`script-src '${sha(m[1])}'`)) fail('El script de dist/4dash.html no coincide con su hash CSP.');
+  if (!cur.includes(`style-src '${sha(st[1])}'`)) fail('Los estilos de dist/4dash.html no coinciden con su hash CSP.');
+  if (cur !== html) fail('dist/4dash.html no coincide con el código fuente (ejecuta node build.mjs y vuelve a publicarlo).');
+  let pub = '';
+  try { pub = readFileSync(out + '.sha256', 'utf8').trim().split(/\s+/)[0]; } catch { /* sin archivo de hash */ }
+  if (pub !== fileHash) fail('dist/4dash.html.sha256 no coincide con el archivo (ejecuta node build.mjs).');
+  console.log(`✔ Integridad verificada: dist/4dash.html coincide con src/ y con sus hashes
+  SHA-256 ${fileHash}`);
+  process.exit(0);
+}
+
+mkdirSync(join(root, 'dist'), { recursive: true });
 writeFileSync(out, html, 'utf8');
+writeFileSync(out + '.sha256', `${fileHash}  4dash.html
+`, 'utf8');
 console.log(`✔ dist/4dash.html (${(Buffer.byteLength(html) / 1024).toFixed(1)} KB)`);
+console.log(`  SHA-256 ${fileHash} (dist/4dash.html.sha256)`);
 console.log(`  script ${sha(js)}`);
 console.log(`  style  ${sha(css)}`);
