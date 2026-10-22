@@ -3,7 +3,9 @@
 **4Dash** convierte una hoja de cálculo (`.xlsx`, `.csv`) en un dashboard interactivo dentro de **un único archivo HTML autocontenido**:
 sin servidor, sin instalación, sin librerías externas y sin conexiones de red. Todo se procesa en el navegador.
 
-> Abre `dist/4dash.html` con Edge, Chrome, Firefox o Safari (versiones de 2023 en adelante). Nada más.
+> **Descarga:** [`4dash.html` de la release v1.4.0](https://github.com/Vex62/4dash/releases/tag/v1.4.0) (con su SHA-256 para
+> verificarlo) o `dist/4dash.html` de este repositorio. Ábrelo con Edge, Chrome, Firefox o Safari (versiones de 2023 en
+> adelante). Nada más.
 
 ## Funcionalidades
 
@@ -28,6 +30,8 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 | **Accesibilidad** | Paleta categórica validada para daltonismo en claro y oscuro, colores estables por entidad, leyenda siempre con ≥ 2 series, iconos + texto en deltas, navegación por teclado, `prefers-reduced-motion`. |
 
 ## Novedades de la v1.4: exportación a Power BI
+
+Publicada en la [release v1.4.0](https://github.com/Vex62/4dash/releases/tag/v1.4.0).
 
 **Exportar → Power BI** descarga un `.zip` con el dashboard convertido en un **proyecto de Power BI (PBIP)**: el formato
 de proyecto abierto que Microsoft documenta públicamente, con el modelo semántico en **TMDL** y el informe en **PBIR**
