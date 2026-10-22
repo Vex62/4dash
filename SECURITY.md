@@ -11,7 +11,7 @@ El objetivo del atacante sería ejecutar código en el navegador, exfiltrar dato
 
 | Control | Implementación |
 |---|---|
-| Sin dependencias ni red | Cero librerías y cero CDN. La CSP prohíbe toda conexión (`connect-src 'none'`, `default-src 'none'`). El build falla si aparece una URL externa. |
+| Sin dependencias ni red | Cero librerías y cero CDN. La CSP prohíbe toda conexión (`connect-src 'none'`, `default-src 'none'`). El build falla si aparece una URL externa; la única excepción es el prefijo de los esquemas públicos de Power BI (`developer.microsoft.com/json-schemas/fabric/`), que se escribe como identificador `$schema` en los archivos exportados, nunca se descarga y solo puede aparecer una vez en el código. |
 | CSP estricta por hash | `script-src` y `style-src` solo admiten el hash SHA-256 del bloque incrustado: no se permite `unsafe-inline`, `unsafe-eval` ni scripts inyectados. Además `object-src`, `frame-src`, `worker-src`, `base-uri` y `form-action` a `'none'`. |
 | Trusted Types | `require-trusted-types-for 'script'`: cualquier asignación a `innerHTML` y similares lanza un error en Chromium. La única política (`fourdash-xml`) se usa solo para `DOMParser` en un documento XML inerte. |
 | DOM seguro | Todo el texto se inserta con `textContent`/nodos de texto (`h()` en `01-util.js`). Nombres de hojas, columnas y celdas nunca se interpretan como HTML. |
@@ -23,6 +23,7 @@ El objetivo del atacante sería ejecutar código en el navegador, exfiltrar dato
 | Proyectos y almacenamiento local | `JSON.parse` con *reviver* que descarta `__proto__`, `constructor` y `prototype`; después, validación por esquema campo a campo (tipos, enumerados, longitudes, rangos, ids `^[A-Za-z0-9_-]{1,40}$`). Los objetos se reconstruyen desde cero y nunca se mezclan con los originales. Las agrupaciones usan `Map`/`Set`. |
 | Paletas de color | Los colores se aplican como variables CSS mediante CSSOM (compatible con la CSP, sin estilos en línea). Los colores personalizados de proyectos importados deben cumplir `^#[0-9a-f]{6}$`; cualquier otro valor se sustituye por el predeterminado. |
 | Columnas condicionales (v1.3) | Las reglas «SI … ENTONCES …» son **datos que se interpretan**, nunca código: sin `eval`, `new Function` ni expresiones regulares construidas a partir de lo que escribe el usuario. Operadores de una lista cerrada, referencias a columnas por nombre exacto y solo hacia columnas anteriores (sin ciclos). Límites de 40 columnas condicionales por origen, 30 reglas por columna y 10 condiciones por regla. Al abrir un proyecto, las reglas se validan por esquema y los valores se **recalculan** a partir de ellas: los valores guardados nunca se toman como fiables. |
+| Exportación a Power BI (v1.4) | Proyecto PBIP generado en el navegador con un escritor ZIP propio (`CompressionStream` nativo). Los datos van incrustados como JSON comprimido en base64, de modo que ningún valor de celda se interpreta como código M o DAX. Los nombres de tablas, columnas y medidas y los literales de las reglas se escapan para cada lenguaje: TMDL (`'…'` con `''`), DAX (`'tabla'[col]` con `''` y `]]`; cadenas con `""`; comodines de `CONTAINSSTRING` escapados con `~`), M (`#"…"` y cadenas con `""` y la secuencia de escape `#(` neutralizada como `#(#)(`) y PBIR (literales `'…'` con `''`). Se eliminan caracteres de control, comillas iniciales y ``` (delimitador de TMDL). No se genera ni se lee el formato binario `.pbix`. |
 | Exportación CSV | Neutraliza *CSV/Formula Injection*: los textos que empiezan por `= + - @ tab CR` se prefijan con `'`. |
 | Privacidad | Autoguardado opcional y desactivable; botón para borrar los datos locales. `referrer` = `no-referrer`. |
 
@@ -140,6 +141,18 @@ No existe ninguna petición de red (`connect-src 'none'`); los datos nunca salen
 | A08 · Proyectos manipulados | Definiciones o valores calculados alterados en `.4dash.json` o `localStorage`. | Validación por esquema (`sanitizeCalc`) y recálculo de todos los valores al cargar. |
 | Integridad de los datos | Borrar o renombrar una columna usada por una regla. | Al renombrar, las reglas se actualizan; no se permite borrar una columna en uso. |
 
+## Revisión de la versión 1.4 (exportación a Power BI)
+
+| Área | Riesgo considerado | Control |
+|---|---|---|
+| A03 · Inyección en M / DAX / TMDL | Que un nombre de columna, de hoja o un valor de regla cerrase una cadena y añadiera código al modelo (por ejemplo, una llamada `Web.Contents` en M que se ejecutaría al actualizar en Power BI). | Escapado específico de cada lenguaje (ver «Resumen de controles»); los valores de las celdas nunca se escriben como código, solo dentro del bloque base64. Probado con nombres que contienen `'`, `"`, `]`, `#(lf)`, `/`, `:` y comillas iniciales: TOM deserializa el modelo y los nombres llegan intactos. |
+| A03 · Inyección en PBIR | Texto de títulos, cuadros de texto o filtros que alterase el JSON. | Todo el JSON se genera con `JSON.stringify`; los literales PBIR duplican `'`. |
+| A04 · Agotamiento de recursos | Orígenes enormes incrustados en una sola expresión M. | Por encima de 8 MB (base64) el origen se exporta como CSV en `datos/` con un parámetro de carpeta; el base64 se trocea en literales de 4.000 caracteres. |
+| A05 · Configuración | La excepción de URL en el build podría abrir la puerta a otras URL. | Coincidencia exacta del prefijo `developer.microsoft.com/json-schemas/fabric/` y como máximo una aparición; la CSP (`connect-src 'none'`) impide cualquier conexión. |
+| A08 · Integridad del paquete | ZIP corrupto o con rutas peligrosas. | CRC-32 por entrada, nombres UTF-8 generados por 4Dash (sin `..` ni rutas absolutas; los nombres de archivo pasan por `safeFileName`). Verificado con `zipfile` de Python (`testzip`). |
+| Privacidad | El paquete contiene los datos importados. | Se genera y se descarga localmente, sin red. El `LEEME.txt` lo recuerda; trátalo con la misma clasificación que el Excel original. |
+| Propiedad intelectual | Usar formatos o contenidos de Microsoft sin permiso. | Solo se escriben formatos documentados públicamente (PBIP, TMDL, PBIR, tema JSON) según la documentación y los esquemas públicos de Microsoft (MIT). No se incluye ningún archivo de Microsoft (ni el tema base, que Power BI Desktop ya trae) ni se usa ingeniería inversa del `.pbix`. |
+
 ## Riesgos residuales y recomendaciones
 1. **Datos en `localStorage` sin cifrar.** Recomendación: desactivar el autoguardado en equipos compartidos y usar
    «Borrar datos guardados localmente».
@@ -147,6 +160,8 @@ No existe ninguna petición de red (`connect-src 'none'`); los datos nunca salen
    exclusivo de `textContent`.
 3. **`frame-ancestors`** requiere cabecera HTTP si el archivo se aloja en un servidor (ver A05).
 4. Los archivos `.4dash.json` contienen los datos importados: trátalos con la misma clasificación que el Excel original.
+5. Los proyectos de Power BI exportados también contienen los datos, y sus columnas calculadas usan `TODAY()`: el resultado
+   depende de la fecha de la última actualización en Power BI.
 
 ## Cómo reproducir la revisión
 - `node build.mjs` falla ante APIs peligrosas, URLs externas o errores de sintaxis.
@@ -156,3 +171,10 @@ No existe ninguna petición de red (`connect-src 'none'`); los datos nunca salen
   y (v1.3) definiciones de columnas condicionales manipuladas (ids con `<script>`, operador `eval`, operandos-objeto,
   referencias circulares) y 100.000 filas con varias reglas.
   Resultado: ningún script ejecutado, ninguna violación de CSP, todas las entradas maliciosas rechazadas o neutralizadas.
+- Exportación a Power BI (v1.4): los proyectos generados (con todos los tipos de visual, reglas de todas las familias de
+  operadores, nombres con caracteres especiales, orígenes con nombres que solo difieren en mayúsculas, proyecto sin datos
+  y la vía CSV) se validan con dos herramientas oficiales de Microsoft, solo durante el desarrollo y sin incluirlas en
+  4Dash: `@microsoft/powerbi-report-authoring-cli validate` (esquemas PBIR y reglas de informe: 0 errores, 0 avisos) y la
+  biblioteca TOM (`Microsoft.AnalysisServices.Tabular`, `TmdlSerializer.DeserializeDatabaseFromFolder`, que deserializa el
+  modelo TMDL y lo vuelve a serializar como TMSL). Los datos incrustados se comprueban con una ida y vuelta (base64 → deflate →
+  JSON) contra el origen.

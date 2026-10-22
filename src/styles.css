@@ -799,6 +799,8 @@ table.dv { border-collapse: separate; border-spacing: 0; font-size: 12px; font-v
 .seg-row .btn[aria-pressed="true"] { background: var(--primary-soft); border-color: var(--primary); }
 .export-opts .form-row { margin-bottom: 12px; }
 .export-preview { max-width: 100%; max-height: 220px; border: 1px solid var(--border); border-radius: 4px; display: block; margin: 4px auto 0; background: var(--canvas-bg); }
+.export-opts .pbi-list { margin: 8px 0 12px; padding-left: 20px; line-height: 1.5; }
+.export-opts p { margin: 0 0 8px; }
 
 /* ---------- Adaptación a zoom del navegador y pantallas estrechas ---------- */
 @media (max-width: 1280px) {

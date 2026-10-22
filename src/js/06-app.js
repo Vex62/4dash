@@ -300,7 +300,7 @@ function renderToolbar() {
         { label: 'Abrir proyecto… (Ctrl+O)', icon: 'open', onClick: openProjectPicker },
         { label: 'Guardar proyecto (Ctrl+S)', icon: 'save', onClick: saveProjectFile },
         '-',
-        { label: 'Exportar imagen o PDF… (Ctrl+E)', icon: 'export', onClick: () => openExportDialog() },
+        { label: 'Exportar imagen, PDF o Power BI… (Ctrl+E)', icon: 'export', onClick: () => openExportDialog() },
         { label: 'Imprimir… (Ctrl+P)', icon: 'print', onClick: printDashboard }
       ], { cls: 'keep', title: 'Nuevo, abrir, guardar, exportar e imprimir' })]),
     tgroup('Datos', [
@@ -334,7 +334,7 @@ function renderToolbar() {
       tbtn('panelR', 'Panel derecho', () => togglePane('right'), { pressed: !isCollapsed('right'), cls: 'opt' }),
       h('div', { class: 'zoom-box' }, zoomSel)], 'push'),
     tgroup('Exportar', [
-      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG) o PDF tal y como se ve en el Presentador (Ctrl+E)' })])
+      tbtn('export', 'Exportar', () => openExportDialog(), { cls: 'accent keep', title: 'Exportar como imagen (PNG, SVG), PDF o proyecto de Power BI (Ctrl+E)' })])
   );
   const more = tbtn('more', 'Más', e => toggleToolbarOverflow(e.currentTarget), { cls: 'tb-more' });
   more.setAttribute('aria-expanded', 'false');

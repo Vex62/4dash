@@ -183,13 +183,27 @@ function openExportDialog() {
   const body = h('div', { class: 'modal-body export-opts' });
   const go = h('button', { class: 'btn primary', type: 'button' }, icon('export', 16), 'Exportar');
   const cancel = h('button', { class: 'btn', type: 'button', text: 'Cancelar' });
-  const m = openModal({ title: 'Exportar dashboard', labelledIcon: 'export', body, foot: h('div', { class: 'modal-foot' }, h('span', { class: 'grow hint', text: 'Se exporta tal y como se ve en la vista Presentador, con los filtros activos.' }), cancel, go) });
+  const footHint = h('span', { class: 'grow hint' });
+  const m = openModal({ title: 'Exportar dashboard', labelledIcon: 'export', body, foot: h('div', { class: 'modal-foot' }, footHint, cancel, go) });
   cancel.addEventListener('click', () => m.close());
-  go.addEventListener('click', () => { m.close(); exportDashboard(Object.assign({}, o)); });
+  go.addEventListener('click', () => { m.close(); if (o.fmt === 'pbi') exportPowerBI(); else exportDashboard(Object.assign({}, o)); });
   let previewUrl = null;
   const draw = () => {
     clear(body);
-    body.appendChild(formRow('Formato', segEl([['png', 'PNG · imagen'], ['pdf', 'PDF'], ['svg', 'SVG · vectorial']], o.fmt, v => { o.fmt = v; draw(); }, 'Formato')));
+    body.appendChild(formRow('Formato', segEl([['png', 'PNG · imagen'], ['pdf', 'PDF'], ['svg', 'SVG · vectorial'], ['pbi', 'Power BI']], o.fmt, v => { o.fmt = v; draw(); }, 'Formato')));
+    if (o.fmt === 'pbi') {
+      footHint.textContent = 'Se descarga un .zip con el proyecto (.pbip) para abrirlo en Power BI Desktop.';
+      body.append(
+        h('p', { text: 'Proyecto de Power BI (PBIP): el formato de proyecto abierto y documentado por Microsoft. Se abre con Power BI Desktop y desde ahí se puede guardar como .pbix.' }),
+        h('ul', { class: 'pbi-list' },
+          h('li', { text: 'Todas las páginas, con sus visuales, posiciones, títulos, estilos y la paleta como tema.' }),
+          h('li', { text: 'Los datos incrustados en el modelo (los orígenes muy grandes viajan como CSV).' }),
+          h('li', { text: 'Agregaciones como medidas DAX y columnas condicionales como columnas calculadas DAX.' }),
+          h('li', { text: 'Los filtros activos como filtros del informe.' })),
+        h('p', { class: 'hint', text: 'Descomprime el .zip, abre el .pbip y pulsa «Actualizar» para cargar los datos. Lo que no tiene equivalente exacto (degradados, barras de datos…) se aproxima y se detalla en LEEME.txt. Se genera en el navegador, sin conexión.' }));
+      return;
+    }
+    footHint.textContent = 'Se exporta tal y como se ve en la vista Presentador, con los filtros activos.';
     body.appendChild(h('div', { class: 'form-inline' },
       formRow('Páginas', selectEl([['current', 'Página actual'], ['all', `Todas (${App.p.pages.length})`]], o.pages, v => { o.pages = v; })),
       formRow('Resolución', selectEl([['1', 'Normal (1×)'], ['2', 'Alta (2×)'], ['3', 'Muy alta (3×)']], String(o.scale), v => { o.scale = +v || 2; })),

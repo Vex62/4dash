@@ -35,7 +35,10 @@ if (/<\/style/i.test(css)) fail('El CSS contiene "</style".');
 if (/\binnerHTML\s*=|outerHTML\s*=|insertAdjacentHTML|document\.write|\beval\s*\(|new Function\s*\(/.test(js.replace(/'innerHTML'|'outerHTML'/g, ''))) {
   fail('Se ha detectado una API peligrosa (innerHTML/eval/new Function/document.write).');
 }
-if (/https?:\/\/(?!www\.w3\.org\/2000\/svg)/.test(js + css)) fail('Se ha detectado una URL externa en el código.');
+// Excepciones: el espacio de nombres SVG y el prefijo de los esquemas públicos de Power BI ($schema),
+// que se escribe en los archivos exportados como identificador y nunca se descarga (connect-src 'none').
+if (/https?:\/\/(?!www\.w3\.org\/2000\/svg|developer\.microsoft\.com\/json-schemas\/fabric\/')/.test(js + css)) fail('Se ha detectado una URL externa en el código.');
+if ((js.match(/https:\/\/developer\.microsoft\.com\//g) || []).length > 1) fail('El prefijo de esquemas de Power BI solo puede aparecer una vez (PBI_SCHEMA).');
 try { new vm.Script(js, { filename: '4dash.js' }); } catch (e) { fail('Error de sintaxis en el JS: ' + e.message); }
 
 const sha = s => 'sha256-' + createHash('sha256').update(s, 'utf8').digest('base64');

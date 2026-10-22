@@ -292,7 +292,7 @@ const TUTORIAL = [
 ];
 const SHORTCUTS = [
   ['Ctrl + Z / Ctrl + Y', 'Deshacer / rehacer'], ['Supr', 'Eliminar el visual seleccionado'], ['Ctrl + D', 'Duplicar visual'],
-  ['Ctrl + C / Ctrl + V', 'Copiar / pegar visual'], ['Flechas (Mayús = 10 px)', 'Mover el visual seleccionado'], ['Ctrl + S / Ctrl + O', 'Guardar / abrir proyecto'], ['Ctrl + E', 'Exportar como imagen o PDF'], ['Ctrl + rueda (sobre el lienzo)', 'Zoom del lienzo'],
+  ['Ctrl + C / Ctrl + V', 'Copiar / pegar visual'], ['Flechas (Mayús = 10 px)', 'Mover el visual seleccionado'], ['Ctrl + S / Ctrl + O', 'Guardar / abrir proyecto'], ['Ctrl + E', 'Exportar como imagen, PDF o Power BI'], ['Ctrl + rueda (sobre el lienzo)', 'Zoom del lienzo'],
   ['F5', 'Ir a la vista Presentador'], ['← → / F', 'Páginas y pantalla completa (Presentador)'], ['Esc', 'Deseleccionar / cerrar / salir'], ['F1', 'Abrir este tutorial']
 ];
 function openTutorial(start = 0) {

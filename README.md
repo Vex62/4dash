@@ -23,9 +23,41 @@ sin servidor, sin instalación, sin librerías externas y sin conexiones de red.
 | **Paletas de color** | 7 paletas para la herramienta y los gráficos: 4Dash (predeterminada), **Verde esmeralda**, **Azul eléctrico**, Corporativo marino, Atardecer, Violeta y Grafito y cian, todas validadas para daltonismo y contraste en claro y oscuro. Cualquier paleta se puede **personalizar con el selector de color HTML** (barra superior, color principal, acento y 8 colores de serie) con vista previa en vivo y comprobación de accesibilidad. Se guarda con el proyecto y se puede deshacer. |
 | **Barra superior** | Cambio de vista Editor/Presentador, **espacio para el logo** de la empresa o cliente, paleta de colores, tema claro/oscuro y **botón ?** con tutorial paso a paso y atajos de teclado. |
 | **Proyecto** | Autoguardado local (opcional), guardar/abrir proyecto `.4dash.json`, páginas múltiples (renombrar, duplicar, reordenar), tamaños de página, imprimir todas las páginas. |
-| **Exportar (Ctrl+E)** | El dashboard **tal y como se ve en el Presentador** (cabecera con logo, título, página y fecha opcional; filtros activos) a **PNG** (1×, 2× o 3×), **SVG** vectorial o **PDF** (una hoja por página, del tamaño del lienzo). Página actual o todas, tema actual / claro / oscuro y vista previa. Sin librerías ni red. |
+| **Exportar (Ctrl+E)** | El dashboard **tal y como se ve en el Presentador** (cabecera con logo, título, página y fecha opcional; filtros activos) a **PNG** (1×, 2× o 3×), **SVG** vectorial o **PDF** (una hoja por página, del tamaño del lienzo). Página actual o todas, tema actual / claro / oscuro y vista previa. Y a **Power BI**: un proyecto `.pbip` con modelo, medidas, columnas condicionales, páginas, visuales y tema (ver «Novedades de la v1.4»). Sin librerías ni red. |
 | **Zoom y pantallas pequeñas** | La barra de herramientas es una sola fila que oculta textos de forma progresiva (queda el icono con su descripción); los grupos que no caben pasan, con su texto, al panel **«Más»**, de modo que ningún control se pierde (verificado de 100 % a 500 % de zoom). La barra superior conserva todos sus iconos. Con mucho zoom del navegador los paneles laterales se pliegan y se abren flotando sobre el lienzo, y la barra superior se compacta. |
 | **Accesibilidad** | Paleta categórica validada para daltonismo en claro y oscuro, colores estables por entidad, leyenda siempre con ≥ 2 series, iconos + texto en deltas, navegación por teclado, `prefers-reduced-motion`. |
+
+## Novedades de la v1.4: exportación a Power BI
+
+**Exportar → Power BI** descarga un `.zip` con el dashboard convertido en un **proyecto de Power BI (PBIP)**: el formato
+de proyecto abierto que Microsoft documenta públicamente, con el modelo semántico en **TMDL** y el informe en **PBIR**
+(JSON con esquemas públicos). Se genera entero en el navegador, sin conexión, así que 4Dash sigue siendo un único HTML
+autocontenido.
+
+1. Descomprime el `.zip` y abre `<proyecto>.pbip` con **Power BI Desktop** de agosto de 2025 o posterior. Si tu versión es
+   anterior a la disponibilidad general de PBIR, activa en *Opciones → Características en versión preliminar* el guardado
+   como proyecto de Power BI (.pbip) y el formato de informe mejorado (PBIR).
+2. Pulsa **Actualizar** para cargar los datos en el modelo.
+3. Si necesitas un único archivo, **Archivo → Guardar como → .pbix**.
+
+| 4Dash | Power BI |
+|---|---|
+| Origen de datos | Tabla del modelo con los datos **incrustados** (consulta Power Query con el JSON comprimido, como «Escribir datos»). Los orígenes muy grandes viajan como CSV en la carpeta `datos/` y se leen desde el parámetro `CarpetaDatos`. |
+| Agregaciones (suma, promedio, recuento, distinto, mín., máx., mediana) | **Medidas DAX** con su formato (moneda, porcentaje, decimales). |
+| Columnas condicionales | **Columnas calculadas DAX** (`SWITCH(TRUE(), …)`); «hoy» y «últimos N días» usan `TODAY()`. |
+| Agrupación de fechas (año, trimestre, mes, día) | Columnas calculadas de periodo, ordenadas cronológicamente. |
+| Columnas, apiladas, barras, líneas, área, circular, anillo, árbol, dispersión | Los visuales nativos equivalentes, con orden, Top N, etiquetas, leyenda, colores y grosor/suavizado de línea. |
+| KPI · medidor · tabla · selector | KPI con tendencia y objetivo (tarjeta si no hay eje temporal) · medidor con máximo y objetivo · matriz o tabla · segmentación. |
+| Texto · imagen · formas | Cuadro de texto (títulos y viñetas) · imagen incrustada · forma con relleno, contorno y texto. |
+| Páginas, posiciones, tamaño de lienzo, títulos, fondos, bordes, esquinas y sombras | Igual. |
+| Paleta | Tema personalizado del informe. |
+| Filtros activos | Filtros del informe. |
+
+Lo que no tiene equivalente exacto se aproxima y se explica en el `LEEME.txt` del paquete: degradados (primer color),
+barras de datos de las tablas, objetivo de las tarjetas sin eje temporal, colores personalizados por valor de leyenda y
+la agrupación «Otros» de los gráficos circulares. Las comparaciones de texto de las reglas en Power BI no distinguen
+mayúsculas, pero sí acentos. El formato `.pbix` binario no se genera: su modelo de datos es un formato cerrado sin
+documentación pública.
 
 ## Novedades de la v1.3: columnas condicionales
 
@@ -80,6 +112,7 @@ de [SECURITY.md](SECURITY.md).
 │       ├── 05-ui.js         ← modales, menús, saneado de imágenes/proyectos, tutorial
 │       ├── 06-app.js        ← estado, editor, paneles, estilos, páginas, persistencia
 │       ├── 06b-export.js    ← exportación PNG / SVG / PDF
+│       ├── 06c-powerbi.js   ← exportación a Power BI (PBIP: TMDL + PBIR) y escritor ZIP
 │       ├── 07-dataeditor.js ← editor de datos
 │       ├── 07b-palettes.js  ← paletas de color y editor personalizado
 │       ├── 07c-integrity.js ← comprobación de integridad y «Acerca de»
@@ -124,7 +157,7 @@ navegador bloqueará el script. Edita `src/` y vuelve a compilar.
 | Ctrl+D, Ctrl+C / Ctrl+V | Duplicar, copiar / pegar visual |
 | Flechas (Mayús = 10 px) | Mover visual |
 | Ctrl+S / Ctrl+O / Ctrl+P | Guardar / abrir proyecto / imprimir |
-| Ctrl+E | Exportar como PNG, SVG o PDF |
+| Ctrl+E | Exportar como PNG, SVG, PDF o proyecto de Power BI |
 | Ctrl + rueda (sobre el lienzo) | Zoom del lienzo |
 | F5 | Cambiar a Presentador |
 | ← → · F · Esc | Páginas · pantalla completa · salir (Presentador) |
@@ -146,5 +179,5 @@ Columnas condicionales: hasta 40 por origen de datos, 30 reglas por columna y 10
   sin eliminar los avisos de autoría y licencia.
 
 Parte de los trazos de los iconos se basan en Feather Icons (MIT) y Lucide (ISC); ver
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Excel es una marca de Microsoft Corporation; 4Dash es un proyecto
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Excel y Power BI son marcas de Microsoft Corporation; 4Dash es un proyecto
 independiente sin afiliación con Microsoft ni con otros fabricantes.

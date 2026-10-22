@@ -1,6 +1,6 @@
 {
   "name": "4dash",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "4Dash: dashboards interactivos a partir de hojas de cálculo en un único HTML autocontenido, sin dependencias.",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
